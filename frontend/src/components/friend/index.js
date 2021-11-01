@@ -5,7 +5,7 @@ function index() {
     <>
       <Topbar />
       <div style={{ position: "relative", marginTop: "64px" }}>
-        <h1>커뮤니티 페이지</h1>
+        <h1>팔로우 페이지</h1>
       </div>
     </>
   );
