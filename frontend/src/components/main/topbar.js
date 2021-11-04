@@ -106,6 +106,8 @@ const Right = styled.div`
 `;
 
 const topbar = () => {
+  const isLogined = window.sessionStorage.userInfo == null ? false : true;
+
   return (
     <Bar>
       <Container>
@@ -124,7 +126,7 @@ const topbar = () => {
             <a href="/friend">친구</a>
           </Link>
           <Search>
-            <Input type="text" placeholder="스터디 검색" class="srh" />
+            <Input type="text" placeholder="스터디 검색" className="srh" />
           </Search>
         </Left>
         <Right>
@@ -147,9 +149,15 @@ const topbar = () => {
               alt="DM_icon"
             />
           </a>
-          <a href="/login" class="login">
-            로그인
-          </a>
+          {!isLogined ? (
+            <a href="/login" className="login">
+              로그인
+            </a>
+          ) : (
+            <a href="/profile" className="login">
+              프로필
+            </a>
+          )}
         </Right>
       </Container>
     </Bar>
