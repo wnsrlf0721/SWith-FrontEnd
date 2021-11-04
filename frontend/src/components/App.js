@@ -1,6 +1,6 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
-import main from "./main/index";
+import main from "./main/Index";
 import room from "./room/index";
 import auth from "./login/index";
 import plan from "./plan/index";

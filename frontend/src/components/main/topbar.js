@@ -13,7 +13,7 @@ const Bar = styled.div`
 `;
 
 const Container = styled.div`
-  width: 1920px;
+  width: 100%;
   height: 64px;
   margin: 0 0 24px;
   display: flex;
