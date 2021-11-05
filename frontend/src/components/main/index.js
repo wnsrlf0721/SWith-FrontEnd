@@ -5,7 +5,6 @@ import Topbar from "./topbar";
 import Container from 'react-bootstrap/Container'
 import BtnPrev from "../../images/Prev.svg";
 import BtnNext from "../../images/Next.svg";
-import study from "../../images/study.png";
 
 import "./Index.css"
 import StudyCard from './StudyCard'
@@ -46,12 +45,6 @@ const HistoryBox = styled.div`
   background-color: #fafafa;
   border-radius: 5px;
 `;
-// const HistoryBoxImg = styled.div`
-//   width: 216px;
-//   height: 144px;
-//   //background-color: #ffffff;
-//   border-radius: 5px;
-// `;
 
 const TextBox = styled.div`
   //width: 87px;
@@ -148,7 +141,7 @@ const Index = () => {
               </EmptyBox>
               <EmptyBox style= {{backgroundColor:'#ccc',margin:'35px 0 30px',width:'100%',height:'1px'}}/>
               <EmptyBox style={{width:'100%', height:'58px',margin:'0 0 20px'}}>
-                <TextBox style = {{fontWeight:'bold',fontSize:'15px'}}>오늘 목표 당성률</TextBox>
+                <TextBox style = {{fontWeight:'bold',fontSize:'15px'}}>오늘의 할일 달성률</TextBox>
                 <EmptyBox style={{margin:'10px 0 0',width:'100%',height:'10px'}}>
                   <EmptyBox style={{margin:'0',width :'90%',height:'10px',borderRadius:'100px',backgroundColor:'#e4e6eb'}}/>
                   <EmptyBox style={{margin:'-10px 0 0',width :'45%',height:'10px',borderRadius:'100px',backgroundColor:'#ef8585'}}/>
