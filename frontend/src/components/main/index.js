@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, useState} from "react";
 //import {StyleSheet, Text, View} from 'react-native';
 import styled from "styled-components";
 import Topbar from "./topbar";
@@ -7,29 +7,30 @@ import BtnPrev from "../../images/Prev.svg";
 import BtnNext from "../../images/Next.svg";
 import study from "../../images/study.png";
 
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Navbar from "react-bootstrap/Navbar"
+import "./Index.css"
+import StudyCard from './StudyCard'
+import studyImage from "../../images/studyImage.jpg";
+
+//상단 카드, 객체 이름 css, homepage flex시 위치 수정
 
 const Wrap = styled.div`
   display: flex;
-  //flexDirection: Col
+  flex-direction: column;
   min-height: 800px;
   min-width: 800px;
-  text-align: center;
+  text-align: left;
   //align-items: center;
 `;
 const HomePage = styled.div`  
-  width: 100%;
+  
   display: flex;
   height: 482px;
-  padding: 0 0 0;
+  padding: 100px 0 0;
   margin: 66px 0 0;
   border: solid 1px #ccc;
   background-color: #fafbfc;
 `;
+
 const EmptyBox = styled.div`
   width: 66%;
   height: 310px;//244
@@ -68,14 +69,34 @@ const TextBox = styled.div`
   color: #000;
 `;
 
-// style= {{margin:'0 548px 40px 0',height: "29px", width: '717.88px'}}
-//컨테이너 엠프티박스로 바꾸고 페이지 넘기는 화살표 위치 제대로..
-const index = () => {
+///////////////////////////////////////////////
+const BottomPage = styled.div`
+  padding: 70px 20px 0;
+  width: 1200px;
+  margin: 0 auto;
+`;
+
+
+const Index = () => {
+  let studyNum = 0;
+  const [toggleState,setToggleState] = useState(1);
+  const toggleTab = (index) => {
+    setToggleState(index);
+  }
+  const [studyTitle, setStudyTitle] = useState("스윗 스터디룸");
+  const addStudyTitle = () => {
+    //later
+  }
+  const [studyHashtag, setStudyHashtag] = useState("#스윗 #SWith");
+  const addStudyHashtag = ()=> {
+    //later
+  }
+
   return (
     <Wrap>
       <Topbar/>
       <HomePage>
-        <EmptyBox>
+        <EmptyBox style = {{margin: '0 auto'}}>
           <EmptyBox style = {{margin:'0',width:'60%'}}>
             <Container style= {{margin:'0 0 48px 0',width: '720px'}}>
               <TextBox style = {{fontWeight:'bold',width:'600px'}}>내 스터디</TextBox>
@@ -97,8 +118,8 @@ const index = () => {
               {/* <HistoryBoxImg/> */}
               <img
                 style={{ height: "144px", width: "216px" }}
-                src={study}
-                alt="study"
+                src={studyImage}
+                alt="studyImage"
               />
               <TextBox style = {{width: '180px',height: '70px',margin: '15px 18px 0',fontSize: '17px'}}>스터디 이름</TextBox>
             </HistoryBox>
@@ -106,8 +127,8 @@ const index = () => {
               {/* <HistoryBoxImg/> */}
               <img
                 style={{ height: "144px", width: "216px" }}
-                src={study}
-                alt="study"
+                src={studyImage}
+                alt="studyImage"
               />
               <TextBox style = {{width: '180px',height: '70px',margin: '15px 18px 0',fontSize: '17px'}}>스터디 이름</TextBox>
             </HistoryBox>
@@ -139,9 +160,64 @@ const index = () => {
           </EmptyBox>
         </EmptyBox>
       </HomePage>
+      <BottomPage>
+        <div className = "StudiesContainer">
+            <div className = "StudiesHeader"> 
+              <div className = "StudiesHeaderTitle">
+                <h3 style = {{fontSize:"22px", fontWeight: "700", lineHeight: "30px;"}}>스터디 목록</h3>
+                < div className = "StudiesHeaderNum">
+                총 {studyNum} 개 스터디
+                </div>
+              </div>
 
+            </div>
+            <div className = "StudiesTabWrap">
+              <div className = "StudiesTabListWrap">
+                <button className = {toggleState === 1 ? "StudiesButtonActive" : "StudiesButton"} onClick={ () => toggleTab(1)}>
+                  전체
+                </button>
+                <button className = {toggleState === 2? "StudiesButtonActive" : "StudiesButton"} onClick={() => toggleTab(2)}>
+                  국가 고시
+                </button>
+                <button className = {toggleState === 3? "StudiesButtonActive" : "StudiesButton"} onClick={() => toggleTab(3)}>
+                  독서
+                </button>
+                <button className = {toggleState === 4? "StudiesButtonActive" : "StudiesButton"} onClick={() => toggleTab(4)}>
+                  수능
+                </button>
+                <button className = {toggleState === 5? "StudiesButtonActive" : "StudiesButton"} onClick={() => toggleTab(5)}>
+                  어학
+                </button>
+                <button className = {toggleState === 6? "StudiesButtonActive" : "StudiesButton"} onClick={() => toggleTab(6)}>
+                  자격증
+                </button>
+                <button className = {toggleState === 7? "StudiesButtonActive" : "StudiesButton"} onClick={() => toggleTab(7)}>
+                  기타
+                </button>
+    
+                
+              </div>
+
+            </div>
+            <div className = "StudyCardWrap">
+            
+              <StudyCard title={studyTitle} imgUrl= {studyImage} body={studyHashtag}>
+              </StudyCard>
+              <StudyCard title={studyTitle} imgUrl= {studyImage} body={studyHashtag}>
+              </StudyCard>
+              <StudyCard title={studyTitle} imgUrl= {studyImage} body={studyHashtag}>
+              </StudyCard>
+              <StudyCard title={studyTitle} imgUrl= {studyImage} body={studyHashtag}>
+              </StudyCard>
+              <StudyCard title={studyTitle} imgUrl= {studyImage} body={studyHashtag}>
+              </StudyCard>
+              <StudyCard title={studyTitle} imgUrl= {studyImage} body={studyHashtag}>
+              </StudyCard>
+            </div>
+        </div>
+      </BottomPage>
     </Wrap>
   );
 };
 
-export default index;
+export default Index;
