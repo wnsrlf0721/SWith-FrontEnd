@@ -15,7 +15,7 @@ const Bar = styled.div`
 const Container = styled.div`
   width: 100%;
   height: 64px;
-  margin: 0 0 24px;
+  margin: 0 0 0;
   display: flex;
   flex-direction: row;
   align-items: center;
