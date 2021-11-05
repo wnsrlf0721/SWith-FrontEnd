@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import Topbar from "../main/topbar";
+
 function Index() {
   const isLogined = window.sessionStorage.userInfo == null ? false : true;
   useEffect(() => {
@@ -8,7 +9,6 @@ function Index() {
       return (window.location.href = "/login");
     }
   }, []);
-
   return (
     <>
       <Topbar />
