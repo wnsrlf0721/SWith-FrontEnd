@@ -91,6 +91,7 @@ const Button = styled.button`
   border: 0;
   outline: 0;
   text-decoration: none;
+  cursor: pointer;
 `;
 const Join = styled.div`
   margin-top: 30px;
@@ -151,9 +152,12 @@ const Loginjs = () => {
           const result = response.data;
           console.log(result);
           if (result.status === "200" && result.message === "OK") {
+            const data = result.data;
             alert("로그인 성공!");
             let user = {
               name: email,
+              jwt: data.jwt,
+              userId: data.userId,
             };
             sessionStorage.setItem("userInfo", JSON.stringify(user));
             return (window.location.href = "/");

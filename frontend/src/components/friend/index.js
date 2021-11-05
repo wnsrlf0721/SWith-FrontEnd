@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Topbar from "../main/topbar";
-function index() {
+function Index() {
+  const isLogined = window.sessionStorage.userInfo == null ? false : true;
+  useEffect(() => {
+    if (!isLogined) {
+      alert("로그인이 필요합니다.");
+      return (window.location.href = "/login");
+    }
+  }, []);
+
   return (
     <>
       <Topbar />
@@ -11,4 +19,4 @@ function index() {
   );
 }
 
-export default index;
+export default Index;

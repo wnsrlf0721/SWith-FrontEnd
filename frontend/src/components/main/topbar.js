@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import logo from "../../images/logo.png";
 import DM_icon from "../../images/DM_icon.png";
+import axios from "../../api/defaultaxios";
 
 const Bar = styled.div`
   width: 100%;
@@ -72,7 +73,7 @@ const Right = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  width: 278px;
+  height: 20px;
 
   /* Inside Auto Layout */
   flex: none;
@@ -103,10 +104,42 @@ const Right = styled.div`
     text-decoration: none;
     color: #fafafa;
   }
+  .rLink {
+    font-size: 17px;
+    font-family: Roboto;
+    color: #ef8585;
+    font-weight: 700;
+    text-decoration: none;
+    padding: 0 6px;
+  }
 `;
 
-const topbar = () => {
+const Topbar = () => {
   const isLogined = window.sessionStorage.userInfo == null ? false : true;
+
+  const onLogout = (e) => {
+    const data = JSON.parse(window.sessionStorage.userInfo);
+    console.log(data);
+    alert("로그아웃 하였습니다.");
+    sessionStorage.removeItem("userInfo");
+    return (window.location.href = "/");
+    // axios
+    //   .post("/logout", {
+    //     email: data.name,
+    //   })
+    //   .then((response) => {
+    //     const result = response.data;
+    //     console.log(result);
+    //     if (result.status === "200" && result.message === "OK") {
+    //       alert("로그아웃 하였습니다.");
+    //       sessionStorage.removeItem("userInfo");
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log(error.toJSON());
+    //     alert("로그아웃하는데 문제가 발생했습니다.");
+    //   });
+  };
 
   return (
     <Bar>
@@ -130,21 +163,12 @@ const topbar = () => {
           </Search>
         </Left>
         <Right>
-          <a
-            href="/mk_room"
-            style={{
-              fontSize: "17px",
-              fontFamily: "Roboto",
-              color: "#EF8585",
-              fontWeight: "700",
-              textDecoration: "none",
-            }}
-          >
+          <a className="rLink" href="/mk_room">
             스터디 만들기
           </a>
           <a href="/dm">
             <img
-              style={{ height: "18px", width: "18px" }}
+              style={{ height: "18px", width: "18px", padding: "0 6px" }}
               src={DM_icon}
               alt="DM_icon"
             />
@@ -154,9 +178,22 @@ const topbar = () => {
               로그인
             </a>
           ) : (
-            <a href="/profile" className="login">
-              프로필
-            </a>
+            <div>
+              <a href="/profile" className="rLink">
+                프로필
+              </a>
+              <button
+                style={{
+                  border: "none",
+                  backgroundColor: "white",
+                  cursor: "pointer",
+                }}
+                className="rLink"
+                onClick={onLogout}
+              >
+                로그아웃
+              </button>
+            </div>
           )}
         </Right>
       </Container>
@@ -164,4 +201,4 @@ const topbar = () => {
   );
 };
 
-export default topbar;
+export default Topbar;

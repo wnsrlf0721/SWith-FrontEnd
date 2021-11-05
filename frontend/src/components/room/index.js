@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-function index() {
+function Index() {
+  const isLogined = window.sessionStorage.userInfo == null ? false : true;
+  useEffect(() => {
+    if (!isLogined) {
+      alert("로그인이 필요합니다.");
+      return (window.location.href = "/login");
+    }
+  }, []);
   return <h1>스터디룸 페이지</h1>;
 }
 
-export default index;
+export default Index;

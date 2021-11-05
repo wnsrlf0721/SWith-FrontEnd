@@ -105,6 +105,7 @@ const SendBT = styled.button`
   font-family: Roboto;
   font-size: 15px;
   color: #fafafa;
+  cursor: pointer;
 `;
 
 const Joinjs = () => {
