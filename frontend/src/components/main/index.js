@@ -84,7 +84,7 @@ const Index = () => {
   const addStudyHashtag = ()=> {
     //later
   }
-
+  
   return (
     <Wrap>
       <Topbar/>
