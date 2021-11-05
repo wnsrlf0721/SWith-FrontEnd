@@ -1,58 +1,3 @@
-<<<<<<< HEAD
-// import React from "react";
-// import Topbar from "./topbar";
-// import StudyList from "./StudyList";
-
-// const index = () => {
-//   return (
-//     <>
-//       <Topbar />
-//       <StudyList/>
-//     </>
-//   );
-// };
-
-// export default index;
-
-
-import React , {useState} from "react";
-import Topbar from "./topbar";
-import "./Index.css"
-import StudyCard from './StudyCard'
-import studyImage from "../../images/studyImage.jpg";
-import styled from "styled-components";
-
-const Container = styled.div`
-  padding: 70px 20px 0;
-  width: 1200px;
-  margin: 0 auto;
-`
-
-
-
-const Index = () => {
-    let studyNum = 0;
-    const [toggleState,setToggleState] = useState(1);
-    const toggleTab = (index) => {
-      setToggleState(index);
-    }
-    const [studyTitle, setStudyTitle] = useState("스윗 스터디룸");
-    const addStudyTitle = () => {
-      //later
-    }
-    const [studyHashtag, setStudyHashtag] = useState("#스윗 #SWith");
-    const addStudyHashtag = ()=> {
-      //later
-    }
-
-
-    
-
-    return (
-    <>
-      <Topbar />
-      <Container>
-=======
 import React, {Component, useState} from "react";
 //import {StyleSheet, Text, View} from 'react-native';
 import styled from "styled-components";
@@ -144,7 +89,7 @@ const Index = () => {
     <Wrap>
       <Topbar/>
       <HomePage>
-        <EmptyBox style = {{margin: '0 auto'}}>
+        <EmptyBox style = {{margin: '0 auto', width: '1200px'}}>
           <EmptyBox style = {{margin:'0',width:'60%'}}>
             <Container style= {{margin:'0 0 48px 0',width: '720px'}}>
               <TextBox style = {{fontWeight:'bold',width:'600px'}}>내 스터디</TextBox>
@@ -209,7 +154,6 @@ const Index = () => {
         </EmptyBox>
       </HomePage>
       <BottomPage>
->>>>>>> master
         <div className = "StudiesContainer">
             <div className = "StudiesHeader"> 
               <div className = "StudiesHeaderTitle">
@@ -264,18 +208,9 @@ const Index = () => {
               </StudyCard>
             </div>
         </div>
-<<<<<<< HEAD
-      </Container>
-    </>
-  );
-};
-
-export default Index;
-=======
       </BottomPage>
     </Wrap>
   );
 };
 
 export default Index;
->>>>>>> master
