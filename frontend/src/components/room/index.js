@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 
 function Index() {
-  const isLogined = window.sessionStorage.userInfo == null ? false : true;
   useEffect(() => {
+    const isLogined = window.sessionStorage.userInfo == null ? false : true;
     if (!isLogined) {
       alert("로그인이 필요합니다.");
       return (window.location.href = "/login");

@@ -1,9 +1,15 @@
 import React, { useEffect } from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Topbar from "../main/topbar";
+import view from "./route/view";
+import edit from "./route/edit";
+import plan from "../plan/index";
+
+const baseUrl = "/profile/";
 
 const Index = () => {
-  const isLogined = window.sessionStorage.userInfo == null ? false : true;
   useEffect(() => {
+    const isLogined = window.sessionStorage.userInfo == null ? false : true;
     if (!isLogined) {
       alert("로그인이 필요합니다.");
       return (window.location.href = "/login");
@@ -12,8 +18,14 @@ const Index = () => {
   return (
     <>
       <Topbar />
-      <div style={{ position: "relative", marginTop: "64px" }}>
-        <h1>개인 프로필 페이지</h1>
+      <div>
+        <BrowserRouter>
+          <Switch>
+            <Route exact path={baseUrl} component={view} />
+            <Route path={baseUrl + "edit"} component={edit} />
+            <Route path="/plan" component={plan} />
+          </Switch>
+        </BrowserRouter>
       </div>
     </>
   );

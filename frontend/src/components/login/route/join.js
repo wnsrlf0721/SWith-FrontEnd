@@ -255,12 +255,12 @@ const Joinjs = () => {
                 이메일이 중복되었는지 확인해주세요
               </div>
             )}
+            {checkemail && (
+              <div>
+                <SendBT onClick={(e) => sendCode(e)}>인증번호 전송</SendBT>
+              </div>
+            )}
           </Text>
-          {checkemail && (
-            <SendBT onClick={(e) => sendCode(e)} style={{ float: "right" }}>
-              인증번호 전송
-            </SendBT>
-          )}
           <Text>
             <Label>인증번호</Label>
             <Input
