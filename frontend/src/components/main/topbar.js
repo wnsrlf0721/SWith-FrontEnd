@@ -13,7 +13,7 @@ const Bar = styled.div`
 `;
 
 const Container = styled.div`
-  width: 1920px;
+  width: 100%;
   height: 64px;
   margin: 0 0 0;
   display: flex;
@@ -122,6 +122,7 @@ const topbar = () => {
             <a href="/plan">공부기록</a>
             <a href="/comm">커뮤니티</a>
             <a href="/friend">친구</a>
+            <a href="/UserProfile">유저프로필사진</a>
           </Link>
           <Search>
             <Input type="text" placeholder="스터디 검색" class="srh" />

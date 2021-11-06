@@ -89,7 +89,7 @@ const Index = () => {
     <Wrap>
       <Topbar/>
       <HomePage>
-        <EmptyBox style = {{margin: '0 auto'}}>
+        <EmptyBox style = {{margin: '0 auto', width: '1200px'}}>
           <EmptyBox style = {{margin:'0',width:'60%'}}>
             <Container style= {{margin:'0 0 48px 0',width: '720px'}}>
               <TextBox style = {{fontWeight:'bold',width:'600px'}}>내 스터디</TextBox>
