@@ -8,7 +8,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from '@fullcalendar/interaction';
 
-//import "@fullcalendar/core/main.css";
+import "@fullcalendar/core";
 import "@fullcalendar/daygrid/main.css";
 import "@fullcalendar/timegrid/main.css";
 
@@ -25,7 +25,6 @@ export default class Calendar extends React.Component {
   render() {
     return (
       <div className='demo-app'>
-        {this.renderSidebar()}
         <div className='demo-app-main'>
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -54,6 +53,7 @@ export default class Calendar extends React.Component {
             */
           />
         </div>
+        {this.renderSidebar()}
       </div>
     )
   }
@@ -61,15 +61,15 @@ export default class Calendar extends React.Component {
   renderSidebar() {
     return (
       <div className='demo-app-sidebar'>
-        <div className='demo-app-sidebar-section'>
+        {/* <div className='demo-app-sidebar-section'>
           <h2>Instructions</h2>
           <ul>
             <li>Select dates and you will be prompted to create a new event</li>
             <li>Drag, drop, and resize events</li>
             <li>Click an event to delete it</li>
           </ul>
-        </div>
-        <div className='demo-app-sidebar-section'>
+        </div> */}
+        {/* <div className='demo-app-sidebar-section'>
           <label>
             <input
               type='checkbox'
@@ -78,9 +78,9 @@ export default class Calendar extends React.Component {
             ></input>
             toggle weekends
           </label>
-        </div>
+        </div> */}
         <div className='demo-app-sidebar-section'>
-          <h2>All Events ({this.state.currentEvents.length})</h2>
+          <h2>To do list ({this.state.currentEvents.length})</h2>
           <ul>
             {this.state.currentEvents.map(renderSidebarEvent)}
           </ul>

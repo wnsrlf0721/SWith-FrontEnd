@@ -154,7 +154,7 @@ const Topbar = () => {
           </a>
           <Link>
             <a href="/">홈</a>
-            <a href="/plan">공부기록</a>
+            <a href="/plan">학습관리</a>
             <a href="/comm">커뮤니티</a>
             <a href="/friend">친구</a>
             {/* <a href="/UserProfile">프로필편집</a> */}

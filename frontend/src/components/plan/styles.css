@@ -1,5 +1,5 @@
 .App {
-  font-family: sans-serif;
+  font-family: Roboto;
   text-align: center;
 }
 
@@ -32,22 +32,30 @@ b { /* used for event dates/times */
 }
 
 .Container {
-  flex-direction: column;
+  
+  flex-direction: row;
+  width:100%;
+  font-family: Roboto;
+  font-size: 14px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .demo-app {
   display: flex;
   min-height: 100%;
-  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  font-family: Roboto;
   font-size: 14px;
   flex-direction: row;
-  margin-top: 64px;
+  margin: 0 auto;
 }
 
 .demo-app-sidebar {
   width: 300px;
   line-height: 1.5;
-  background: #eaf9ff;
+  background: #fafafa;
   border-right: 1px solid #d3e2e8;
 }
 
@@ -63,4 +71,41 @@ b { /* used for event dates/times */
 .fc { /* the calendar root */
   max-width: 1100px;
   margin: 0 auto;
+}
+
+
+
+:root {
+  --fc-small-font-size: .85em;
+  --fc-page-bg-color: #fff;
+  --fc-neutral-bg-color: rgba(208, 208, 208, 0.3);
+  --fc-neutral-text-color: #808080;
+  --fc-border-color: #ddd;
+
+  --fc-button-text-color: #fff;
+  --fc-button-bg-color: #ef8585;
+  --fc-button-border-color: #ef8585;
+  --fc-button-hover-bg-color: #ef5656;
+  --fc-button-hover-border-color: #ef5656;
+  --fc-button-active-bg-color: #ef5656;
+  --fc-button-active-border-color: #ef5656;
+
+  --fc-event-bg-color: #f8ad1d;
+  --fc-event-border-color: #f8ad1d;
+  --fc-event-text-color: #fff;
+  --fc-event-selected-overlay-color: rgba(0, 0, 0, 0.25);
+
+  --fc-more-link-bg-color: #d0d0d0;
+  --fc-more-link-text-color: inherit;
+
+  --fc-event-resizer-thickness: 8px;
+  --fc-event-resizer-dot-total-width: 8px;
+  --fc-event-resizer-dot-border-width: 1px;
+
+  --fc-non-business-color: rgba(215, 215, 215, 0.3);
+  --fc-bg-event-color: rgb(143, 223, 130);
+  --fc-bg-event-opacity: 0.3;
+  --fc-highlight-color: rgba(235, 235, 235, 0.3);
+  --fc-today-bg-color: rgba(55, 136, 216, 0.15);
+  --fc-now-indicator-color: red;
 }
