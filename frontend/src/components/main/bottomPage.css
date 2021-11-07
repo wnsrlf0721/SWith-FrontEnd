@@ -6,14 +6,12 @@
 .StudiesHeader {
   position: relative;
   z-index: 3;
-
-  
 }
 .StudiesHeaderTitle {
   justify-content: space-between;
   -webkit-box-align: end;
   align-items: flex-end;
-  display : flex;
+  display: flex;
   font-size: 100px;
 }
 
@@ -34,16 +32,15 @@ font-size: 22px;
   display: flex;
   align-items: center;
 }
- .StudiesTabListWrap {
-  display:flex;
+.StudiesTabListWrap {
+  display: flex;
   margin: 0;
   padding: 0;
   list-style: none;
 }
- .StudiesButtonActive{
-  margin : 4px;  
-  border: 1px
-  solid #ef7575;
+.StudiesButtonActive {
+  margin: 4px;
+  border: 1px solid #ef7575;
   background-color: #ef8585;
   font-weight: 700;
   color: #fff;
@@ -54,27 +51,35 @@ font-size: 22px;
   outline: 0;
   text-decoration: none;
   cursor: pointer;
-  }
+}
 
- .StudiesButton {
-  margin : 4px;
-  border: 1px
-  solid #d0d0d0;
+.StudiesButton {
+  margin: 4px;
+  border: 1px solid #d0d0d0;
   border-radius: 100px;
   padding: 3px 18px;
   background-color: #fff;
   font-size: 15px;
   line-height: 34px;
   cursor: pointer;
-  color : #454648
- 
+  color: #454648;
 }
 
-
 .StudyCardWrap {
-    margin-top : 30px;
-    width:100%;
-    display: flex;
-    flex-wrap: wrap;
-    height: 100%;
+  margin-top: 30px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+}
+.Pagebutton {
+  margin: 4px;
+  border: 1px solid #d0d0d0;
+  border-radius: 100px;
+  padding: 3px 18px;
+  background-color: #fff;
+  font-size: 15px;
+  line-height: 34px;
+  cursor: pointer;
+  color: #454648;
 }
