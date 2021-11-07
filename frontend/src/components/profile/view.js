@@ -1,8 +1,8 @@
-import axios from "../../../api/defaultaxios";
+import axios from "../../api/defaultaxios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import UserImage from "../../../images/default_profile_Image.png";
+import UserImage from "../../images/default_profile_Image.png";
 
 const Container = styled.div`
   display: flex;

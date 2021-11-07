@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import axios from "../../../api/defaultaxios";
-import UserImage from "../../../images/default_profile_Image.png";
+import axios from "../../api/defaultaxios";
+import UserImage from "../../images/default_profile_Image.png";
 
 const Container = styled.div`
   display: flex;

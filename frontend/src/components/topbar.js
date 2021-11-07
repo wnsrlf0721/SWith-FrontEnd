@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import logo from "../../images/logo.png";
-import DM_icon from "../../images/DM_icon.png";
-import axios from "../../api/defaultaxios";
+import logo from "../images/logo.png";
+import DM_icon from "../images/DM_icon.png";
+import axios from "../api/defaultaxios";
 
 const Bar = styled.div`
   width: 100%;
