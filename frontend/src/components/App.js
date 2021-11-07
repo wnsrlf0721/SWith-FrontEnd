@@ -7,7 +7,7 @@ import plan from "./plan/index";
 import comm from "./comm/index";
 import friend from "./friend/index";
 import profile from "./profile/index";
-
+import dm from "./DM/index";
 function App() {
   return (
     <>
@@ -20,6 +20,7 @@ function App() {
           <Route path="/plan/" component={plan} />
           <Route path="/comm/" component={comm} />
           <Route path="/friend/" component={friend} />
+          <Route path="/dm" component={dm} />
         </Switch>
       </BrowserRouter>
     </>
