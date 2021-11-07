@@ -1,12 +1,12 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
-import main from "./main/index";
+import main from "../routes/main";
 import room from "./room/index";
-import auth from "./login/index";
+import auth from "../routes/auth";
 import plan from "./plan/index";
 import comm from "./comm/index";
 import friend from "./friend/index";
-import profile from "./profile/index";
+import profile from "../routes/profile";
 import dm from "./DM/index";
 
 function App() {

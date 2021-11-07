@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import Topbar from "../main/topbar";
-import view from "./route/view";
-import edit from "./route/edit";
-import plan from "../plan/index";
+import Topbar from "../components/topbar";
+import view from "../components/profile/view";
+import edit from "../components/profile/edit";
+import plan from "../components/plan/index";
 
 const baseUrl = "/profile/";
 

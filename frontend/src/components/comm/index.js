@@ -1,5 +1,5 @@
 import React from "react";
-import Topbar from "../main/topbar";
+import Topbar from "../topbar";
 function index() {
   return (
     <>

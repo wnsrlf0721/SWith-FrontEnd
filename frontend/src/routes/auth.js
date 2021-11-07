@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
-import login from "./route/login";
-import join from "./route/join";
-import logo from "../../images/logo.png";
+import login from "../components/login/login";
+import join from "../components/login/join";
+import logo from "../images/logo.png";
 
 const Header = styled.header`
   height: 64px;

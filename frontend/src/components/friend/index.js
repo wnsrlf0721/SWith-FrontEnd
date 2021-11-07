@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Topbar from "../main/topbar";
+import Topbar from "../topbar";
 
 function Index() {
   useEffect(() => {
