@@ -57,10 +57,25 @@ const BottomPage = () => {
     //later
   };
 
+  const [posts, setPosts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 10;
+
   useEffect(() => {
-    const Listlen = exampleList.data.length;
-    setStudyNum(Listlen);
+    setPosts(exampleList.data);
+    setStudyNum(exampleList.data.length);
   }, []);
+
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(posts.length / postsPerPage); i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <Bottompage>
@@ -98,14 +113,25 @@ const BottomPage = () => {
         </div>
 
         <div className="StudyCardWrap">
-          {exampleList.data.map((data) => (
-            <StudyCard
-              title={data.title}
-              imgUrl={studyImage}
-              body={data.body}
-            ></StudyCard>
-          ))}
+          {currentPosts.map((data) => {
+            return (
+              <StudyCard
+                title={data.title}
+                imgUrl={studyImage}
+                body={data.body}
+              ></StudyCard>
+            );
+          })}
         </div>
+        <nav>
+          {pageNumbers.map((number) => {
+            return (
+              <button className="Pagebutton" onClick={() => paginate(number)}>
+                {number}
+              </button>
+            );
+          })}
+        </nav>
       </div>
     </Bottompage>
   );
