@@ -44,7 +44,7 @@ const TabWrap = styled.div`
   width:182px;
   font-family: Roboto;
   font-size: 14px;
-  margin-top: 64px;
+  margin-top: 84px;
   //display: flex;
   align-items: center;
   display: table; 
@@ -54,7 +54,7 @@ const TabWrap = styled.div`
 `; 
 const TabWrapContainer = styled.div`
   width:100%;
-  margin-top:64px;
+  // margin-top:64px;
   margin-left: auto;
   margin-right: auto;
 `; 
