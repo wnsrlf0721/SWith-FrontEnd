@@ -11,6 +11,7 @@ const Bar = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 5;
 `;
 
 const Container = styled.div`
