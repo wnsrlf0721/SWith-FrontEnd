@@ -187,7 +187,7 @@ const Joinjs = () => {
   };
   const certificate = (e) => {
     axios
-      .post("/sign/certificate-email", {
+      .post("/signup/certificate-email", {
         email: email,
         certificationCode: authcode,
       })
@@ -204,6 +204,7 @@ const Joinjs = () => {
       });
   };
   const onSignup = (e) => {
+    console.log(nickname);
     if (!emailtype || !checkemail || !checkcode || !password || !nickname) {
       return alert("빈칸을 다시 한번 확인해주세요.");
     }
