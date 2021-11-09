@@ -14,6 +14,8 @@ import "@fullcalendar/timegrid/main.css";
 
 import { INITIAL_EVENTS, createEventId } from './event-utils';
 
+let todayStr = new Date().toDateString() // YYYY-MM-DD of today
+let today = new Date().toLocaleDateString()
 
 export default class Calendar extends React.Component {
 
@@ -23,6 +25,8 @@ export default class Calendar extends React.Component {
   }
 
   render() {
+    
+  
     return (
       <div className='demo-app'>
         <div className='demo-app-main'>
@@ -80,7 +84,8 @@ export default class Calendar extends React.Component {
           </label>
         </div> */}
         <div className='demo-app-sidebar-section'>
-          <h2>To do list ({this.state.currentEvents.length})</h2>
+          <h2>오늘의 To-do list</h2>
+          <h3>{today}</h3>
           <ul>
             {this.state.currentEvents.map(renderSidebarEvent)}
           </ul>
@@ -96,7 +101,7 @@ export default class Calendar extends React.Component {
   }
 
   handleDateSelect = (selectInfo) => {
-    let title = prompt('Please enter a new title for your event')
+    let title = prompt('새로운 일정을 등록하세요')
     let calendarApi = selectInfo.view.calendar
 
     calendarApi.unselect() // clear date selection
@@ -107,13 +112,14 @@ export default class Calendar extends React.Component {
         title,
         start: selectInfo.startStr,
         end: selectInfo.endStr,
-        allDay: selectInfo.allDay
+        allDay: selectInfo.allDay,
+        
       })
     }
   }
 
   handleEventClick = (clickInfo) => {
-    if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+    if (window.confirm(`정말 '${clickInfo.event.title}'을 삭제하시겠습니까?`)) {
       clickInfo.event.remove()
     }
   }
@@ -135,13 +141,47 @@ function renderEventContent(eventInfo) {
 }
 
 function renderSidebarEvent(event) {
-  return (
-    <li key={event.id}>
-      <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
-      <i>{event.title}</i>
-    </li>
-  )
+  let Start = event.start.toDateString() 
+  let Today = new Date()
+  
+
+ 
+  if(!event.end){
+    if(Start==todayStr){
+      return (
+        <li key={event.id}>
+          
+          <b>{event.title}</b>
+        </li>
+      )
+    }
+  }
+  else{
+    
+    if((Today.getTime()>=event.start.getTime())&&(Today.getTime()<=event.end.getTime())){
+      return (
+        <li key={event.id}>
+          
+          <b>{event.title}</b>
+        </li>
+      )
+    }
+  }
+// 원본 코드
+// return (
+//   <li key={event.id}>
+//     <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
+//     <i>{event.title}</i>
+//   </li>
+// )
+
+
 }
+
+
+
+
+
 
 
 
