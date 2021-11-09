@@ -187,7 +187,7 @@ const Joinjs = () => {
   };
   const certificate = (e) => {
     axios
-      .post("/sign/certificate-email", {
+      .post("/signup/certificate-email", {
         email: email,
         certificationCode: authcode,
       })
