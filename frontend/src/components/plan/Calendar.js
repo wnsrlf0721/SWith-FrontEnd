@@ -27,16 +27,15 @@ export default class Calendar extends React.Component {
       {
         id:'0' ,
         check: false,
-        title:'0번',
-        date:''
+        // title:'0번',
+        // date:''
       },
       {
         id:'1' ,
         check: true,
-        title:'1번',
-        date:''
+        // title:'1번',
+        // date:''
       }
-      
     ]
   }
 
@@ -77,7 +76,6 @@ export default class Calendar extends React.Component {
       </div>
     );
   }
-
 
   // eventAdd={function(){}}
   // eventChange={function(){}}
@@ -128,8 +126,8 @@ export default class Calendar extends React.Component {
   }
 
   renderSidebar() {
-    // const {todo} = this.state;
-    // console.log(todo);
+    const {todo} = this.state;
+    console.log(todo);
     return (
       <div className="demo-app-sidebar">
         <div className='demo-app-sidebar-section'>
@@ -142,8 +140,6 @@ export default class Calendar extends React.Component {
       </div>
     );
   }
-
-  //userId.taskDescription=부분들,,,배열?
 
   getTodoCheck = (event) => {
     let IdNum = event.id;
@@ -171,7 +167,7 @@ export default class Calendar extends React.Component {
   handleTodoCreate = (event) => {
     const { todo } = this.state;
     this.setState({
-      todo: todo.concat({ id: event.id, check:false, title:event.title,date:event.end})
+      todo: todo.concat({ id: event.id, check:false})//, title:event.title,date:event.end
     })
   }
 
@@ -245,8 +241,6 @@ export default class Calendar extends React.Component {
       let todayMD = String(Today.getMonth()+ Today.getDate().toString().padStart(2,'0')+'01')
       let endMD = String(event.end.getMonth()+event.end.getDate().toString().padStart(2,'0')+event.end.getHours().toString().padStart(2,'0'))
       
-     
-  
       if((todayMD>=startMD)&&(todayMD<=endMD)){
       // if((Today.getTime()>=event.start.getTime()&&(Today.getTime()<=event.end.getTime()))){
         return (
@@ -261,7 +255,6 @@ export default class Calendar extends React.Component {
           </li>
         )
       }
-  
       
     }
   // 원본 코드
