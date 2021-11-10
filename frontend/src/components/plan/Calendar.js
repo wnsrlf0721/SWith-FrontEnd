@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 //import Topbar from "../main/topbar";
 import "./styles.css";
 
@@ -6,36 +6,33 @@ import "./styles.css";
 import FullCalendar, { formatDate } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from '@fullcalendar/interaction';
+import interactionPlugin from "@fullcalendar/interaction";
 
 import "@fullcalendar/core";
 import "@fullcalendar/daygrid/main.css";
 import "@fullcalendar/timegrid/main.css";
 
-import { INITIAL_EVENTS, createEventId } from './event-utils';
-
+import { INITIAL_EVENTS, createEventId } from "./event-utils";
 
 export default class Calendar extends React.Component {
-
   state = {
     weekendsVisible: true,
-    currentEvents: []
-  }
+    currentEvents: [],
+  };
 
   render() {
     return (
-      <div className='demo-app'>
-        <div className='demo-app-main'>
+      <div className="demo-app">
+        <div className="demo-app-main">
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             headerToolbar={{
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay',
+              left: "prev,next today",
+              center: "title",
+              right: "dayGridMonth,timeGridWeek,timeGridDay",
             }}
-            
-            locale='ko'
-            initialView='dayGridMonth'
+            locale="ko"
+            initialView="dayGridMonth"
             editable={true}
             selectable={true}
             selectMirror={true}
@@ -55,12 +52,12 @@ export default class Calendar extends React.Component {
         </div>
         {this.renderSidebar()}
       </div>
-    )
+    );
   }
 
   renderSidebar() {
     return (
-      <div className='demo-app-sidebar'>
+      <div className="demo-app-sidebar">
         {/* <div className='demo-app-sidebar-section'>
           <h2>Instructions</h2>
           <ul>
@@ -79,27 +76,25 @@ export default class Calendar extends React.Component {
             toggle weekends
           </label>
         </div> */}
-        <div className='demo-app-sidebar-section'>
+        <div className="demo-app-sidebar-section">
           <h2>To do list ({this.state.currentEvents.length})</h2>
-          <ul>
-            {this.state.currentEvents.map(renderSidebarEvent)}
-          </ul>
+          <ul>{this.state.currentEvents.map(renderSidebarEvent)}</ul>
         </div>
       </div>
-    )
+    );
   }
 
   handleWeekendsToggle = () => {
     this.setState({
-      weekendsVisible: !this.state.weekendsVisible
-    })
-  }
+      weekendsVisible: !this.state.weekendsVisible,
+    });
+  };
 
   handleDateSelect = (selectInfo) => {
-    let title = prompt('Please enter a new title for your event')
-    let calendarApi = selectInfo.view.calendar
+    let title = prompt("Please enter a new title for your event");
+    let calendarApi = selectInfo.view.calendar;
 
-    calendarApi.unselect() // clear date selection
+    calendarApi.unselect(); // clear date selection
 
     if (title) {
       calendarApi.addEvent({
@@ -107,22 +102,26 @@ export default class Calendar extends React.Component {
         title,
         start: selectInfo.startStr,
         end: selectInfo.endStr,
-        allDay: selectInfo.allDay
-      })
+        allDay: selectInfo.allDay,
+      });
     }
-  }
+  };
 
   handleEventClick = (clickInfo) => {
-    if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove()
+    if (
+      window.confirm(
+        `Are you sure you want to delete the event '${clickInfo.event.title}'`
+      )
+    ) {
+      clickInfo.event.remove();
     }
-  }
+  };
 
   handleEvents = (events) => {
     this.setState({
-      currentEvents: events
-    })
-  }
+      currentEvents: events,
+    });
+  };
 }
 ///////////////////////////////////
 function renderEventContent(eventInfo) {
@@ -131,17 +130,20 @@ function renderEventContent(eventInfo) {
       <b>{eventInfo.timeText}</b>
       <i>{eventInfo.event.title}</i>
     </>
-  )
+  );
 }
 
 function renderSidebarEvent(event) {
   return (
     <li key={event.id}>
-      <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
+      <b>
+        {formatDate(event.start, {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })}
+      </b>
       <i>{event.title}</i>
     </li>
-  )
+  );
 }
-
-
-
