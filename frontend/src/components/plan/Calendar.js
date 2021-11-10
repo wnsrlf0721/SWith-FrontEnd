@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 //import Topbar from "../main/topbar";
 import "./styles.css";
 
@@ -17,6 +17,7 @@ import { INITIAL_EVENTS, createEventId } from './event-utils';
 let todayStr = new Date().toDateString() // YYYY-MM-DD of today
 let today = new Date().toLocaleDateString()
 
+
 export default class Calendar extends React.Component {
 
   state = {
@@ -25,6 +26,7 @@ export default class Calendar extends React.Component {
   }
 
   render() {
+    
     
   
     return (
@@ -39,7 +41,7 @@ export default class Calendar extends React.Component {
             }}
             
             locale='ko'
-            initialView='dayGridMonth'
+            initialView='timeGridWeek'
             editable={true}
             selectable={true}
             selectMirror={true}
@@ -131,6 +133,7 @@ export default class Calendar extends React.Component {
   }
 }
 ///////////////////////////////////
+
 function renderEventContent(eventInfo) {
   return (
     <>
@@ -143,7 +146,6 @@ function renderEventContent(eventInfo) {
 function renderSidebarEvent(event) {
   let Start = event.start.toDateString() 
   let Today = new Date()
-  
 
  
   if(!event.end){
@@ -157,15 +159,22 @@ function renderSidebarEvent(event) {
     }
   }
   else{
+    let startMD = String(event.start.getMonth()+event.start.getDate().toString().padStart(2,'0')+'00')
+    let todayMD = String(Today.getMonth()+ Today.getDate().toString().padStart(2,'0')+'01')
+    let endMD = String(event.end.getMonth()+event.end.getDate().toString().padStart(2,'0')+event.end.getHours().toString().padStart(2,'0'))
     
-    if((Today.getTime()>=event.start.getTime())||(Today.getTime()<=event.end.getTime())){
+   
+
+    if((todayMD>=startMD)&&(todayMD<=endMD)){
+    // if((Today.getTime()>=event.start.getTime()&&(Today.getTime()<=event.end.getTime()))){
       return (
         <li key={event.id}>
-          
           <b>{event.title}</b>
         </li>
       )
     }
+
+    
   }
 // 원본 코드
 // return (
