@@ -5,14 +5,14 @@ import Chart from "react-apexcharts";
 
 const series_week = [
   {
-    name: "Inflation",
+    name: "Week Complete",
     data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 3.2],
   },
 ];
 
 const series_month = [
   {
-    name: "Inflation",
+    name: "Month Complete",
     data: [2.3, 3.1, 4.0, 10.1, 4.0],
   },
 ];
@@ -50,17 +50,6 @@ const options = {
   xaxis: {
     categories: ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
     position: "bottom",
-  },
-  yaxis: {
-    axisBorder: {
-      show: false,
-    },
-    axisTicks: {
-      show: false,
-    },
-    labels: {
-      show: false,
-    },
   },
 };
 
@@ -177,8 +166,7 @@ const Statistics = () => {
     axios
       .get(`/statistics/${userInfo.userId}`)
       .then((response) => {
-        const data = response.data;
-        console.log(data);
+        console.log(response);
       })
       .catch((error) => {
         console.log(error.toJSON());

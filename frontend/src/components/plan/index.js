@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-
+import axios from "../../api/defaultaxios";
 import Calendar from "./Calendar";
 import Statistics from "./Statistics";
 
@@ -57,6 +57,15 @@ const Index = () => {
     } else {
       console.log(window.sessionStorage.userInfo);
     }
+    const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    axios
+      .get(`/planners/${userInfo.userId}`)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error.toJSON());
+      });
   }, []);
 
   const [swapleft, setSwapleft] = useState(true);
