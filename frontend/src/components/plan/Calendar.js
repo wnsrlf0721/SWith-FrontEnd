@@ -27,12 +27,14 @@ export default class Calendar extends React.Component {
       {
         id:'0' ,
         check: false,
-        title:'0번'
+        title:'0번',
+        date:''
       },
       {
         id:'1' ,
         check: true,
-        title:'1번'
+        title:'1번',
+        date:''
       }
       
     ]
@@ -50,8 +52,6 @@ export default class Calendar extends React.Component {
               center: "title",
               right: "dayGridMonth,timeGridWeek,timeGridDay",
             }}
-
-
             locale="ko"
             initialView="dayGridMonth"
 
@@ -78,29 +78,60 @@ export default class Calendar extends React.Component {
     );
   }
 
+
+  // eventAdd={function(){}}
+  // eventChange={function(){}}
+  // eventRemove={function(){}}
+
+/* 여기서부터 api연결부분 */
+
+  eventAllSave=(event)=>{
+    //currentEvent라는 배열에 현재 시점까지의 이벤트들이 전부 들어있고 이것을 한꺼번에 DB에 올리는 부분.. 실제로는 필요x
+
+/*
+    this.state.currentEvents.map((event)=> {
+      "taskID": event.id,
+      
+      "taskDescription":event.title,
+    
+      "startDate":event.start,
+      
+      "endDate":event.end,
+      
+      "complete":+this.getTodoCheck(event.id)//boolean값을 0,1로 바꿈
+    })
+*/
+  }
+
+  handleEventAdd = (event) =>{
+    //해당 이벤트를 캘린더의 클릭으로 생성하였으므로 데이터베이스에 이벤트를 추가해야함
+/*
+    "taskID": event.id,
+
+    "taskDescription":event.title,
+  
+    "startDate":event.start,
+    
+    "endDate":event.end,
+    
+    "complete":+this.getTodoCheck(event.id)//boolean값을 0,1로 바꿈
+*/
+  }
+  handleEventChange = (event) =>{
+    //체크 상태가 바뀐 이벤트를 데이터베이스에 반영, 해당 이벤트만 내용을 수정할 것인가?
+
+  }
+
+  handleEventRemove = (event) =>{
+    //달력에 존재하는 이벤트를 클릭할 때 이벤트가 삭제됨, 파라미터에 들어온 이벤트를 DB에서 삭제하는 부분
+
+  }
+
   renderSidebar() {
     // const {todo} = this.state;
     // console.log(todo);
     return (
       <div className="demo-app-sidebar">
-        {/* <div className='demo-app-sidebar-section'>
-          <h2>Instructions</h2>
-          <ul>
-            <li>Select dates and you will be prompted to create a new event</li>
-            <li>Drag, drop, and resize events</li>
-            <li>Click an event to delete it</li>
-          </ul>
-        </div> */}
-        {/* <div className='demo-app-sidebar-section'>
-          <label>
-            <input
-              type='checkbox'
-              checked={this.state.weekendsVisible}
-              onChange={this.handleWeekendsToggle}
-            ></input>
-            toggle weekends
-          </label>
-        </div> */}
         <div className='demo-app-sidebar-section'>
           <h2>오늘의 To-do list</h2>
           <h3>{today}</h3>
@@ -112,48 +143,42 @@ export default class Calendar extends React.Component {
     );
   }
 
-  // handleTodoToggle = () => {
-  //   const { todo } = this.state;
-  //   this.setState({
-  //     // weekendsVisible: !this.state.weekendsVisible
+  //userId.taskDescription=부분들,,,배열?
 
-  //   })
-  // }
-
-
-  getTodoCheck = (id) => {
+  getTodoCheck = (event) => {
+    let IdNum = event.id;
     const { todo } = this.state;
     let chch;
     todo.map((x)=> { 
-      if(x.id === id) { 
+      if(x.id === IdNum) { 
         chch = x.check;
       } })
-    // console.log(ResultTF);
-    // return ResultTF
     return chch
   }
-  handleTodoUpdate = (id) => {
+  handleTodoUpdate = (event) => {
+    let IdNum = event.id;
     const { todo } = this.state;
     this.setState({
       todo: todo.map(
-        info => id === info.id
+        info => IdNum === info.id
           ? { ...info, check: !info.check } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
           : info // 기존의 값을 그대로 유지
       )
-    })
+    });
+    this.handleEventChange(event);
   };
 
-  handleTodoCreate = (idNum,title) => {
+  handleTodoCreate = (event) => {
     const { todo } = this.state;
     this.setState({
-      todo: todo.concat({ id: idNum, check:false, title:title  })
+      todo: todo.concat({ id: event.id, check:false, title:event.title,date:event.end})
     })
   }
 
-  handleTodoRemove = (id) => {
+  handleTodoRemove = (event) => {
     const { todo } = this.state;
     this.setState({
-      todo: todo.filter(info => info.id !== id),
+      todo: todo.filter(info => info.id !== event.id),
     });
   };
 
@@ -162,7 +187,6 @@ export default class Calendar extends React.Component {
   handleDateSelect = (selectInfo) => {
     let title = prompt('새로운 일정을 등록하세요')
     let calendarApi = selectInfo.view.calendar
-    //const { todo } = this.state;
     calendarApi.unselect() // clear date selection
 
     if (title) {
@@ -174,12 +198,9 @@ export default class Calendar extends React.Component {
         end: selectInfo.endStr,
         allDay: selectInfo.allDay,
       });
-      // const { todo } = this.state;
-      this.handleTodoCreate(idNum,title);
-      //console.log(todo)
-      //console.log(title)
-      //console.log()
-      
+      let event = calendarApi.getEventById(idNum);
+      this.handleTodoCreate(event);
+      this.handleEventAdd(event)
     }
     
   }
@@ -187,7 +208,8 @@ export default class Calendar extends React.Component {
   handleEventClick = (clickInfo) => {
     if (window.confirm(`정말 '${clickInfo.event.title}'을 삭제하시겠습니까?`)) {
       clickInfo.event.remove();
-      this.handleTodoRemove(clickInfo.event.id);
+      this.handleTodoRemove(clickInfo.event);
+      this.handleEventRemove(clickInfo.event);
       //console.log(clickInfo.event.id);
     }
   };
@@ -210,8 +232,8 @@ export default class Calendar extends React.Component {
           <li key={event.id}>
             <input
               type='checkbox'
-              checked={this.getTodoCheck(event.id)}
-              onChange={()=>this.handleTodoUpdate(event.id)}
+              checked={this.getTodoCheck(event)}
+              onChange={()=>this.handleTodoUpdate(event)}
             ></input>
             <b>{event.title}</b>
           </li>
@@ -231,8 +253,8 @@ export default class Calendar extends React.Component {
           <li key={event.id}>
             <input
               type='checkbox'
-              checked={this.getTodoCheck(event.id)}
-              onChange={()=>this.handleTodoUpdate(event.id)}
+              checked={this.getTodoCheck(event)}
+              onChange={()=>this.handleTodoUpdate(event)}
             ></input>        
           
             <b>{event.title}</b>
