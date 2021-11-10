@@ -71,8 +71,11 @@ b { /* used for event dates/times */
 .fc { /* the calendar root */
   max-width: 1100px;
   margin: 0 auto;
+  
 }
-
+.fc-direction-ltr .fc-daygrid-event.fc-event-end{
+  overflow:hidden;
+}
 
 
 :root {

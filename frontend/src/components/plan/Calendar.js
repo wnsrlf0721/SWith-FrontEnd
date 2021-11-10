@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 //import Topbar from "../main/topbar";
 import "./styles.css";
@@ -16,11 +17,7 @@ import { INITIAL_EVENTS, createEventId,currentID} from './event-utils';
 
 let todayStr = new Date().toDateString() // YYYY-MM-DD of today
 let today = new Date().toLocaleDateString()
-//let checkStatus 
-// const [inputs, setInputs] = useState({
-//   username: '',
-//   email: ''
-// }); 
+
 export default class Calendar extends React.Component {
 
   state = {
@@ -42,6 +39,7 @@ export default class Calendar extends React.Component {
   }
 
   render() {
+
     return (
       <div className="demo-app">
         <div className="demo-app-main">
@@ -52,8 +50,11 @@ export default class Calendar extends React.Component {
               center: "title",
               right: "dayGridMonth,timeGridWeek,timeGridDay",
             }}
+
+
             locale="ko"
             initialView="dayGridMonth"
+
             editable={true}
             selectable={true}
             selectMirror={true}
@@ -198,31 +199,65 @@ export default class Calendar extends React.Component {
   }
 
   
-  renderSidebarEvent=(event)=> {
+  renderSidebarEvent= (event) => {
     let Start = event.start.toDateString() 
     let Today = new Date()
-    
-  return (
-    <li key={event.id}>
-      <input
-        type='checkbox'
-        checked={this.getTodoCheck(event.id)}
-        onChange={()=>this.handleTodoUpdate(event.id)}
-      ></input>
-      <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
-      <i>{event.title}</i>
-    </li>
-  )
-
-
+  
+   
+    if(!event.end){
+      if(Start==todayStr){
+        return (
+          <li key={event.id}>
+            <input
+              type='checkbox'
+              checked={this.getTodoCheck(event.id)}
+              onChange={()=>this.handleTodoUpdate(event.id)}
+            ></input>
+            <b>{event.title}</b>
+          </li>
+        )
+      }
+    }
+    else{
+      let startMD = String(event.start.getMonth()+event.start.getDate().toString().padStart(2,'0')+'00')
+      let todayMD = String(Today.getMonth()+ Today.getDate().toString().padStart(2,'0')+'01')
+      let endMD = String(event.end.getMonth()+event.end.getDate().toString().padStart(2,'0')+event.end.getHours().toString().padStart(2,'0'))
+      
+     
+  
+      if((todayMD>=startMD)&&(todayMD<=endMD)){
+      // if((Today.getTime()>=event.start.getTime()&&(Today.getTime()<=event.end.getTime()))){
+        return (
+          <li key={event.id}>
+            <input
+              type='checkbox'
+              checked={this.getTodoCheck(event.id)}
+              onChange={()=>this.handleTodoUpdate(event.id)}
+            ></input>        
+          
+            <b>{event.title}</b>
+          </li>
+        )
+      }
+  
+      
+    }
+  // 원본 코드
+  // return (
+  //   <li key={event.id}>
+  //     <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
+  //     <i>{event.title}</i>
+  //   </li>
+  // )
   }
 }
 ///////////////////////////////////
+
 function renderEventContent(eventInfo) {
   return (
     <>
       <b>{eventInfo.timeText}</b>
       <i>{eventInfo.event.title}</i>
     </>
-  );
+  )
 }
