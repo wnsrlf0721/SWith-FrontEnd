@@ -1,4 +1,5 @@
-import React, {useState} from "react";
+
+import React, { useEffect } from "react";
 //import Topbar from "../main/topbar";
 import "./styles.css";
 
@@ -6,42 +7,54 @@ import "./styles.css";
 import FullCalendar, { formatDate } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from '@fullcalendar/interaction';
+import interactionPlugin from "@fullcalendar/interaction";
 
 import "@fullcalendar/core";
 import "@fullcalendar/daygrid/main.css";
 import "@fullcalendar/timegrid/main.css";
 
-import { INITIAL_EVENTS, createEventId } from './event-utils';
+import { INITIAL_EVENTS, createEventId,currentID} from './event-utils';
 
 let todayStr = new Date().toDateString() // YYYY-MM-DD of today
 let today = new Date().toLocaleDateString()
-
 
 export default class Calendar extends React.Component {
 
   state = {
     weekendsVisible: true,
-    currentEvents: []
+    currentEvents: [],
+    todo: [
+      {
+        id:'0' ,
+        check: false,
+        title:'0번'
+      },
+      {
+        id:'1' ,
+        check: true,
+        title:'1번'
+      }
+      
+    ]
   }
 
   render() {
-    
-    
-  
+
     return (
-      <div className='demo-app'>
-        <div className='demo-app-main'>
+      <div className="demo-app">
+        <div className="demo-app-main">
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             headerToolbar={{
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay',
+              left: "prev,next today",
+              center: "title",
+              right: "dayGridMonth,timeGridWeek,timeGridDay",
             }}
-            
-            locale='ko'
-            initialView='timeGridWeek'
+
+
+            locale="ko"
+            initialView="dayGridMonth"
+
             editable={true}
             selectable={true}
             selectMirror={true}
@@ -58,15 +71,18 @@ export default class Calendar extends React.Component {
             eventRemove={function(){}}
             */
           />
+          
         </div>
         {this.renderSidebar()}
       </div>
-    )
+    );
   }
 
   renderSidebar() {
+    // const {todo} = this.state;
+    // console.log(todo);
     return (
-      <div className='demo-app-sidebar'>
+      <div className="demo-app-sidebar">
         {/* <div className='demo-app-sidebar-section'>
           <h2>Instructions</h2>
           <ul>
@@ -89,47 +105,150 @@ export default class Calendar extends React.Component {
           <h2>오늘의 To-do list</h2>
           <h3>{today}</h3>
           <ul>
-            {this.state.currentEvents.map(renderSidebarEvent)}
+            {this.state.currentEvents.map(this.renderSidebarEvent)}
           </ul>
         </div>
       </div>
-    )
+    );
   }
 
-  handleWeekendsToggle = () => {
+  // handleTodoToggle = () => {
+  //   const { todo } = this.state;
+  //   this.setState({
+  //     // weekendsVisible: !this.state.weekendsVisible
+
+  //   })
+  // }
+
+
+  getTodoCheck = (id) => {
+    const { todo } = this.state;
+    let chch;
+    todo.map((x)=> { 
+      if(x.id === id) { 
+        chch = x.check;
+      } })
+    // console.log(ResultTF);
+    // return ResultTF
+    return chch
+  }
+  handleTodoUpdate = (id) => {
+    const { todo } = this.state;
     this.setState({
-      weekendsVisible: !this.state.weekendsVisible
+      todo: todo.map(
+        info => id === info.id
+          ? { ...info, check: !info.check } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
+          : info // 기존의 값을 그대로 유지
+      )
+    })
+  };
+
+  handleTodoCreate = (idNum,title) => {
+    const { todo } = this.state;
+    this.setState({
+      todo: todo.concat({ id: idNum, check:false, title:title  })
     })
   }
+
+  handleTodoRemove = (id) => {
+    const { todo } = this.state;
+    this.setState({
+      todo: todo.filter(info => info.id !== id),
+    });
+  };
+
+
 
   handleDateSelect = (selectInfo) => {
     let title = prompt('새로운 일정을 등록하세요')
     let calendarApi = selectInfo.view.calendar
-
+    //const { todo } = this.state;
     calendarApi.unselect() // clear date selection
 
     if (title) {
+      let idNum = createEventId();
       calendarApi.addEvent({
-        id: createEventId(),
+        id: idNum,
         title,
         start: selectInfo.startStr,
         end: selectInfo.endStr,
         allDay: selectInfo.allDay,
-        
-      })
+      });
+      // const { todo } = this.state;
+      this.handleTodoCreate(idNum,title);
+      //console.log(todo)
+      //console.log(title)
+      //console.log()
+      
     }
+    
   }
 
   handleEventClick = (clickInfo) => {
     if (window.confirm(`정말 '${clickInfo.event.title}'을 삭제하시겠습니까?`)) {
-      clickInfo.event.remove()
+      clickInfo.event.remove();
+      this.handleTodoRemove(clickInfo.event.id);
+      //console.log(clickInfo.event.id);
     }
-  }
+  };
 
   handleEvents = (events) => {
     this.setState({
       currentEvents: events
     })
+  }
+
+  
+  renderSidebarEvent= (event) => {
+    let Start = event.start.toDateString() 
+    let Today = new Date()
+  
+   
+    if(!event.end){
+      if(Start==todayStr){
+        return (
+          <li key={event.id}>
+            <input
+              type='checkbox'
+              checked={this.getTodoCheck(event.id)}
+              onChange={()=>this.handleTodoUpdate(event.id)}
+            ></input>
+            <b>{event.title}</b>
+          </li>
+        )
+      }
+    }
+    else{
+      let startMD = String(event.start.getMonth()+event.start.getDate().toString().padStart(2,'0')+'00')
+      let todayMD = String(Today.getMonth()+ Today.getDate().toString().padStart(2,'0')+'01')
+      let endMD = String(event.end.getMonth()+event.end.getDate().toString().padStart(2,'0')+event.end.getHours().toString().padStart(2,'0'))
+      
+     
+  
+      if((todayMD>=startMD)&&(todayMD<=endMD)){
+      // if((Today.getTime()>=event.start.getTime()&&(Today.getTime()<=event.end.getTime()))){
+        return (
+          <li key={event.id}>
+            <input
+              type='checkbox'
+              checked={this.getTodoCheck(event.id)}
+              onChange={()=>this.handleTodoUpdate(event.id)}
+            ></input>        
+          
+            <b>{event.title}</b>
+          </li>
+        )
+      }
+  
+      
+    }
+  // 원본 코드
+  // return (
+  //   <li key={event.id}>
+  //     <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
+  //     <i>{event.title}</i>
+  //   </li>
+  // )
   }
 }
 ///////////////////////////////////
@@ -142,55 +261,3 @@ function renderEventContent(eventInfo) {
     </>
   )
 }
-
-function renderSidebarEvent(event) {
-  let Start = event.start.toDateString() 
-  let Today = new Date()
-
- 
-  if(!event.end){
-    if(Start==todayStr){
-      return (
-        <li key={event.id}>
-          
-          <b>{event.title}</b>
-        </li>
-      )
-    }
-  }
-  else{
-    let startMD = String(event.start.getMonth()+event.start.getDate().toString().padStart(2,'0')+'00')
-    let todayMD = String(Today.getMonth()+ Today.getDate().toString().padStart(2,'0')+'01')
-    let endMD = String(event.end.getMonth()+event.end.getDate().toString().padStart(2,'0')+event.end.getHours().toString().padStart(2,'0'))
-    
-   
-
-    if((todayMD>=startMD)&&(todayMD<=endMD)){
-    // if((Today.getTime()>=event.start.getTime()&&(Today.getTime()<=event.end.getTime()))){
-      return (
-        <li key={event.id}>
-          <b>{event.title}</b>
-        </li>
-      )
-    }
-
-    
-  }
-// 원본 코드
-// return (
-//   <li key={event.id}>
-//     <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
-//     <i>{event.title}</i>
-//   </li>
-// )
-
-
-}
-
-
-
-
-
-
-
-
