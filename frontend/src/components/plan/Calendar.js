@@ -12,13 +12,34 @@ import "@fullcalendar/core";
 import "@fullcalendar/daygrid/main.css";
 import "@fullcalendar/timegrid/main.css";
 
-import { INITIAL_EVENTS, createEventId } from "./event-utils";
+import { INITIAL_EVENTS, createEventId,currentID} from './event-utils';
 
+let todayStr = new Date().toDateString() // YYYY-MM-DD of today
+let today = new Date().toLocaleDateString()
+//let checkStatus 
+// const [inputs, setInputs] = useState({
+//   username: '',
+//   email: ''
+// }); 
 export default class Calendar extends React.Component {
+
   state = {
     weekendsVisible: true,
     currentEvents: [],
-  };
+    todo: [
+      {
+        id:'0' ,
+        check: false,
+        title:'0번'
+      },
+      {
+        id:'1' ,
+        check: true,
+        title:'1번'
+      }
+      
+    ]
+  }
 
   render() {
     return (
@@ -49,6 +70,7 @@ export default class Calendar extends React.Component {
             eventRemove={function(){}}
             */
           />
+          
         </div>
         {this.renderSidebar()}
       </div>
@@ -56,6 +78,8 @@ export default class Calendar extends React.Component {
   }
 
   renderSidebar() {
+    // const {todo} = this.state;
+    // console.log(todo);
     return (
       <div className="demo-app-sidebar">
         {/* <div className='demo-app-sidebar-section'>
@@ -76,52 +100,122 @@ export default class Calendar extends React.Component {
             toggle weekends
           </label>
         </div> */}
-        <div className="demo-app-sidebar-section">
-          <h2>To do list ({this.state.currentEvents.length})</h2>
-          <ul>{this.state.currentEvents.map(renderSidebarEvent)}</ul>
+        <div className='demo-app-sidebar-section'>
+          <h2>오늘의 To-do list</h2>
+          <h3>{today}</h3>
+          <ul>
+            {this.state.currentEvents.map(this.renderSidebarEvent)}
+          </ul>
         </div>
       </div>
     );
   }
 
-  handleWeekendsToggle = () => {
+  // handleTodoToggle = () => {
+  //   const { todo } = this.state;
+  //   this.setState({
+  //     // weekendsVisible: !this.state.weekendsVisible
+
+  //   })
+  // }
+
+
+  getTodoCheck = (id) => {
+    const { todo } = this.state;
+    let chch;
+    todo.map((x)=> { 
+      if(x.id === id) { 
+        chch = x.check;
+      } })
+    // console.log(ResultTF);
+    // return ResultTF
+    return chch
+  }
+  handleTodoUpdate = (id) => {
+    const { todo } = this.state;
     this.setState({
-      weekendsVisible: !this.state.weekendsVisible,
+      todo: todo.map(
+        info => id === info.id
+          ? { ...info, check: !info.check } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
+          : info // 기존의 값을 그대로 유지
+      )
+    })
+  };
+
+  handleTodoCreate = (idNum,title) => {
+    const { todo } = this.state;
+    this.setState({
+      todo: todo.concat({ id: idNum, check:false, title:title  })
+    })
+  }
+
+  handleTodoRemove = (id) => {
+    const { todo } = this.state;
+    this.setState({
+      todo: todo.filter(info => info.id !== id),
     });
   };
 
-  handleDateSelect = (selectInfo) => {
-    let title = prompt("Please enter a new title for your event");
-    let calendarApi = selectInfo.view.calendar;
 
-    calendarApi.unselect(); // clear date selection
+
+  handleDateSelect = (selectInfo) => {
+    let title = prompt('새로운 일정을 등록하세요')
+    let calendarApi = selectInfo.view.calendar
+    //const { todo } = this.state;
+    calendarApi.unselect() // clear date selection
 
     if (title) {
+      let idNum = createEventId();
       calendarApi.addEvent({
-        id: createEventId(),
+        id: idNum,
         title,
         start: selectInfo.startStr,
         end: selectInfo.endStr,
         allDay: selectInfo.allDay,
       });
+      // const { todo } = this.state;
+      this.handleTodoCreate(idNum,title);
+      //console.log(todo)
+      //console.log(title)
+      //console.log()
+      
     }
-  };
+    
+  }
 
   handleEventClick = (clickInfo) => {
-    if (
-      window.confirm(
-        `Are you sure you want to delete the event '${clickInfo.event.title}'`
-      )
-    ) {
+    if (window.confirm(`정말 '${clickInfo.event.title}'을 삭제하시겠습니까?`)) {
       clickInfo.event.remove();
+      this.handleTodoRemove(clickInfo.event.id);
+      //console.log(clickInfo.event.id);
     }
   };
 
   handleEvents = (events) => {
     this.setState({
-      currentEvents: events,
-    });
-  };
+      currentEvents: events
+    })
+  }
+
+  
+  renderSidebarEvent=(event)=> {
+    let Start = event.start.toDateString() 
+    let Today = new Date()
+    
+  return (
+    <li key={event.id}>
+      <input
+        type='checkbox'
+        checked={this.getTodoCheck(event.id)}
+        onChange={()=>this.handleTodoUpdate(event.id)}
+      ></input>
+      <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
+      <i>{event.title}</i>
+    </li>
+  )
+
+
+  }
 }
 ///////////////////////////////////
 function renderEventContent(eventInfo) {
@@ -130,20 +224,5 @@ function renderEventContent(eventInfo) {
       <b>{eventInfo.timeText}</b>
       <i>{eventInfo.event.title}</i>
     </>
-  );
-}
-
-function renderSidebarEvent(event) {
-  return (
-    <li key={event.id}>
-      <b>
-        {formatDate(event.start, {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        })}
-      </b>
-      <i>{event.title}</i>
-    </li>
   );
 }
