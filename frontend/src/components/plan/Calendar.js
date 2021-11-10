@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useEffect } from "react";
 //import Topbar from "../main/topbar";
 import "./styles.css";
 
@@ -6,7 +6,7 @@ import "./styles.css";
 import FullCalendar, { formatDate } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from '@fullcalendar/interaction';
+import interactionPlugin from "@fullcalendar/interaction";
 
 import "@fullcalendar/core";
 import "@fullcalendar/daygrid/main.css";
@@ -22,7 +22,6 @@ let today = new Date().toLocaleDateString()
 //   email: ''
 // }); 
 export default class Calendar extends React.Component {
-
 
   state = {
     weekendsVisible: true,
@@ -41,21 +40,20 @@ export default class Calendar extends React.Component {
       
     ]
   }
-  
 
   render() {
     return (
-      <div className='demo-app'>
-        <div className='demo-app-main'>
+      <div className="demo-app">
+        <div className="demo-app-main">
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             headerToolbar={{
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay',
+              left: "prev,next today",
+              center: "title",
+              right: "dayGridMonth,timeGridWeek,timeGridDay",
             }}
-            locale='ko'
-            initialView='dayGridMonth'
+            locale="ko"
+            initialView="dayGridMonth"
             editable={true}
             selectable={true}
             selectMirror={true}
@@ -76,14 +74,14 @@ export default class Calendar extends React.Component {
         </div>
         {this.renderSidebar()}
       </div>
-    )
+    );
   }
 
   renderSidebar() {
     // const {todo} = this.state;
     // console.log(todo);
     return (
-      <div className='demo-app-sidebar'>
+      <div className="demo-app-sidebar">
         {/* <div className='demo-app-sidebar-section'>
           <h2>Instructions</h2>
           <ul>
@@ -110,7 +108,7 @@ export default class Calendar extends React.Component {
           </ul>
         </div>
       </div>
-    )
+    );
   }
 
   // handleTodoToggle = () => {
@@ -191,7 +189,7 @@ export default class Calendar extends React.Component {
       this.handleTodoRemove(clickInfo.event.id);
       //console.log(clickInfo.event.id);
     }
-  }
+  };
 
   handleEvents = (events) => {
     this.setState({
@@ -226,14 +224,5 @@ function renderEventContent(eventInfo) {
       <b>{eventInfo.timeText}</b>
       <i>{eventInfo.event.title}</i>
     </>
-  )
+  );
 }
-
-
-
-
-
-
-
-
-
