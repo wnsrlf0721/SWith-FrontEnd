@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "../../api/defaultaxios";
 import Chart from "react-apexcharts";
+import moment from "moment";
 
 const series_week = [
   {
@@ -155,18 +156,90 @@ const Timer = ({ hours = 0, minutes = 0, seconds = 0 }) => {
 
 const Statistics = () => {
   // 공부시간 기록
-  const [todayStudy, setTodayStudy] = useState(0);
-  const [weekStudy, setWeekStudy] = useState(0);
-  const [monthStudy, setMonthStudy] = useState(0);
+  const [todayStudy, setTodayStudy] = useState({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+  const [weekStudy, setWeekStudy] = useState({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+  const [monthStudy, setMonthStudy] = useState({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 
   // 달성률 기록
 
   useEffect(() => {
     const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    const date = moment().format("YYYY-MM-DD"); //현재 날짜
+    const Today = moment(date);
+
+    // axios.post("/statistics", {
+    //   userId: `${userInfo.userId}`,
+
+    //   studyTime: "03:59:59",
+
+    //   date: "2021-11-11",
+    // });
     axios
       .get(`/statistics/${userInfo.userId}`)
       .then((response) => {
-        console.log(response);
+        const datas = response.data.data;
+        datas.map((data) => {
+          //일간, 주간, 월간 공부시간 기록
+          console.log(data);
+          const D_date = moment(data.date);
+          const Diff = Math.abs(Today.diff(D_date, "days"));
+
+          const hour = Number(data.studyTime.slice(0, 2));
+          const minute = Number(data.studyTime.slice(3, 5));
+          const second = Number(data.studyTime.slice(6, 8));
+
+          //오늘의 공부시간
+          if (Diff === 0) {
+            console.log(`today study time: ${data.studyTime}`);
+            const todaytime = {
+              hours: todayStudy.hours + hour,
+              minutes: todayStudy.minutes + minute,
+              seconds: todayStudy.seconds + second,
+            };
+            console.log(todaytime);
+            setTodayStudy({ ...todayStudy, todaytime });
+            console.log(todayStudy);
+          }
+
+          if (Today.month() + 1 === D_date.month() + 1) {
+            //주간 공부시간
+            if (Today.week() === D_date.week()) {
+              console.log(`Week study time: ${data.studyTime}`);
+              const weektime = {
+                hours: weekStudy.hours + hour,
+                minutes: weekStudy.minutes + minute,
+                seconds: weekStudy.seconds + second,
+              };
+              console.log(weektime);
+              setWeekStudy({ ...weekStudy, weektime });
+              console.log(weekStudy);
+            }
+            //월간 공부시간
+            else {
+              console.log(`Month study time: ${data.studyTime}`);
+              const monthtime = {
+                hours: monthStudy.hours + hour,
+                minutes: monthStudy.minutes + minute,
+                seconds: monthStudy.seconds + second,
+              };
+              console.log(monthtime);
+              setMonthStudy({ ...monthStudy, monthtime });
+              console.log(monthStudy);
+            }
+          }
+        });
       })
       .catch((error) => {
         console.log(error.toJSON());
@@ -182,7 +255,11 @@ const Statistics = () => {
             <Box style={{ width: "200px" }}>
               <div>
                 <Label>오늘의 공부시간</Label>
-                <Timer hours="0" minutes="9" seconds="0" />
+                <Timer
+                  hours={todayStudy.hours}
+                  minutes={todayStudy.minutes}
+                  seconds={todayStudy.seconds}
+                />
               </div>
             </Box>
             <Box>
