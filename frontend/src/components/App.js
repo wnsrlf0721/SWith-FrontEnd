@@ -8,6 +8,8 @@ import comm from "./comm/index";
 import friend from "./friend/index";
 import profile from "../routes/profile";
 import dm from "./DM/index";
+import Test_EnterStudyRoom from "./room/Test_EnterStudyRoom";
+import StudyRoom from "./room/StudyRoom";
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
           <Route path="/comm/" component={comm} />
           <Route path="/friend/" component={friend} />
           <Route path="/dm" component={dm} />
+          <Route exact path="/test-StudyRoom" component={ Test_EnterStudyRoom } />
+          <Route path="/StudyRoom" component={ StudyRoom } />
         </Switch>
       </BrowserRouter>
     </>
