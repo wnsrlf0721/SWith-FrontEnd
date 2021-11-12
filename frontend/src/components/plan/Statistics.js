@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "../../api/defaultaxios";
 import Chart from "react-apexcharts";
+import moment from "moment";
+import Timer from "./Timer";
 
 const series_week = [
   {
@@ -128,45 +130,75 @@ const Progress = ({ done }) => {
     </ProgressBar>
   );
 };
-/****************************************************/
-
-/**공부시간 표현 CSS**/
-const P = styled.p`
-  font-family: Roboto;
-  font-size: 22px;
-  font-weight: normal;
-  color: #595959;
-`;
-const Timer = ({ hours = 0, minutes = 0, seconds = 0 }) => {
-  const [time, setTime] = useState({
-    hours: parseInt(hours, 10),
-    minutes: parseInt(minutes, 10),
-    seconds: parseInt(seconds, 10),
-  });
-
-  return (
-    <div style={{ marginTop: "60px", textAlign: "center" }}>
-      <P>{`${time.hours.toString().padStart(2, "0")}:${time.minutes
-        .toString()
-        .padStart(2, "0")}:${time.seconds.toString().padStart(2, "0")}`}</P>
-    </div>
-  );
-};
 
 const Statistics = () => {
+  const date = moment().format("YYYY-MM-DD"); //현재 날짜
+  const Today = moment(date);
   // 공부시간 기록
-  const [todayStudy, setTodayStudy] = useState(0);
-  const [weekStudy, setWeekStudy] = useState(0);
-  const [monthStudy, setMonthStudy] = useState(0);
+  const [todayhour, setTodayhour] = useState(0);
+  const [todayminute, setTodayminute] = useState(0);
+  const [todaysecond, setTodaysecond] = useState(0);
+  const [todaycount, setTodaycount] = useState(0);
+
+  const [weekhour, setWeekhour] = useState(0);
+  const [weekminute, setWeekminute] = useState(0);
+  const [weeksecond, setWeeksecond] = useState(0);
+  const [weekcount, setWeekcount] = useState(0);
+
+  const [monthhour, setMonthhour] = useState(0);
+  const [monthminute, setMonthminute] = useState(0);
+  const [monthsecond, setMonthsecond] = useState(0);
+  const [monthcount, setMonthcount] = useState(0);
 
   // 달성률 기록
 
   useEffect(() => {
     const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    /* 아래 api 주석 처리부분 해제하고 학습시간, 날짜 입력하면 임의로 추가 가능
+    여러 데이터들을 입력해 오늘, 주별, 월별 학습시간이 제대로 나오는지 볼 수 있음*/
+
+    // axios.post("/statistics", {
+    //   userId: `${userInfo.userId}`,
+    //   studyTime: "03:59:59",
+    //   date: "2021-11-12",
+    // });
     axios
       .get(`/statistics/${userInfo.userId}`)
       .then((response) => {
-        console.log(response);
+        const datas = response.data.data;
+        console.log(datas);
+        datas.map((data) => {
+          //일간, 주간, 월간 공부시간 기록
+          const D_date = moment(data.date);
+          console.log(D_date);
+          const Diff = Math.abs(Today.diff(D_date, "days"));
+
+          const hour = Number(data.studyTime.slice(0, 2));
+          const minute = Number(data.studyTime.slice(3, 5));
+          const second = Number(data.studyTime.slice(6, 8));
+
+          if (Today.month() + 1 === D_date.month() + 1) {
+            if (Today.week() === D_date.week()) {
+              //오늘의 공부시간
+              if (Diff === 0) {
+                setTodayhour((todayhour) => todayhour + hour);
+                setTodayminute((todayminute) => todayminute + minute);
+                setTodaysecond((todaysecond) => todaysecond + second);
+                setTodaycount((todaycount) => todaycount + 1);
+              }
+              //주간 공부시간
+              setWeekhour((weekhour) => weekhour + hour);
+              setWeekminute((weekminute) => weekminute + minute);
+              setWeeksecond((weeksecond) => weeksecond + second);
+              setWeekcount((weekcount) => weekcount + 1);
+            }
+            //월간 공부시간
+            setMonthhour((monthhour) => monthhour + hour);
+            setMonthminute((monthminute) => monthminute + minute);
+            setMonthsecond((monthsecond) => monthsecond + second);
+            setMonthcount((monthcount) => monthcount + 1);
+          }
+        });
       })
       .catch((error) => {
         console.log(error.toJSON());
@@ -182,7 +214,12 @@ const Statistics = () => {
             <Box style={{ width: "200px" }}>
               <div>
                 <Label>오늘의 공부시간</Label>
-                <Timer hours="0" minutes="9" seconds="0" />
+                <Timer
+                  hours={todayhour}
+                  minutes={todayminute}
+                  seconds={todaysecond}
+                  count={todaycount}
+                />
               </div>
             </Box>
             <Box>
@@ -199,13 +236,23 @@ const Statistics = () => {
             <Box style={{ width: "200px" }}>
               <div>
                 <Label>주간 평균 공부시간</Label>
-                <Timer hours="0" minutes="0" seconds="0" />
+                <Timer
+                  hours={weekhour}
+                  minutes={weekminute}
+                  seconds={weeksecond}
+                  count={weekcount}
+                />
               </div>
             </Box>
             <Box style={{ width: "200px" }}>
               <div>
                 <Label>주간 총 공부시간</Label>
-                <Timer hours="0" minutes="0" seconds="0" />
+                <Timer
+                  hours={weekhour}
+                  minutes={weekminute}
+                  seconds={weeksecond}
+                  count="1"
+                />
               </div>
             </Box>
             <Box>
@@ -233,13 +280,23 @@ const Statistics = () => {
             <Box style={{ width: "200px" }}>
               <div>
                 <Label>월간 평균 공부시간</Label>
-                <Timer hours="0" minutes="0" seconds="0" />
+                <Timer
+                  hours={monthhour}
+                  minutes={monthminute}
+                  seconds={monthsecond}
+                  count={monthcount}
+                />
               </div>
             </Box>
             <Box style={{ width: "200px" }}>
               <div>
                 <Label>월간 총 공부시간</Label>
-                <Timer hours="0" minutes="0" seconds="0" />
+                <Timer
+                  hours={monthhour}
+                  minutes={monthminute}
+                  seconds={monthsecond}
+                  count="1"
+                />
               </div>
             </Box>
             <Box>
