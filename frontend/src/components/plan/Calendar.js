@@ -34,7 +34,7 @@ const Calendar = () => {
     id:'',
     title:'',
     start:'',
-    end:''
+    end:'',
   }]);
   //const {id,title,start,end} = currentEvents;
   //const {id,title,start,end} = getEvent;
@@ -49,6 +49,9 @@ const Calendar = () => {
         .then((events) => {
           const tasks= events.data.data.studyplanner_Tasks;
           tasks.map((task)=>{
+            // const startTxt = [task.startDate.getFullYear(),task.startDate.getMonth()+1,task.startDate.getDate(),task.startDate.toTimeString().substring(0,8)].join()
+            // const endTxt = [task.endDate.getFullYear(),task.endDate.getMonth()+1,task.endDate.getDate(),task.endDate.toTimeString().substring(0,8)].join()
+            // if(endTxt - startTxt == )
             tempEvents= tempEvents.concat(
             {
               id: task.id,
@@ -67,33 +70,6 @@ const Calendar = () => {
     return getEvent; 
   }
 
-/*
-  const handleEventAdd = (event) =>{
-    let start = event.start.toISOString().substring(0,19);
-    let end = event.start.toISOString().substring(0,19);
-    let title = event.title;
-    const userInfo = JSON.parse(window.sessionStorage.userInfo);
-    axios
-    .post(`/planners/${userInfo.userId}`, {
-      taskDescription:title,
-      startDate:start,
-      endDate:end, 
-      complete:0
-    })
-    .then((response) => {
-      const data = response.data;
-      console.log(data);
-      if (data.status === "200" && data.message === "OK") {
-        //alert(`성공`);
-      }
-    })
-    .catch((error) => {
-      console.log(error.response.data);
-      //alert("오류");
-    });
-
-  }
-  */
   const handleEventDelete = (event) =>{
     const userInfo = JSON.parse(window.sessionStorage.userInfo);
     axios
@@ -127,16 +103,21 @@ const Calendar = () => {
     const userInfo = JSON.parse(window.sessionStorage.userInfo);
     setTodo(
       todo.map(info =>
-        info.id === IdNum ? { ...info, check: !info.check } : info
+        info.id === IdNum ? { ...info, check: !info.check, } : info
       )
     );
 
     axios
-    .patch(`/planners/${userInfo.userId}/${event.id}`, {
-      complete: +getTodoCheck(event),
+    .put(`/planners/${userInfo.userId}/${event.id}`, {
+      taskDescription:event.title,
+      startDate:event.start,
+      endDate:event.end, 
+      complete:+getTodoCheck(event)
     })
     .then((response) => {
       const data = response.data;
+      console.log(+getTodoCheck(event))
+      //console.log({todo})
       console.log(data);
       if (data.status === "200" && data.message === "OK") {
         //alert(`성공`);
@@ -144,6 +125,8 @@ const Calendar = () => {
       window.location.reload();
     })
     .catch((error) => {
+      console.log(event.id)
+      console.log(getTodoCheck(event))
       console.log(error.toJSON());
 
     });
@@ -157,7 +140,6 @@ const Calendar = () => {
     };
     setTodo(todo.concat(TempTodo));
   }
-
   const handleTodoRemove = (event) => {
     setTodo(todo.filter(info => info.id !== event.id));
   };
@@ -166,12 +148,16 @@ const Calendar = () => {
     let title = prompt('새로운 일정을 등록하세요')
     let calendarApi = selectInfo.view.calendar
     calendarApi.unselect() // clear date selection
-    let start = selectInfo.start.toISOString().substring(0,19);
-    let end = selectInfo.end.toISOString().substring(0,19);
+    // let start = selectInfo.start.toISOString().substring(0,19);
+    // let end = selectInfo.end.toISOString().substring(0,19);
     const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    const startDate = selectInfo.start;
+    const endDate = selectInfo.end;
+    const start = [startDate.getFullYear(),startDate.getMonth()+1,startDate.getDate()].join('-')+'T'+startDate.toTimeString().substring(0,8)
+    const end = [endDate.getFullYear(),endDate.getMonth()+1,endDate.getDate()].join('-')+'T'+endDate.toTimeString().substring(0,8)
 
     //let idNum = createEventId();
-    console.log(selectInfo)  
+    //console.log(selectInfo)  
     if (title) {
         axios
         .post(`/planners/${userInfo.userId}`, {
@@ -187,11 +173,16 @@ const Calendar = () => {
             title,
             start: selectInfo.startStr,
             end: selectInfo.endStr,
+            allDay: selectInfo.allDay,
+            
           });
           let event = calendarApi.getEventById(data.data.taskId);
           handleTodoCreate(event);
           //handleEventAdd(event); 
-          console.log(data.data.taskId);
+          console.log(start)
+          console.log(data);
+          console.log(event)
+          //console.log(data.data.taskId);
           if (data.status === "200" && data.message === "OK") {
             //alert(`성공`);
           }
@@ -285,6 +276,7 @@ const Calendar = () => {
     <div className="demo-app">
       <LoadTest/>
       <div className="demo-app-main">
+        
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           headerToolbar={{
@@ -299,13 +291,15 @@ const Calendar = () => {
           selectMirror={true}
           dayMaxEvents={true}
           weekends={true}
+          events = {getEvent}
           initialEvents={HandleLoad()} 
           //initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
           select={handleDateSelect}
           eventContent={renderEventContent} // custom render function
           eventClick={handleEventClick}
           eventsSet={handleEvents} // called after events are initialized/added/changed/removed
-        />
+          
+       />
       </div>
       {renderSidebar()}
     </div>
