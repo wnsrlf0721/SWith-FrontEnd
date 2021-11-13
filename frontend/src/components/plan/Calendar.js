@@ -23,6 +23,10 @@ function renderEventContent(eventInfo) {
     </>
   )
 }
+function fillZero(str){
+  return str.length >= 2 ? str:new Array(2-str.length+1).join('0')+str;//남는 길이만큼 0으로 채움
+}
+
 
 let todayStr = new Date().toDateString() // YYYY-MM-DD of today
 let today = new Date().toLocaleDateString()
@@ -35,6 +39,7 @@ const Calendar = () => {
     title:'',
     start:'',
     end:'',
+    allDay:''
   }]);
   //const {id,title,start,end} = currentEvents;
   //const {id,title,start,end} = getEvent;
@@ -49,15 +54,28 @@ const Calendar = () => {
         .then((events) => {
           const tasks= events.data.data.studyplanner_Tasks;
           tasks.map((task)=>{
-            // const startTxt = [task.startDate.getFullYear(),task.startDate.getMonth()+1,task.startDate.getDate(),task.startDate.toTimeString().substring(0,8)].join()
-            // const endTxt = [task.endDate.getFullYear(),task.endDate.getMonth()+1,task.endDate.getDate(),task.endDate.toTimeString().substring(0,8)].join()
-            // if(endTxt - startTxt == )
+            const taskStart = task.startDate;
+            const taskEnd = task.endDate;
+            //const startTxt = [taskStart.substring(0,4),taskStart.substring(5,7),taskStart.substring(8,10),taskStart.substring(11,13),taskStart.substring(14,16)].join('')
+            //const endTxt = [taskEnd.substring(0,4),taskEnd.substring(5,7),taskEnd.substring(8,10),taskEnd.substring(11,13),taskEnd.substring(14,16)].join('')
+            const startTxt = [taskStart.substring(11,13),taskStart.substring(14,16)].join('')
+            const endTxt = [taskEnd.substring(11,13),taskEnd.substring(14,16)].join('')
+            // const startTxt = [task.startDate.getFullYear(),fillZero(task.startDate.getMonth()+1),fillZero(task.startDate.getDate()),fillZero(task.startDate.getHours()),fillZero(task.startDate.getMinutes())].join()
+            // const endTxt = [task.endDate.getFullYear(),fillZero(task.endDate.getMonth()+1),fillZero(task.endDate.getDate()),fillZero(task.endDate.getHours()),fillZero(task.endDate.getMinutes())].join()
+            //console.log(taskStart.substring(0,3))
+            //console.log(startTxt)
+            let allday = false;
+            if((endTxt.substring(0,4)=='0000')&&(endTxt.substring(0,4)=='0000')){
+              console.log('성공');
+              allday= true;
+            }
             tempEvents= tempEvents.concat(
             {
               id: task.id,
               title: task.taskDescription,
               start: task.startDate,
-              end: task.endDate
+              end: task.endDate,
+              allDay:allday
             })
           });setEvent(tempEvents);
           return getEvent;      
@@ -153,9 +171,10 @@ const Calendar = () => {
     const userInfo = JSON.parse(window.sessionStorage.userInfo);
     const startDate = selectInfo.start;
     const endDate = selectInfo.end;
-    const start = [startDate.getFullYear(),startDate.getMonth()+1,startDate.getDate()].join('-')+'T'+startDate.toTimeString().substring(0,8)
-    const end = [endDate.getFullYear(),endDate.getMonth()+1,endDate.getDate()].join('-')+'T'+endDate.toTimeString().substring(0,8)
-
+    const start = [startDate.getFullYear(),fillZero((startDate.getMonth()+1).toString()),startDate.toString().substring(8,10)].join('-')+'T'+startDate.toTimeString().substring(0,8)
+    const end = [endDate.getFullYear(),fillZero((endDate.getMonth()+1).toString()),endDate.toString().substring(8,10)].join('-')+'T'+endDate.toTimeString().substring(0,8)
+    console.log(startDate)
+    console.log(start)
     //let idNum = createEventId();
     //console.log(selectInfo)  
     if (title) {
