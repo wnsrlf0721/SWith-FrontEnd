@@ -1,9 +1,8 @@
 
-import React, { useEffect } from "react";
-//import Topbar from "../main/topbar";
-import "./styles.css";
-
+import React, { useState,useEffect } from "react";
 //import styled from "styled-components";
+import "./styles.css";
+import axios from "../../api/defaultaxios";
 import FullCalendar, { formatDate } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -14,222 +13,223 @@ import "@fullcalendar/daygrid/main.css";
 import "@fullcalendar/timegrid/main.css";
 
 import { INITIAL_EVENTS, createEventId,currentID} from './event-utils';
+import LoadTest from "./LoadTest"
+///////////////////////////////////
+function renderEventContent(eventInfo) {
+  return (
+    <>
+      <b>{eventInfo.timeText}</b>
+      <i>{eventInfo.event.title}</i>
+    </>
+  )
+}
 
 let todayStr = new Date().toDateString() // YYYY-MM-DD of today
 let today = new Date().toLocaleDateString()
+let tooday = new Date().toISOString().substring(0,19);
+const Calendar = () => {
+  const [currentEvents,setCurrentEvents] = useState([]);
+  const [todo,setTodo] = useState([]);
+  const [getEvent, setEvent] = useState([{
+    id:'',
+    title:'',
+    start:'',
+    end:''
+  }]);
+  //const {id,title,start,end} = currentEvents;
+  //const {id,title,start,end} = getEvent;
+  const {id,check} = todo;
 
-export default class Calendar extends React.Component {
-
-  state = {
-    weekendsVisible: true,
-    currentEvents: [],
-    todo: [
-      {
-        id:'0' ,
-        check: false,
-        // title:'0번',
-        // date:''
-      },
-      {
-        id:'1' ,
-        check: true,
-        // title:'1번',
-        // date:''
-      }
-    ]
+  const HandleLoad = () =>{
+    useEffect(() => {
+      let tempEvents = [];
+      const userInfo = JSON.parse(window.sessionStorage.userInfo);
+      axios
+        .get(`/planners/${userInfo.userId}`)
+        .then((events) => {
+          const tasks= events.data.data.studyplanner_Tasks;
+          tasks.map((task)=>{
+            tempEvents= tempEvents.concat(
+            {
+              id: task.id,
+              title: task.taskDescription,
+              start: task.startDate,
+              end: task.endDate
+            })
+          });setEvent(tempEvents);
+          return getEvent;      
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }, []);
+    console.log(getEvent);
+    return getEvent; 
   }
-
-  render() {
-
-    return (
-      <div className="demo-app">
-        <div className="demo-app-main">
-          <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            headerToolbar={{
-              left: "prev,next today",
-              center: "title",
-              right: "dayGridMonth,timeGridWeek,timeGridDay",
-            }}
-            locale="ko"
-            initialView="dayGridMonth"
-
-            editable={true}
-            selectable={true}
-            selectMirror={true}
-            dayMaxEvents={true}
-            weekends={this.state.weekendsVisible}
-            initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
-            select={this.handleDateSelect}
-            eventContent={renderEventContent} // custom render function
-            eventClick={this.handleEventClick}
-            eventsSet={this.handleEvents} // called after events are initialized/added/changed/removed
-            /* you can update a remote database when these fire:
-            eventAdd={function(){}}
-            eventChange={function(){}}
-            eventRemove={function(){}}
-            */
-          />
-          
-        </div>
-        {this.renderSidebar()}
-      </div>
-    );
-  }
-
-  // eventAdd={function(){}}
-  // eventChange={function(){}}
-  // eventRemove={function(){}}
-
-/* 여기서부터 api연결부분 */
-
-  eventAllSave=(event)=>{
-    //currentEvent라는 배열에 현재 시점까지의 이벤트들이 전부 들어있고 이것을 한꺼번에 DB에 올리는 부분.. 실제로는 필요x
 
 /*
-    this.state.currentEvents.map((event)=> {
-      "taskID": event.id,
-      
-      "taskDescription":event.title,
-    
-      "startDate":event.start,
-      
-      "endDate":event.end,
-      
-      "complete":+this.getTodoCheck(event.id)//boolean값을 0,1로 바꿈
+  const handleEventAdd = (event) =>{
+    let start = event.start.toISOString().substring(0,19);
+    let end = event.start.toISOString().substring(0,19);
+    let title = event.title;
+    const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    axios
+    .post(`/planners/${userInfo.userId}`, {
+      taskDescription:title,
+      startDate:start,
+      endDate:end, 
+      complete:0
     })
-*/
-  }
-
-  handleEventAdd = (event) =>{
-    //해당 이벤트를 캘린더의 클릭으로 생성하였으므로 데이터베이스에 이벤트를 추가해야함
-/*
-    "taskID": event.id,
-
-    "taskDescription":event.title,
-  
-    "startDate":event.start,
-    
-    "endDate":event.end,
-    
-    "complete":+this.getTodoCheck(event.id)//boolean값을 0,1로 바꿈
-*/
-  }
-  handleEventChange = (event) =>{
-    //체크 상태가 바뀐 이벤트를 데이터베이스에 반영, 해당 이벤트만 내용을 수정할 것인가?
+    .then((response) => {
+      const data = response.data;
+      console.log(data);
+      if (data.status === "200" && data.message === "OK") {
+        //alert(`성공`);
+      }
+    })
+    .catch((error) => {
+      console.log(error.response.data);
+      //alert("오류");
+    });
 
   }
-
-  handleEventRemove = (event) =>{
-    //달력에 존재하는 이벤트를 클릭할 때 이벤트가 삭제됨, 파라미터에 들어온 이벤트를 DB에서 삭제하는 부분
-
+  */
+  const handleEventDelete = (event) =>{
+    const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    axios
+    .delete(`/planners/${userInfo.userId}/${event.id}`, {
+    })
+    .then((response) => {
+      const data = response.data;
+      console.log(data);
+      if (data.status === "200" && data.message === "OK") {
+        //alert(`성공`);
+      }
+    })
+    .catch((error) => {
+      console.log(error.response.data);
+      //alert("오류");
+    });
   }
 
-  renderSidebar() {
-    const {todo} = this.state;
-    console.log(todo);
-    return (
-      <div className="demo-app-sidebar">
-        <div className='demo-app-sidebar-section'>
-          <h2>오늘의 To-do list</h2>
-          <h3>{today}</h3>
-          <ul>
-            {this.state.currentEvents.map(this.renderSidebarEvent)}
-          </ul>
-        </div>
-      </div>
-    );
-  }
-
-  getTodoCheck = (event) => {
+  const getTodoCheck = (event) => {
     let IdNum = event.id;
-    const { todo } = this.state;
-    let chch;
+    let check;
     todo.map((x)=> { 
       if(x.id === IdNum) { 
-        chch = x.check;
+        check = x.check;
       } })
-    return chch
-  }
-  handleTodoUpdate = (event) => {
+    return check
+  };
+
+  const handleTodoUpdate = (event) => {
     let IdNum = event.id;
-    const { todo } = this.state;
-    this.setState({
-      todo: todo.map(
-        info => IdNum === info.id
-          ? { ...info, check: !info.check } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
-          : info // 기존의 값을 그대로 유지
+    const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    setTodo(
+      todo.map(info =>
+        info.id === IdNum ? { ...info, check: !info.check } : info
       )
+    );
+
+    axios
+    .patch(`/planners/${userInfo.userId}/${event.id}`, {
+      complete: +getTodoCheck(event),
+    })
+    .then((response) => {
+      const data = response.data;
+      console.log(data);
+      if (data.status === "200" && data.message === "OK") {
+        //alert(`성공`);
+      }
+      window.location.reload();
+    })
+    .catch((error) => {
+      console.log(error.toJSON());
+
     });
-    this.handleEventChange(event);
+    
   };
 
-  handleTodoCreate = (event) => {
-    const { todo } = this.state;
-    this.setState({
-      todo: todo.concat({ id: event.id, check:false})//, title:event.title,date:event.end
-    })
+  const handleTodoCreate = (event) => {
+    const TempTodo = {
+      id:event.id,
+      check:false
+    };
+    setTodo(todo.concat(TempTodo));
   }
 
-  handleTodoRemove = (event) => {
-    const { todo } = this.state;
-    this.setState({
-      todo: todo.filter(info => info.id !== event.id),
-    });
+  const handleTodoRemove = (event) => {
+    setTodo(todo.filter(info => info.id !== event.id));
   };
 
-
-
-  handleDateSelect = (selectInfo) => {
+  const handleDateSelect = (selectInfo) => {
     let title = prompt('새로운 일정을 등록하세요')
     let calendarApi = selectInfo.view.calendar
     calendarApi.unselect() // clear date selection
+    let start = selectInfo.start.toISOString().substring(0,19);
+    let end = selectInfo.end.toISOString().substring(0,19);
+    const userInfo = JSON.parse(window.sessionStorage.userInfo);
 
+    //let idNum = createEventId();
+    console.log(selectInfo)  
     if (title) {
-      let idNum = createEventId();
-      calendarApi.addEvent({
-        id: idNum,
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay,
-      });
-      let event = calendarApi.getEventById(idNum);
-      this.handleTodoCreate(event);
-      this.handleEventAdd(event)
+        axios
+        .post(`/planners/${userInfo.userId}`, {
+          taskDescription:title,
+          startDate:start,
+          endDate:end, 
+          complete:0
+        })
+        .then((response) => {
+          const data = response.data;
+          calendarApi.addEvent({
+            id: data.data.taskId,
+            title,
+            start: selectInfo.startStr,
+            end: selectInfo.endStr,
+          });
+          let event = calendarApi.getEventById(data.data.taskId);
+          handleTodoCreate(event);
+          //handleEventAdd(event); 
+          console.log(data.data.taskId);
+          if (data.status === "200" && data.message === "OK") {
+            //alert(`성공`);
+          }
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+          //alert("오류");
+        });
+
     }
-    
   }
 
-  handleEventClick = (clickInfo) => {
+  const handleEventClick = (clickInfo) => {
     if (window.confirm(`정말 '${clickInfo.event.title}'을 삭제하시겠습니까?`)) {
       clickInfo.event.remove();
-      this.handleTodoRemove(clickInfo.event);
-      this.handleEventRemove(clickInfo.event);
-      //console.log(clickInfo.event.id);
+      handleTodoRemove(clickInfo.event);
+      handleEventDelete(clickInfo.event);
+      console.log(todo);
     }
   };
 
-  handleEvents = (events) => {
-    this.setState({
-      currentEvents: events
-    })
+  const handleEvents = (events) => {
+    setCurrentEvents(events);
   }
 
-  
-  renderSidebarEvent= (event) => {
+  const renderSidebarEvent= (event) => {
     let Start = event.start.toDateString() 
     let Today = new Date()
-  
-   
+    //console.log(event.start.toISOString().substring(0,19));
+    //console.log(event.end.toISOString().substring(0,19))
     if(!event.end){
       if(Start==todayStr){
         return (
           <li key={event.id}>
             <input
               type='checkbox'
-              checked={this.getTodoCheck(event)}
-              onChange={()=>this.handleTodoUpdate(event)}
+              checked={getTodoCheck(event)}
+              onChange={()=>handleTodoUpdate(event)}
             ></input>
             <b>{event.title}</b>
           </li>
@@ -247,32 +247,70 @@ export default class Calendar extends React.Component {
           <li key={event.id}>
             <input
               type='checkbox'
-              checked={this.getTodoCheck(event)}
-              onChange={()=>this.handleTodoUpdate(event)}
-            ></input>        
-          
+              checked={getTodoCheck(event)}
+              onChange={()=>handleTodoUpdate(event)}
+            ></input>                
             <b>{event.title}</b>
           </li>
         )
       }
       
     }
-  // 원본 코드
-  // return (
-  //   <li key={event.id}>
-  //     <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
-  //     <i>{event.title}</i>
-  //   </li>
-  // )
+    //   return (
+    //   <li key={event.id}>
+    //     <input
+    //       type='checkbox'
+    //       checked={getTodoCheck(event)}
+    //       onChange={()=>handleTodoUpdate(event)}
+    //     ></input>  
+    //     <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
+    //     <i>{event.title}</i>
+    //   </li>
+    // )
   }
-}
-///////////////////////////////////
+  const renderSidebar = ()=> {
+    return (
+      <div className="demo-app-sidebar">
+        <div className='demo-app-sidebar-section'>
+          <h2>오늘의 To-do list</h2>
+          <h3>{today}</h3>
+          <ul>
+            {currentEvents.map(renderSidebarEvent)}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+  return (  
+    <div className="demo-app">
+      <LoadTest/>
+      <div className="demo-app-main">
+        <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          headerToolbar={{
+            left: "prev,next today",
+            center: "title",
+            right: "dayGridMonth,timeGridWeek,timeGridDay",
+          }}
+          locale="ko"
+          initialView="dayGridMonth"
+          editable={true}
+          selectable={true}
+          selectMirror={true}
+          dayMaxEvents={true}
+          weekends={true}
+          initialEvents={HandleLoad()} 
+          //initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
+          select={handleDateSelect}
+          eventContent={renderEventContent} // custom render function
+          eventClick={handleEventClick}
+          eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+        />
+      </div>
+      {renderSidebar()}
+    </div>
+  );
 
-function renderEventContent(eventInfo) {
-  return (
-    <>
-      <b>{eventInfo.timeText}</b>
-      <i>{eventInfo.event.title}</i>
-    </>
-  )
 }
+
+export default Calendar;

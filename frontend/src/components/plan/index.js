@@ -61,7 +61,11 @@ const Index = () => {
     axios
       .get(`/planners/${userInfo.userId}`)
       .then((response) => {
-        console.log(response);
+        const std = response.data.data.studyplanner_Tasks;
+        const id = response.data.data.id;
+        //console.log(response.data.data);
+        //console.log(id);
+        //console.log(std);
       })
       .catch((error) => {
         console.log(error.toJSON());

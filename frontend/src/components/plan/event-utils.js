@@ -7,19 +7,13 @@ export const INITIAL_EVENTS = [
     id: createEventId(),
     title: 'All-day event',
     start: todayStr,
-    // extendedProps:{
-    //   CheckStatus:false
-    // }
-    //CheckStatus:false
+    end:todayStr
   },
   {
     id: createEventId(),
     title: 'Timed event',
     start: todayStr + 'T12:00:00',
-    // extendedProps:{
-    //   CheckStatus:true
-    // }
-    //CheckStatus:true
+    end:todayStr + 'T12:00:00',
   }
   //   start: todayStr + 'T12:00:00'
   // },
@@ -48,6 +42,7 @@ export const INITIAL_EVENTS = [
 
   
 ]
+
 
 export function createEventId() {
   return String(eventGuid++)
