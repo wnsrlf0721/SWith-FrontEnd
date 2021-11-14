@@ -13,7 +13,7 @@ import "@fullcalendar/daygrid/main.css";
 import "@fullcalendar/timegrid/main.css";
 
 import { INITIAL_EVENTS, createEventId,currentID} from './event-utils';
-import LoadTest from "./LoadTest"
+//import LoadTest from "./LoadTest"
 ///////////////////////////////////
 function renderEventContent(eventInfo) {
   return (
@@ -26,8 +26,7 @@ function renderEventContent(eventInfo) {
 function fillZero(str){
   return str.length >= 2 ? str:new Array(2-str.length+1).join('0')+str;//남는 길이만큼 0으로 채움
 }
-
-
+let check = false;
 let todayStr = new Date().toDateString() // YYYY-MM-DD of today
 let today = new Date().toLocaleDateString()
 let tooday = new Date().toISOString().substring(0,19);
@@ -43,11 +42,12 @@ const Calendar = () => {
   }]);
   //const {id,title,start,end} = currentEvents;
   //const {id,title,start,end} = getEvent;
-  const {id,check} = todo;
+  //const {id,check} = todo;
 
   const HandleLoad = () =>{
     useEffect(() => {
       let tempEvents = [];
+      let tempTodo = [];
       const userInfo = JSON.parse(window.sessionStorage.userInfo);
       axios
         .get(`/planners/${userInfo.userId}`)
@@ -56,17 +56,10 @@ const Calendar = () => {
           tasks.map((task)=>{
             const taskStart = task.startDate;
             const taskEnd = task.endDate;
-            //const startTxt = [taskStart.substring(0,4),taskStart.substring(5,7),taskStart.substring(8,10),taskStart.substring(11,13),taskStart.substring(14,16)].join('')
-            //const endTxt = [taskEnd.substring(0,4),taskEnd.substring(5,7),taskEnd.substring(8,10),taskEnd.substring(11,13),taskEnd.substring(14,16)].join('')
             const startTxt = [taskStart.substring(11,13),taskStart.substring(14,16)].join('')
             const endTxt = [taskEnd.substring(11,13),taskEnd.substring(14,16)].join('')
-            // const startTxt = [task.startDate.getFullYear(),fillZero(task.startDate.getMonth()+1),fillZero(task.startDate.getDate()),fillZero(task.startDate.getHours()),fillZero(task.startDate.getMinutes())].join()
-            // const endTxt = [task.endDate.getFullYear(),fillZero(task.endDate.getMonth()+1),fillZero(task.endDate.getDate()),fillZero(task.endDate.getHours()),fillZero(task.endDate.getMinutes())].join()
-            //console.log(taskStart.substring(0,3))
-            //console.log(startTxt)
             let allday = false;
-            if((endTxt.substring(0,4)=='0000')&&(endTxt.substring(0,4)=='0000')){
-              console.log('성공');
+            if((endTxt.substring(0,4)=='0000')&&(startTxt.substring(0,4)=='0000')){
               allday= true;
             }
             tempEvents= tempEvents.concat(
@@ -76,16 +69,24 @@ const Calendar = () => {
               start: task.startDate,
               end: task.endDate,
               allDay:allday
-            })
+            });
+            tempTodo= tempTodo.concat(
+            {
+              id: task.id,
+              check:Boolean(task.complete)
+            });
           });setEvent(tempEvents);
-          return getEvent;      
+          setTodo(tempTodo);
+          //return getEvent;      
         })
         .catch((error) => {
           console.log(error);
         });
-    }, []);
-    console.log(getEvent);
-    return getEvent; 
+    }, [check]);
+    //console.log(getEvent);
+    //console.log(todo);
+    //return getEvent; 
+ 
   }
 
   const handleEventDelete = (event) =>{
@@ -108,47 +109,66 @@ const Calendar = () => {
 
   const getTodoCheck = (event) => {
     let IdNum = event.id;
-    let check;
+    //let check;
+    //console.log(todo)
+          //console.log(x.id,IdNum)
     todo.map((x)=> { 
-      if(x.id === IdNum) { 
+      if(x.id== IdNum) { 
         check = x.check;
-      } })
+        
+      } 
+    })
     return check
   };
 
-  const handleTodoUpdate = (event) => {
+  const HandleTodoCheck = (event)=>{
     let IdNum = event.id;
-    const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    //console.log(event.id)
     setTodo(
       todo.map(info =>
-        info.id === IdNum ? { ...info, check: !info.check, } : info
-      )
-    );
-
-    axios
-    .put(`/planners/${userInfo.userId}/${event.id}`, {
-      taskDescription:event.title,
-      startDate:event.start,
-      endDate:event.end, 
-      complete:+getTodoCheck(event)
-    })
-    .then((response) => {
-      const data = response.data;
-      console.log(+getTodoCheck(event))
-      //console.log({todo})
-      console.log(data);
-      if (data.status === "200" && data.message === "OK") {
-        //alert(`성공`);
-      }
-      window.location.reload();
-    })
-    .catch((error) => {
-      console.log(event.id)
-      console.log(getTodoCheck(event))
-      console.log(error.toJSON());
-
-    });
+        info.id == IdNum ? { ...info, check: !info.check, } : info
+      )//==아니면 오류남
+    );//console.log(todo)//여기서 설정한 값이 안나옴!! 왜지? 다음에 위에서 로드하면 나옴..뭐지?
+    // todo.map((x)=> { 
+    //   if(x.id== IdNum) { 
+         console.log(getTodoCheck(event))//부정을 해야 알맞음..
+    //   } 
+    // })
     
+    //useEffect(()=>{
+       HandleTodoUpdate(event);//업데이트하면 리렌더링 되면서 db에 제대로 안됨,,
+    //},[check])
+  }
+  const HandleTodoUpdate = (event) => {
+      const userInfo = JSON.parse(window.sessionStorage.userInfo);
+      const startDate = event.start;
+      const endDate = event.end;
+      let chch =0;
+      const start = [startDate.getFullYear(),fillZero((startDate.getMonth()+1).toString()),startDate.toString().substring(8,10)].join('-')+'T'+startDate.toTimeString().substring(0,8)
+      const end = [endDate.getFullYear(),fillZero((endDate.getMonth()+1).toString()),endDate.toString().substring(8,10)].join('-')+'T'+endDate.toTimeString().substring(0,8)
+      if(!getTodoCheck(event)){chch = 1}
+      console.log(todo)
+      axios
+      .put(`/planners/${userInfo.userId}/${event.id}`, {
+        taskDescription:event.title,
+        startDate:start,
+        endDate:end, 
+        complete: chch
+      })
+      .then((response) => {
+        const data = response.data;
+        console.log(todo)
+        console.log(data);
+        if (data.status === "200" && data.message === "OK") {
+          //alert(`성공`);
+        }
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.log(todo)
+        console.log(error.toJSON());
+  
+      });
   };
 
   const handleTodoCreate = (event) => {
@@ -159,6 +179,7 @@ const Calendar = () => {
     setTodo(todo.concat(TempTodo));
   }
   const handleTodoRemove = (event) => {
+    
     setTodo(todo.filter(info => info.id !== event.id));
   };
 
@@ -197,11 +218,7 @@ const Calendar = () => {
           });
           let event = calendarApi.getEventById(data.data.taskId);
           handleTodoCreate(event);
-          //handleEventAdd(event); 
-          console.log(start)
           console.log(data);
-          console.log(event)
-          //console.log(data.data.taskId);
           if (data.status === "200" && data.message === "OK") {
             //alert(`성공`);
           }
@@ -219,7 +236,6 @@ const Calendar = () => {
       clickInfo.event.remove();
       handleTodoRemove(clickInfo.event);
       handleEventDelete(clickInfo.event);
-      console.log(todo);
     }
   };
 
@@ -239,7 +255,7 @@ const Calendar = () => {
             <input
               type='checkbox'
               checked={getTodoCheck(event)}
-              onChange={()=>handleTodoUpdate(event)}
+              onChange={()=>HandleTodoCheck(event)}
             ></input>
             <b>{event.title}</b>
           </li>
@@ -258,7 +274,7 @@ const Calendar = () => {
             <input
               type='checkbox'
               checked={getTodoCheck(event)}
-              onChange={()=>handleTodoUpdate(event)}
+              onChange={()=>HandleTodoCheck(event)}
             ></input>                
             <b>{event.title}</b>
           </li>
@@ -266,17 +282,7 @@ const Calendar = () => {
       }
       
     }
-    //   return (
-    //   <li key={event.id}>
-    //     <input
-    //       type='checkbox'
-    //       checked={getTodoCheck(event)}
-    //       onChange={()=>handleTodoUpdate(event)}
-    //     ></input>  
-    //     <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
-    //     <i>{event.title}</i>
-    //   </li>
-    // )
+
   }
   const renderSidebar = ()=> {
     return (
@@ -291,9 +297,10 @@ const Calendar = () => {
       </div>
     );
   }
+
   return (  
+    
     <div className="demo-app">
-      <LoadTest/>
       <div className="demo-app-main">
         
         <FullCalendar
@@ -317,7 +324,6 @@ const Calendar = () => {
           eventContent={renderEventContent} // custom render function
           eventClick={handleEventClick}
           eventsSet={handleEvents} // called after events are initialized/added/changed/removed
-          
        />
       </div>
       {renderSidebar()}
