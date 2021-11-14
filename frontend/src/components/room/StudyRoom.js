@@ -24,7 +24,7 @@ const StudyRoom = ({ location }) => {
   const [PCs, setPCs] = useState(new Map());
   const userNickName = location.state.nickName;
   const studyRoomId = location.state.studyRoomId;
-
+  console.log('스터디룸ID:'+studyRoomId)
   useEffect(() => {
     initSocket();
     

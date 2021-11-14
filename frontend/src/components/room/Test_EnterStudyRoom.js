@@ -1,16 +1,33 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import axios from "../../api/defaultaxios";
 const Test_EnterStudyRoom = () => {
   const [nickName, setNickName] = useState("");
   const [studyRoomId, setStudyRoomId] = useState("");
+  const isLogined = window.sessionStorage.userInfo == null ? false : true;
   
-  useEffect(() => {
-
-  }, []);
+  if (isLogined) {
+    //alert("로그인이 필요합니다.");
+    //return (window.location.href = "/login");
+    const session = JSON.parse(window.sessionStorage.userInfo);
+    axios
+      .get(`/users/${session.userId}`)
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+        if (data.status === "200" && data.message === "OK") {
+          setNickName(data.data.nickname);
+        }
+      })
+      .catch((error) => {
+        console.log(error.toJSON());
+      });
+  }
 
   const onChangeNickName = (e) => {
-    setNickName(e.target.value);
+    if(!isLogined){
+      setNickName(e.target.value);
+    }
   };
 
   const onChangeStudyRoomId = (e) => {
@@ -30,7 +47,7 @@ const Test_EnterStudyRoom = () => {
           state: {
             nickName: nickName,
             studyRoomId: studyRoomId
-          }
+          },
         }} >
           <button >입장하기</button>
         </Link>
