@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-
+import axios from "../../api/defaultaxios";
 import Calendar from "./Calendar";
 import Statistics from "./Statistics";
 
@@ -49,6 +49,7 @@ const TabWrapContainer = styled.div`
 `;
 
 const Index = () => {
+  const [task, setTask] = useState([]);
   useEffect(() => {
     const isLogined = window.sessionStorage.userInfo == null ? false : true;
     if (!isLogined) {
@@ -57,6 +58,27 @@ const Index = () => {
     } else {
       console.log(window.sessionStorage.userInfo);
     }
+    const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    let tempEvents = [];
+    axios
+      .get(`/planners/${userInfo.userId}`)
+      .then((response) => {
+        const data = response.data.data;
+        console.log(data);
+        data.studyplanner_Tasks.map((task) => {
+          tempEvents = tempEvents.concat({
+            id: task.id,
+            title: task.taskDescription,
+            start: task.startDate,
+            end: task.endDate,
+            complete: task.complete,
+          });
+        });
+        setTask(tempEvents);
+      })
+      .catch((error) => {
+        console.log(error.toJSON());
+      });
   }, []);
 
   const [swapleft, setSwapleft] = useState(true);
@@ -81,7 +103,7 @@ const Index = () => {
       </TabWrapContainer>
 
       {/* <ToggleBtn/> */}
-      {swapleft ? <Calendar /> : <Statistics />}
+      {swapleft ? <Calendar /> : <Statistics task={task} />}
     </>
   );
 };
