@@ -12,9 +12,6 @@ import "@fullcalendar/core";
 import "@fullcalendar/daygrid/main.css";
 import "@fullcalendar/timegrid/main.css";
 
-import { INITIAL_EVENTS, createEventId,currentID} from './event-utils';
-//import LoadTest from "./LoadTest"
-///////////////////////////////////
 function renderEventContent(eventInfo) {
   return (
     <>
@@ -40,9 +37,7 @@ const Calendar = () => {
     end:'',
     allDay:''
   }]);
-  //const {id,title,start,end} = currentEvents;
-  //const {id,title,start,end} = getEvent;
-  //const {id,check} = todo;
+
 
   const HandleLoad = () =>{
     useEffect(() => {
@@ -83,10 +78,7 @@ const Calendar = () => {
           console.log(error);
         });
     }, [check]);
-    //console.log(getEvent);
-    //console.log(todo);
-    //return getEvent; 
- 
+
   }
 
   const handleEventDelete = (event) =>{
@@ -109,9 +101,6 @@ const Calendar = () => {
 
   const getTodoCheck = (event) => {
     let IdNum = event.id;
-    //let check;
-    //console.log(todo)
-          //console.log(x.id,IdNum)
     todo.map((x)=> { 
       if(x.id== IdNum) { 
         check = x.check;
@@ -123,21 +112,12 @@ const Calendar = () => {
 
   const HandleTodoCheck = (event)=>{
     let IdNum = event.id;
-    //console.log(event.id)
     setTodo(
       todo.map(info =>
         info.id == IdNum ? { ...info, check: !info.check, } : info
-      )//==아니면 오류남
-    );//console.log(todo)//여기서 설정한 값이 안나옴!! 왜지? 다음에 위에서 로드하면 나옴..뭐지?
-    // todo.map((x)=> { 
-    //   if(x.id== IdNum) { 
-         console.log(getTodoCheck(event))//부정을 해야 알맞음..
-    //   } 
-    // })
-    
-    //useEffect(()=>{
-       HandleTodoUpdate(event);//업데이트하면 리렌더링 되면서 db에 제대로 안됨,,
-    //},[check])
+      )
+    );
+       HandleTodoUpdate(event);
   }
   const HandleTodoUpdate = (event) => {
       const userInfo = JSON.parse(window.sessionStorage.userInfo);
@@ -160,7 +140,6 @@ const Calendar = () => {
         console.log(todo)
         console.log(data);
         if (data.status === "200" && data.message === "OK") {
-          //alert(`성공`);
         }
         window.location.reload();
       })
@@ -187,8 +166,6 @@ const Calendar = () => {
     let title = prompt('새로운 일정을 등록하세요')
     let calendarApi = selectInfo.view.calendar
     calendarApi.unselect() // clear date selection
-    // let start = selectInfo.start.toISOString().substring(0,19);
-    // let end = selectInfo.end.toISOString().substring(0,19);
     const userInfo = JSON.parse(window.sessionStorage.userInfo);
     const startDate = selectInfo.start;
     const endDate = selectInfo.end;
@@ -196,8 +173,6 @@ const Calendar = () => {
     const end = [endDate.getFullYear(),fillZero((endDate.getMonth()+1).toString()),endDate.toString().substring(8,10)].join('-')+'T'+endDate.toTimeString().substring(0,8)
     console.log(startDate)
     console.log(start)
-    //let idNum = createEventId();
-    //console.log(selectInfo)  
     if (title) {
         axios
         .post(`/planners/${userInfo.userId}`, {
@@ -246,8 +221,6 @@ const Calendar = () => {
   const renderSidebarEvent= (event) => {
     let Start = event.start.toDateString() 
     let Today = new Date()
-    //console.log(event.start.toISOString().substring(0,19));
-    //console.log(event.end.toISOString().substring(0,19))
     if(!event.end){
       if(Start==todayStr){
         return (
@@ -268,7 +241,6 @@ const Calendar = () => {
       let endMD = String(event.end.getMonth()+event.end.getDate().toString().padStart(2,'0')+event.end.getHours().toString().padStart(2,'0'))
       
       if((todayMD>=startMD)&&(todayMD<=endMD)){
-      // if((Today.getTime()>=event.start.getTime()&&(Today.getTime()<=event.end.getTime()))){
         return (
           <li key={event.id}>
             <input
@@ -319,7 +291,6 @@ const Calendar = () => {
           weekends={true}
           events = {getEvent}
           initialEvents={HandleLoad()} 
-          //initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
           select={handleDateSelect}
           eventContent={renderEventContent} // custom render function
           eventClick={handleEventClick}
