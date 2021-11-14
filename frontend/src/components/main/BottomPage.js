@@ -78,6 +78,7 @@ const BottomPage = () => {
             hashtag : data.hashtags,
           })
           setPosts(roomInfo);
+          setStudyNum(roomInfo.length);
         })
         
       })
@@ -96,7 +97,6 @@ const BottomPage = () => {
 
     getStudyTitleHashtag();
 
-    setStudyNum(exampleList.data.length);
   }, []);
   
   useEffect(() => {
@@ -107,7 +107,7 @@ const BottomPage = () => {
         .get(`/users/${session.userId}`)
         .then((response) => {
           const data = response.data;
-          console.log(data);
+          //console.log(data);
           if (data.status === "200" && data.message === "OK") {
             setNickName(data.data.nickname);
           }
