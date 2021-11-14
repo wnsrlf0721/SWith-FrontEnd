@@ -4,7 +4,7 @@ import './StudyCard.css'
 function StudyCard({title,imgUrl,body}) {
     return(
         <>
-            <div className="card-container">
+            <button className="card-container">
                 <div className="image-container">
                     <img src ={imgUrl} alt='기본스터디이미지'/>
 
@@ -19,7 +19,7 @@ function StudyCard({title,imgUrl,body}) {
 
                 </div>
 
-            </div>
+            </button>
         
         
         </>

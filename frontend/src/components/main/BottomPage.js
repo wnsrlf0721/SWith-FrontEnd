@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "../../api/defaultaxios";
+import { Link } from "react-router-dom";
 
 import StudyCard from "./StudyCard";
 import studyImage from "../../images/studyImage.jpg";
@@ -41,29 +43,82 @@ const category = [
     purpose: "기타",
   },
 ];
+const LinkContainer = styled.div`
 
+  width: calc(20% - 16px);
+  margin: 8px;
+  height: auto;
+  background-color: #fff;
+  position: relative;
+  cursor: pointer;
+  overFlow : hidden;
+  border:0px;
+  text-align: left;
+`
 const BottomPage = () => {
+  
+  const [NickName, setNickName] = useState('');
   const [studyNum, setStudyNum] = useState(0);
   const [toggleState, setToggleState] = useState(1);
   const toggleTab = (index) => {
     setToggleState(index);
   };
-  const [studyTitle, setStudyTitle] = useState("스윗 스터디룸");
-  const addStudyTitle = () => {
-    //later
-  };
-  const [studyHashtag, setStudyHashtag] = useState("#스윗 #SWith");
-  const addStudyHashtag = () => {
-    //later
-  };
+
+  const getStudyTitleHashtag = () => {
+    let roomInfo = [];
+    axios
+      .get("/studyrooms")
+      .then((response) => {
+        const datas = response.data.data;
+        console.log(datas);
+        datas.map((data)=>{
+          roomInfo = roomInfo.concat({
+            id:data.id,
+            title : data.title,
+            hashtag : data.hashtags,
+          })
+          setPosts(roomInfo);
+        })
+        
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
 
+
+
   useEffect(() => {
-    setPosts(exampleList.data);
+
+    getStudyTitleHashtag();
+
     setStudyNum(exampleList.data.length);
+  }, []);
+  
+  useEffect(() => {
+    const isLogined = window.sessionStorage.userInfo == null ? false : true;
+    if (isLogined) {
+      const session = JSON.parse(window.sessionStorage.userInfo);
+      axios
+        .get(`/users/${session.userId}`)
+        .then((response) => {
+          const data = response.data;
+          console.log(data);
+          if (data.status === "200" && data.message === "OK") {
+            setNickName(data.data.nickname);
+          }
+        })
+        .catch((error) => {
+          console.log(error.toJSON());
+        });
+    }
+    else{
+      setNickName('UNKNOWN')
+    }
   }, []);
 
   const indexOfLastPost = currentPage * postsPerPage;
@@ -86,7 +141,7 @@ const BottomPage = () => {
               style={{
                 fontSize: "22px",
                 fontWeight: "700",
-                lineHeight: "30px;",
+                lineHeight: "30px",
               }}
             >
               스터디 목록
@@ -97,6 +152,8 @@ const BottomPage = () => {
 
         <div className="StudiesTabWrap">
           <div className="StudiesTabListWrap">
+             {/* {tempStudyRoom()} */}
+            {/* {StudyRoomSearch()} */}
             {category.map((data) => (
               <button
                 className={
@@ -115,11 +172,21 @@ const BottomPage = () => {
         <div className="StudyCardWrap">
           {currentPosts.map((data) => {
             return (
-              <StudyCard
-                title={data.title}
-                imgUrl={studyImage}
-                body={data.body}
-              ></StudyCard>
+              <LinkContainer>
+                <Link to={{
+                  pathname: '/StudyRoom',
+                  state: {
+                    nickName: NickName,
+                    studyRoomId: data.id
+                  },
+                }} >
+                  <StudyCard
+                    title={data.title}
+                    imgUrl={studyImage}
+                    body={data.body}
+                  ></StudyCard>
+                </Link>
+              </LinkContainer>
             );
           })}
         </div>
