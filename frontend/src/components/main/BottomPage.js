@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "../../api/defaultaxios";
 
 import StudyCard from "./StudyCard";
 import studyImage from "../../images/studyImage.jpg";
@@ -62,9 +63,83 @@ const BottomPage = () => {
   const postsPerPage = 10;
 
   useEffect(() => {
+    axios
+      .get("/studyrooms")
+      .then((response) => {
+        const datas = response.data.data;
+        // //const tempStudyRoom
+        // datas.map((data) => {
+        //   tempStudyRoom = tempStudyRoom.concat(
+        //     {
+        //       id:data,
+
+        //     }
+        //   )
+        // }
+        // );
+        
+        console.log(datas);
+      })
+      .catch((error) => {
+        console.log(error.toJSON());
+      });
+  }, []);
+/*
+  useEffect(() => {
     setPosts(exampleList.data);
     setStudyNum(exampleList.data.length);
   }, []);
+  // "title": "스윗 스터디룸",
+  // "body" : "#스윗 #SWith"
+  //스터디룸 아이디 추가
+  const hash = ['study','swith'];
+  // const tempStudyRoom = ()=>{
+    useEffect(()=>{
+    const day = new Date(2021,12,20).toISOString().substring(0,19);
+    axios
+    .post("/studyrooms", {
+      title: 'swithTest5', 
+      purpose:'study..', 
+      password:'', 
+      secret: '0',
+      notice:'notice', 
+      endDate:'2021-12-05 00:00:00', 
+      hashtags:"[]"
+    })
+    .then((response) => {
+      const data = response.data;
+      console.log(data);
+      if (data.status === "200" && data.message === "OK") {
+        // alert("스터디룸 생성");
+        console.log("스터디룸 생성");
+      }
+    })
+    .catch((error) => {
+      console.log(error.toJSON());
+      //alert("오류");
+    });
+  }, []);
+  */
+  // };
+  //const StudyRoomSearch = ()=>{
+    // const day = new Date(2021,12,20).toISOString().substring(0,19);
+    // axios
+    // .get("/studyrooms", {
+    // })
+    // .then((response) => {
+    //   const data = response.data;
+    //   console.log(data);
+    //   console.log("성공");
+    //   if (data.status === "200" && data.message === "OK") {
+    //     //alert("스터디룸 조회");
+        
+    //   }
+    // })
+    // .catch((error) => {
+    //   console.log(error.toJSON());
+    //   alert("오류");
+    // });
+ // };
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -97,6 +172,8 @@ const BottomPage = () => {
 
         <div className="StudiesTabWrap">
           <div className="StudiesTabListWrap">
+             {/* {tempStudyRoom()} */}
+            {/* {StudyRoomSearch()} */}
             {category.map((data) => (
               <button
                 className={
