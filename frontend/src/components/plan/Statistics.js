@@ -264,7 +264,11 @@ const Statistics = ({ task }) => {
               <div>
                 <Label>오늘의 달성률</Label>
                 <Progress
-                  done={tcCount === 0 ? 0 : Number(todaycomp / tcCount) * 100}
+                  done={
+                    tcCount === 0
+                      ? 0
+                      : Math.round(Number(todaycomp / tcCount) * 100)
+                  }
                 />
               </div>
             </Box>
@@ -310,7 +314,11 @@ const Statistics = ({ task }) => {
               <div>
                 <Label>주간 평균 달성률</Label>
                 <Progress
-                  done={wcCount === 0 ? 0 : Number(weekcomp / wcCount) * 100}
+                  done={
+                    wcCount === 0
+                      ? 0
+                      : Math.round(Number(weekcomp / wcCount) * 100)
+                  }
                 />
               </div>
             </Box>
@@ -356,7 +364,11 @@ const Statistics = ({ task }) => {
               <div>
                 <Label>월간 평균 달성률</Label>
                 <Progress
-                  done={mcCount === 0 ? 0 : Number(monthcomp / mcCount) * 100}
+                  done={
+                    mcCount === 0
+                      ? 0
+                      : Math.round(Number(monthcomp / mcCount) * 100)
+                  }
                 />
               </div>
             </Box>
