@@ -44,6 +44,8 @@ const category = [
 ];
 
 const BottomPage = () => {
+  
+
   const [studyNum, setStudyNum] = useState(0);
   const [toggleState, setToggleState] = useState(1);
   const toggleTab = (index) => {
@@ -51,12 +53,52 @@ const BottomPage = () => {
   };
   const [studyTitle, setStudyTitle] = useState("스윗 스터디룸");
   const addStudyTitle = () => {
-    //later
+    
+
+    //later 배열에 넣고 빼내기
   };
   const [studyHashtag, setStudyHashtag] = useState("#스윗 #SWith");
   const addStudyHashtag = () => {
+    // axios
+    //   .get("/studyrooms")
+    //   .then((response) => {
+    //     const datas = response.data
+    //     console.log(datas);
+    //     datas.map((data)=>{
+    //       roomHashtag = roomHashtag.concat({
+    //         hashTag : data.hashTag,
+    //       })
+    //       setStudyHashtag(roomHashtag);
+    //     })
+        
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
     //later
+    
   };
+
+  const getStudyTitleHashtag = () => {
+    let roomInfo = [];
+    axios
+      .get("/studyrooms")
+      .then((response) => {
+        const datas = response.data.data;
+        console.log(datas);
+        datas.map((data)=>{
+          roomInfo = roomInfo.concat({
+            title : data.title,
+            hashtag : data.hashtags,
+          })
+          setPosts(roomInfo.reverse());
+        })
+        
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -87,6 +129,8 @@ const BottomPage = () => {
 /*
   useEffect(() => {
     setPosts(exampleList.data);
+    getStudyTitleHashtag();
+
     setStudyNum(exampleList.data.length);
   }, []);
   // "title": "스윗 스터디룸",
@@ -161,7 +205,7 @@ const BottomPage = () => {
               style={{
                 fontSize: "22px",
                 fontWeight: "700",
-                lineHeight: "30px;",
+                lineHeight: "30px",
               }}
             >
               스터디 목록
