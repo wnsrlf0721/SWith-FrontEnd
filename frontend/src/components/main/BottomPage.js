@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 
 import StudyCard from "./StudyCard";
 import studyImage from "../../images/studyImage.jpg";
-import exampleList from "./exampleList.json";
 import "./bottomPage.css";
 
 const Bottompage = styled.div`
@@ -16,52 +15,52 @@ const Bottompage = styled.div`
 const category = [
   {
     id: 1,
-    purpose: "전체",
+    name: "전체",
   },
   {
     id: 2,
-    purpose: "국가 고시",
+    name: "국가 고시",
   },
   {
     id: 3,
-    purpose: "독서",
+    name: "독서",
   },
   {
     id: 4,
-    purpose: "수능",
+    name: "수능",
   },
   {
     id: 5,
-    purpose: "어학",
+    name: "어학",
   },
   {
     id: 6,
-    purpose: "자격증",
+    name: "자격증",
   },
   {
     id: 7,
-    purpose: "기타",
+    name: "기타",
   },
 ];
 const LinkContainer = styled.div`
-
   width: calc(20% - 16px);
   margin: 8px;
   height: auto;
   background-color: #fff;
   position: relative;
   cursor: pointer;
-  overFlow : hidden;
-  border:0px;
+  overflow: hidden;
+  border: 0px;
   text-align: left;
-`
+`;
 const BottomPage = () => {
-  
-  const [NickName, setNickName] = useState('');
+  const [NickName, setNickName] = useState("");
   const [studyNum, setStudyNum] = useState(0);
   const [toggleState, setToggleState] = useState(1);
+
   const toggleTab = (index) => {
-    setToggleState(index);
+    console.log(index);
+    setToggleState(index.id);
   };
 
   const getStudyTitleHashtag = () => {
@@ -71,34 +70,26 @@ const BottomPage = () => {
       .then((response) => {
         const datas = response.data.data;
         console.log(datas);
-        datas.map((data)=>{
+        datas.map((data) => {
           roomInfo = roomInfo.concat({
-            id:data.id,
-            title : data.title,
-            hashtag : data.hashtags,
-          })
+            id: data.id,
+            title: data.title,
+            hashtags: data.hashtags,
+            purpose: data.purpose,
+          });
           setPosts(roomInfo);
           setStudyNum(roomInfo.length);
-        })
-        
+        });
       })
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
 
-
-
-  useEffect(() => {
-
-    getStudyTitleHashtag();
-
-  }, []);
-  
   useEffect(() => {
     const isLogined = window.sessionStorage.userInfo == null ? false : true;
     if (isLogined) {
@@ -115,10 +106,10 @@ const BottomPage = () => {
         .catch((error) => {
           console.log(error.toJSON());
         });
+    } else {
+      setNickName("UNKNOWN");
     }
-    else{
-      setNickName('UNKNOWN')
-    }
+    getStudyTitleHashtag();
   }, []);
 
   const indexOfLastPost = currentPage * postsPerPage;
@@ -152,7 +143,7 @@ const BottomPage = () => {
 
         <div className="StudiesTabWrap">
           <div className="StudiesTabListWrap">
-             {/* {tempStudyRoom()} */}
+            {/* {tempStudyRoom()} */}
             {/* {StudyRoomSearch()} */}
             {category.map((data) => (
               <button
@@ -161,9 +152,9 @@ const BottomPage = () => {
                     ? "StudiesButtonActive"
                     : "StudiesButton"
                 }
-                onClick={() => toggleTab(data.id)}
+                onClick={() => toggleTab(data)}
               >
-                {data.purpose}
+                {data.name}
               </button>
             ))}
           </div>
@@ -173,17 +164,19 @@ const BottomPage = () => {
           {currentPosts.map((data) => {
             return (
               <LinkContainer>
-                <Link to={{
-                  pathname: '/StudyRoom',
-                  state: {
-                    nickName: NickName,
-                    studyRoomId: data.id
-                  },
-                }} >
+                <Link
+                  to={{
+                    pathname: "/StudyRoom",
+                    state: {
+                      nickName: NickName,
+                      studyRoomId: data.id,
+                    },
+                  }}
+                >
                   <StudyCard
                     title={data.title}
                     imgUrl={studyImage}
-                    body={data.body}
+                    body={data.hashtags}
                   ></StudyCard>
                 </Link>
               </LinkContainer>
