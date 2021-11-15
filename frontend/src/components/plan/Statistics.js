@@ -113,7 +113,7 @@ const Progress_done = styled.div`
   background: linear-gradient(to left, #f2709c, #ff9472);
   box-shadow: 0 3px 3px -5px #f2709c, 0 2px 5px #f2709c;
   border-radius: 20px;
-  color: #fff;
+  color: #595959;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -131,37 +131,45 @@ const Progress = ({ done }) => {
   );
 };
 
-const Statistics = () => {
+const Statistics = ({ task }) => {
   const date = moment().format("YYYY-MM-DD"); //현재 날짜
   const Today = moment(date);
   // 공부시간 기록
-  const [todayhour, setTodayhour] = useState(0);
-  const [todayminute, setTodayminute] = useState(0);
-  const [todaysecond, setTodaysecond] = useState(0);
-  const [todaycount, setTodaycount] = useState(0);
+  const [todaytime, setTodaytime] = useState({
+    hour: 0,
+    minute: 0,
+    second: 0,
+    count: 0,
+  });
 
-  const [weekhour, setWeekhour] = useState(0);
-  const [weekminute, setWeekminute] = useState(0);
-  const [weeksecond, setWeeksecond] = useState(0);
-  const [weekcount, setWeekcount] = useState(0);
+  const [weektime, setWeektime] = useState({
+    hour: 0,
+    minute: 0,
+    second: 0,
+    count: 0,
+  });
 
-  const [monthhour, setMonthhour] = useState(0);
-  const [monthminute, setMonthminute] = useState(0);
-  const [monthsecond, setMonthsecond] = useState(0);
-  const [monthcount, setMonthcount] = useState(0);
+  const [monthtime, setMonthtime] = useState({
+    hour: 0,
+    minute: 0,
+    second: 0,
+    count: 0,
+  });
 
   // 달성률 기록
+  const [todaycomp, setTodaycomp] = useState(0);
+  const [tcCount, setTcCount] = useState(0);
+
+  const [weekcomp, setWeekcomp] = useState(0);
+  const [wcCount, setWcCount] = useState(0);
+
+  const [monthcomp, setMonthcomp] = useState(0);
+  const [mcCount, setMcCount] = useState(0);
 
   useEffect(() => {
     const userInfo = JSON.parse(window.sessionStorage.userInfo);
-    /* 아래 api 주석 처리부분 해제하고 학습시간, 날짜 입력하면 임의로 추가 가능
-    여러 데이터들을 입력해 오늘, 주별, 월별 학습시간이 제대로 나오는지 볼 수 있음*/
 
-    // axios.post("/statistics", {
-    //   userId: `${userInfo.userId}`,
-    //   studyTime: "03:59:59",
-    //   date: "2021-11-12",
-    // });
+    //공부시간
     axios
       .get(`/statistics/${userInfo.userId}`)
       .then((response) => {
@@ -181,28 +189,58 @@ const Statistics = () => {
             if (Today.week() === D_date.week()) {
               //오늘의 공부시간
               if (Diff === 0) {
-                setTodayhour((todayhour) => todayhour + hour);
-                setTodayminute((todayminute) => todayminute + minute);
-                setTodaysecond((todaysecond) => todaysecond + second);
-                setTodaycount((todaycount) => todaycount + 1);
+                setTodaytime((prevmonth) => ({
+                  ...prevmonth,
+                  hour: prevmonth.hour + hour,
+                  minute: prevmonth.minute + minute,
+                  second: prevmonth.second + second,
+                  count: prevmonth.count + 1,
+                }));
               }
               //주간 공부시간
-              setWeekhour((weekhour) => weekhour + hour);
-              setWeekminute((weekminute) => weekminute + minute);
-              setWeeksecond((weeksecond) => weeksecond + second);
-              setWeekcount((weekcount) => weekcount + 1);
+              setWeektime((prevmonth) => ({
+                ...prevmonth,
+                hour: prevmonth.hour + hour,
+                minute: prevmonth.minute + minute,
+                second: prevmonth.second + second,
+                count: prevmonth.count + 1,
+              }));
             }
             //월간 공부시간
-            setMonthhour((monthhour) => monthhour + hour);
-            setMonthminute((monthminute) => monthminute + minute);
-            setMonthsecond((monthsecond) => monthsecond + second);
-            setMonthcount((monthcount) => monthcount + 1);
+            setMonthtime((prevmonth) => ({
+              ...prevmonth,
+              hour: prevmonth.hour + hour,
+              minute: prevmonth.minute + minute,
+              second: prevmonth.second + second,
+              count: prevmonth.count + 1,
+            }));
           }
         });
       })
       .catch((error) => {
         console.log(error.toJSON());
       });
+    //달성률
+    task.map((event) => {
+      const D_event = moment(event.start);
+      console.log(event);
+      const Diff = Today.diff(D_event.format("YYYY-MM-DD"), "days");
+      if (Today.month() + 1 === D_event.month() + 1) {
+        if (Today.week() === D_event.week()) {
+          //오늘의 달성률
+          if (Diff === 0) {
+            setTodaycomp((todaycomp) => todaycomp + event.complete);
+            setTcCount((tcCount) => tcCount + 1);
+          }
+          //주간 달성률
+          setWeekcomp((weekcomp) => weekcomp + event.complete);
+          setWcCount((wcCount) => wcCount + 1);
+        }
+        //월간 달성률
+        setMonthcomp((monthcomp) => monthcomp + event.complete);
+        setMcCount((mcCount) => mcCount + 1);
+      }
+    });
   }, []);
 
   return (
@@ -215,17 +253,23 @@ const Statistics = () => {
               <div>
                 <Label>오늘의 공부시간</Label>
                 <Timer
-                  hours={todayhour}
-                  minutes={todayminute}
-                  seconds={todaysecond}
-                  count={todaycount}
+                  hours={todaytime.hour}
+                  minutes={todaytime.minute}
+                  seconds={todaytime.second}
+                  count={todaytime.count}
                 />
               </div>
             </Box>
             <Box>
               <div>
                 <Label>오늘의 달성률</Label>
-                <Progress done="70" />
+                <Progress
+                  done={
+                    tcCount === 0
+                      ? 0
+                      : Math.round(Number(todaycomp / tcCount) * 100)
+                  }
+                />
               </div>
             </Box>
           </BoxPage>
@@ -237,10 +281,10 @@ const Statistics = () => {
               <div>
                 <Label>주간 평균 공부시간</Label>
                 <Timer
-                  hours={weekhour}
-                  minutes={weekminute}
-                  seconds={weeksecond}
-                  count={weekcount}
+                  hours={weektime.hour}
+                  minutes={weektime.minute}
+                  seconds={weektime.second}
+                  count={weektime.count}
                 />
               </div>
             </Box>
@@ -248,9 +292,9 @@ const Statistics = () => {
               <div>
                 <Label>주간 총 공부시간</Label>
                 <Timer
-                  hours={weekhour}
-                  minutes={weekminute}
-                  seconds={weeksecond}
+                  hours={weektime.hour}
+                  minutes={weektime.minute}
+                  seconds={weektime.second}
                   count="1"
                 />
               </div>
@@ -269,7 +313,13 @@ const Statistics = () => {
             <Box>
               <div>
                 <Label>주간 평균 달성률</Label>
-                <Progress done="70" />
+                <Progress
+                  done={
+                    wcCount === 0
+                      ? 0
+                      : Math.round(Number(weekcomp / wcCount) * 100)
+                  }
+                />
               </div>
             </Box>
           </BoxPage>
@@ -281,10 +331,10 @@ const Statistics = () => {
               <div>
                 <Label>월간 평균 공부시간</Label>
                 <Timer
-                  hours={monthhour}
-                  minutes={monthminute}
-                  seconds={monthsecond}
-                  count={monthcount}
+                  hours={monthtime.hour}
+                  minutes={monthtime.minute}
+                  seconds={monthtime.second}
+                  count={monthtime.count}
                 />
               </div>
             </Box>
@@ -292,9 +342,9 @@ const Statistics = () => {
               <div>
                 <Label>월간 총 공부시간</Label>
                 <Timer
-                  hours={monthhour}
-                  minutes={monthminute}
-                  seconds={monthsecond}
+                  hours={monthtime.hour}
+                  minutes={monthtime.minute}
+                  seconds={monthtime.second}
                   count="1"
                 />
               </div>
@@ -313,7 +363,13 @@ const Statistics = () => {
             <Box>
               <div>
                 <Label>월간 평균 달성률</Label>
-                <Progress done="70" />
+                <Progress
+                  done={
+                    mcCount === 0
+                      ? 0
+                      : Math.round(Number(monthcomp / mcCount) * 100)
+                  }
+                />
               </div>
             </Box>
           </BoxPage>
