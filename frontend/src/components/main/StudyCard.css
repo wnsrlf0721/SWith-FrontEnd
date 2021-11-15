@@ -62,3 +62,9 @@ a{
 
 
 }
+.card-body{
+    overflow: hidden;
+}
+.hashtagWrap{
+    flex-direction: row;
+}

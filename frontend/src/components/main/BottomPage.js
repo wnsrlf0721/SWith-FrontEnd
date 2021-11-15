@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 import StudyCard from "./StudyCard";
 import studyImage from "../../images/studyImage.jpg";
+import exampleList from "./exampleList.json";
 import "./bottomPage.css";
 
 const Bottompage = styled.div`
@@ -15,54 +16,65 @@ const Bottompage = styled.div`
 const category = [
   {
     id: 1,
-    name: "전체",
+    purpose: "전체",
   },
   {
     id: 2,
-    name: "국가 고시",
+    purpose: "국가 고시",
   },
   {
     id: 3,
-    name: "독서",
+    purpose: "독서",
   },
   {
     id: 4,
-    name: "수능",
+    purpose: "수능",
   },
   {
     id: 5,
-    name: "어학",
+    purpose: "어학",
   },
   {
     id: 6,
-    name: "자격증",
+    purpose: "자격증",
   },
   {
     id: 7,
-    name: "기타",
+    purpose: "기타",
   },
 ];
 const LinkContainer = styled.div`
+
   width: calc(20% - 16px);
   margin: 8px;
   height: auto;
   background-color: #fff;
   position: relative;
   cursor: pointer;
-  overflow: hidden;
-  border: 0px;
+  overFlow : hidden;
+  border:0px;
   text-align: left;
-`;
+`
 const BottomPage = () => {
-  const [NickName, setNickName] = useState("");
+  
+  const [NickName, setNickName] = useState('');
   const [studyNum, setStudyNum] = useState(0);
   const [toggleState, setToggleState] = useState(1);
-
   const toggleTab = (index) => {
-    console.log(index);
-    setToggleState(index.id);
+    setToggleState(index);
   };
-  
+  const [studyTitle, setStudyTitle] = useState("스윗 스터디룸");
+  const addStudyTitle = () => {
+    
+
+    //later
+  };
+  const [studyHashtag, setStudyHashtag] = useState("#스윗 #SWith");
+  const addStudyHashtag = () => {
+    //later
+    
+  };
+
   const getStudyTitleHashtag = () => {
     let roomInfo = [];
     axios
@@ -70,26 +82,34 @@ const BottomPage = () => {
       .then((response) => {
         const datas = response.data.data;
         console.log(datas);
-        datas.map((data) => {
+        datas.map((data)=>{
           roomInfo = roomInfo.concat({
-            id: data.id,
-            title: data.title,
-            hashtags: data.hashtags,
-            purpose: data.purpose,
-          });
+            id:data.id,
+            title : data.title,
+            hashtags : data.hashtags,
+          })
           setPosts(roomInfo);
-          setStudyNum(roomInfo.length);
-        });
+        })
+        
       })
       .catch((error) => {
         console.log(error);
       });
-  };
+  }
 
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
 
+
+
+  useEffect(() => {
+
+    getStudyTitleHashtag();
+
+    setStudyNum(exampleList.data.length);
+  }, []);
+  
   useEffect(() => {
     const isLogined = window.sessionStorage.userInfo == null ? false : true;
     if (isLogined) {
@@ -98,7 +118,7 @@ const BottomPage = () => {
         .get(`/users/${session.userId}`)
         .then((response) => {
           const data = response.data;
-          //console.log(data);
+          console.log(data);
           if (data.status === "200" && data.message === "OK") {
             setNickName(data.data.nickname);
           }
@@ -106,10 +126,10 @@ const BottomPage = () => {
         .catch((error) => {
           console.log(error.toJSON());
         });
-    } else {
-      setNickName("UNKNOWN");
     }
-    getStudyTitleHashtag();
+    else{
+      setNickName('UNKNOWN')
+    }
   }, []);
 
   const indexOfLastPost = currentPage * postsPerPage;
@@ -143,7 +163,7 @@ const BottomPage = () => {
 
         <div className="StudiesTabWrap">
           <div className="StudiesTabListWrap">
-            {/* {tempStudyRoom()} */}
+             {/* {tempStudyRoom()} */}
             {/* {StudyRoomSearch()} */}
             {category.map((data) => (
               <button
@@ -152,9 +172,9 @@ const BottomPage = () => {
                     ? "StudiesButtonActive"
                     : "StudiesButton"
                 }
-                onClick={() => toggleTab(data)}
+                onClick={() => toggleTab(data.id)}
               >
-                {data.name}
+                {data.purpose}
               </button>
             ))}
           </div>
@@ -164,15 +184,13 @@ const BottomPage = () => {
           {currentPosts.map((data) => {
             return (
               <LinkContainer>
-                <Link
-                  to={{
-                    pathname: "/StudyRoom",
-                    state: {
-                      nickName: NickName,
-                      studyRoomId: data.id,
-                    },
-                  }}
-                >
+                <Link to={{
+                  pathname: '/StudyRoom',
+                  state: {
+                    nickName: NickName,
+                    studyRoomId: data.id
+                  },
+                }} >
                   <StudyCard
                     title={data.title}
                     imgUrl={studyImage}
@@ -198,3 +216,83 @@ const BottomPage = () => {
 };
 
 export default BottomPage;
+  // useEffect(() => {
+  //   axios
+  //     .get("/studyrooms")
+  //     .then((response) => {
+  //       const datas = response.data.data;
+  //       // //const tempStudyRoom
+  //       // datas.map((data) => {
+  //       //   tempStudyRoom = tempStudyRoom.concat(
+  //       //     {
+  //       //       id:data,
+
+  //       //     }
+  //       //   )
+  //       // }
+  //       // );
+        
+  //       console.log(datas);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error.toJSON());
+  //     });
+  // }, []);
+  // "title": "스윗 스터디룸",
+  // "body" : "#스윗 #SWith"
+  //스터디룸 아이디 추가
+
+  // const tempStudyRoom = ()=>{
+  /*
+    useEffect(()=>{
+    const day = new Date(2021,12,20).toISOString().substring(0,19);
+    axios
+    .post("/studyrooms", {
+      title: 'swithTest5', 
+      purpose:'study..', 
+      password:'', 
+      secret: '0',
+      notice:'notice', 
+      endDate:'2021-12-05 00:00:00', 
+      hashtags:"[]"
+    })
+    .then((response) => {
+      const data = response.data;
+      console.log(data);
+      if (data.status === "200" && data.message === "OK") {
+        // alert("스터디룸 생성");
+        console.log("스터디룸 생성");
+      }
+    })
+    .catch((error) => {
+      console.log(error.toJSON());
+      //alert("오류");
+    });
+  }, []);
+  */
+
+  // };
+  //const StudyRoomSearch = ()=>{
+    // const day = new Date(2021,12,20).toISOString().substring(0,19);
+    // axios
+    // .get("/studyrooms", {
+    // })
+    // .then((response) => {
+    //   const data = response.data;
+    //   console.log(data);
+    //   console.log("성공");
+    //   if (data.status === "200" && data.message === "OK") {
+    //     //alert("스터디룸 조회");
+        
+    //   }
+    // })
+    // .catch((error) => {
+    //   console.log(error.toJSON());
+    //   alert("오류");
+    // });
+ // };
+  // const RoomEnter =()=>{
+  //   nickName: nickName,
+  //   studyRoomId: studyRoomId
+
+  // }
