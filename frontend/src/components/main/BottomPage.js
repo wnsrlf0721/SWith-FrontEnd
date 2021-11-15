@@ -63,41 +63,6 @@ const BottomPage = () => {
   const toggleTab = (index) => {
     setToggleState(index);
   };
-
-  const getStudyTitleHashtag = () => {
-    let roomInfo = [];
-    axios
-      .get("/studyrooms")
-      .then((response) => {
-        const datas = response.data.data;
-        console.log(datas);
-        datas.map((data)=>{
-          roomInfo = roomInfo.concat({
-            id:data.id,
-            title : data.title,
-            hashtag : data.hashtags,
-          })
-          setPosts(roomInfo);
-          setStudyNum(roomInfo.length);
-        })
-        
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  const [posts, setPosts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 10;
-
-
-
-  useEffect(() => {
-
-    getStudyTitleHashtag();
-
-  }, []);
   
   useEffect(() => {
     const isLogined = window.sessionStorage.userInfo == null ? false : true;
@@ -120,6 +85,42 @@ const BottomPage = () => {
       setNickName('UNKNOWN')
     }
   }, []);
+  const getStudyTitleHashtag = () => {
+    let roomInfo = [];
+    axios
+      .get("/studyrooms")
+      .then((response) => {
+        const datas = response.data.data;
+        console.log(datas);
+        datas.map((data)=>{
+          roomInfo = roomInfo.concat({
+            id:data.id,
+            title : data.title,
+            hashtag : data.hashtags,
+          })
+          setPosts(roomInfo);
+          setStudyNum(roomInfo.length);
+          console.log(roomInfo)
+        })
+        
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  const [posts, setPosts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 10;
+
+
+
+  useEffect(() => {
+
+    getStudyTitleHashtag();
+
+  }, []);
+  
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
