@@ -9,7 +9,7 @@ import profile from "../routes/profile";
 import dm from "./DM/index";
 import MakeRoom from "./room/MakeRoom";
 import StudyRoom from "./room/StudyRoom";
-import testSR from "./room/index";
+// import testSR from "./room/index";
 
 function App() {
   return (

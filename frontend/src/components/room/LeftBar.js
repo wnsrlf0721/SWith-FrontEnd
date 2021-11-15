@@ -6,7 +6,6 @@ import chat from "../../images/chat.png";
 import back from "../../images/back.png";
 const LeftBar = ()=>{
   return (
-    <div className="Container">
             <div className="LeftBarWrap">
               <div className="LeftTopIconWrap">
                 <div className="LogoIcon">
@@ -16,14 +15,14 @@ const LeftBar = ()=>{
                     alt="logo"
                   />
                 </div>
-                <div className="menuIcon">
+                <div className="ImgIcon">
                 <img
                     style ={{width:'auto',backgroundColor:''}}
                     src={menu}
                     alt="menu"
                   />
                 </div>
-                <div className="plannerIcon">
+                <div className="ImgIcon">
                 <img
                     style ={{width:'auto',backgroundColor:''}}
                     src={planner}
@@ -32,14 +31,14 @@ const LeftBar = ()=>{
                 </div>
               </div>
               <div className="LeftBottomIconWrap">
-                <div className="chatIcon">
+                <div className="ImgIcon">
                 <img
                     style ={{width:'auto',backgroundColor:''}}
                     src={chat}
                     alt="chat"
                   />
                 </div>
-                <div className="backIcon">
+                <div className="ImgIcon">
                 <img
                     style ={{width:'auto',backgroundColor:''}}
                     src={back}
@@ -48,9 +47,6 @@ const LeftBar = ()=>{
                 </div>
               </div>
             </div>
-            <div className="RightWrap">
-            </div>
-        </div>
 
 
   );
