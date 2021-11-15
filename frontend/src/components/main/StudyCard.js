@@ -1,5 +1,6 @@
 import React from "react";
 import './StudyCard.css'
+import styled from "styled-components";
 
 function StudyCard({title,imgUrl,body}) {
     return(
