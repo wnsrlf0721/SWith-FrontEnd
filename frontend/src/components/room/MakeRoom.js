@@ -29,6 +29,31 @@ const Rowarea = styled.div`
   .react-datepicker-wrapper {
     width: auto;
   }
+  .container {
+    display: flex;
+  }
+  .tag {
+    display: flex;
+    align-items: center;
+    margin: 7px 0;
+    margin-right: 10px;
+    padding: 0 10px;
+    padding-right: 5px;
+    border: 1px solid #ef8585;
+    border-radius: 5px;
+    background-color: #ef8585;
+    white-space: nowrap;
+    color: white;
+  }
+
+  .tag button {
+    display: flex;
+    padding: 6px;
+    border: none;
+    background-color: unset;
+    cursor: pointer;
+    color: white;
+  }
 `;
 const Label = styled.label`
   display: flex;
@@ -83,6 +108,7 @@ const Index = () => {
 
   // title(방 제목), purpose(필터링), password(비밀번호), notice(공지사항), endDate, hashTag(해시태그)
 
+  const [inputTag, setInputTag] = useState("");
   const [roominfo, setRoominfo] = useState({
     title: "",
     purpose: "",
@@ -106,6 +132,7 @@ const Index = () => {
         purpose: value,
       }));
     } else if (name === "hashTag") {
+      setInputTag(value);
     } else if (name === "notice") {
       setRoominfo((previnfo) => ({
         ...previnfo,
@@ -119,9 +146,35 @@ const Index = () => {
     }
   };
 
+  const onKeyDown = (e) => {
+    const { key } = e;
+    const trimmedInput = inputTag.trim();
+
+    if (
+      key === "Enter" &&
+      trimmedInput.length &&
+      !roominfo.hashTag.includes(trimmedInput)
+    ) {
+      e.preventDefault();
+      setRoominfo((previnfo) => ({
+        ...previnfo,
+        hashTag: [...previnfo.hashTag, trimmedInput],
+      }));
+      setInputTag("");
+    }
+  };
+  const deleteTag = (index) => {
+    setRoominfo((previnfo) => ({
+      ...previnfo,
+      hashTag: previnfo.hashTag.filter((tag, i) => i !== index),
+    }));
+  };
   const onsubmit = useCallback(
     (e) => {
       e.preventDefault();
+      if (!roominfo.title) {
+        return alert("스터디룸 이름이 비어있으면 안됩니다");
+      }
       const room = roominfo;
       room.endDate = moment(room.endDate).format("YYYY-MM-DD 00:00:00");
       if (room.password) {
@@ -147,63 +200,71 @@ const Index = () => {
       <Topbar />
       <Container>
         <div className="page">
-          <form onSubmit={onsubmit}>
-            <Rowarea>
-              <Label>스터디 이름</Label>
-              <Input
-                name="title"
-                onChange={(e) => onChangehandler(e)}
-                value={roominfo.title}
-              />
-            </Rowarea>
-            <Rowarea>
-              <Label>필터링</Label>
-              <Input
-                name="purpose"
-                onChange={(e) => onChangehandler(e)}
-                value={roominfo.purpose}
-              />
-            </Rowarea>
-            <Rowarea>
-              <Label>기간</Label>
-              <DateInput
-                selected={roominfo.endDate}
-                onChange={(date) =>
-                  setRoominfo((previnfo) => ({
-                    ...previnfo,
-                    endDate: date,
-                  }))
-                }
-                locale={ko}
-                dateFormat="yyyy-MM-dd"
-              />
-            </Rowarea>
-            <Rowarea>
-              <Label>해시태그</Label>
+          <Rowarea>
+            <Label>스터디 이름</Label>
+            <Input
+              name="title"
+              onChange={(e) => onChangehandler(e)}
+              value={roominfo.title}
+            />
+          </Rowarea>
+          <Rowarea>
+            <Label>필터링</Label>
+            <Input
+              name="purpose"
+              onChange={(e) => onChangehandler(e)}
+              value={roominfo.purpose}
+            />
+          </Rowarea>
+          <Rowarea>
+            <Label>기간</Label>
+            <DateInput
+              selected={roominfo.endDate}
+              onChange={(date) =>
+                setRoominfo((previnfo) => ({
+                  ...previnfo,
+                  endDate: date,
+                }))
+              }
+              locale={ko}
+              dateFormat="yyyy-MM-dd"
+            />
+          </Rowarea>
+          <Rowarea>
+            <Label>해시태그</Label>
+            <div className="container">
+              {roominfo.hashTag.map((tag, index) => (
+                <div className="tag">
+                  {tag}
+                  <button onClick={() => deleteTag(index)}>x</button>
+                </div>
+              ))}
               <Input
                 name="hashTag"
+                placeholder="Enter a tag"
                 onChange={(e) => onChangehandler(e)}
-                value={roominfo.hashTag}
+                onKeyDown={(e) => onKeyDown(e)}
+                value={inputTag}
               />
-            </Rowarea>
-            <Rowarea>
-              <Label>공지사항</Label>
-              <Input
-                name="notice"
-                onChange={(e) => onChangehandler(e)}
-                value={roominfo.notice}
-              />
-            </Rowarea>
-            <Rowarea>
-              <Label>비밀번호</Label>
-              <Input
-                name="password"
-                onChange={(e) => onChangehandler(e)}
-                value={roominfo.password}
-              />
-            </Rowarea>
-            <Button>스터디 생성</Button>
-          </form>
+            </div>
+          </Rowarea>
+          <Rowarea>
+            <Label>공지사항</Label>
+            <Input
+              name="notice"
+              onChange={(e) => onChangehandler(e)}
+              value={roominfo.notice}
+            />
+          </Rowarea>
+          <Rowarea>
+            <Label>비밀번호</Label>
+            <Input
+              name="password"
+              onChange={(e) => onChangehandler(e)}
+              value={roominfo.password}
+            />
+          </Rowarea>
+          <Button onClick={onsubmit}>스터디 생성</Button>
         </div>
       </Container>
     </div>
