@@ -168,6 +168,8 @@ const BottomPage = () => {
                     title={data.title}
                     imgUrl={studyImage}
                     body={data.hashtags}
+                    studyRoomID={data.id}
+                    nickName={NickName}
                   ></StudyCard>
               </LinkContainer>
             );
