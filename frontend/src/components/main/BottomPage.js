@@ -62,7 +62,7 @@ const BottomPage = () => {
     console.log(index);
     setToggleState(index.id);
   };
-  
+
   const getStudyTitleHashtag = () => {
     let roomInfo = [];
     axios

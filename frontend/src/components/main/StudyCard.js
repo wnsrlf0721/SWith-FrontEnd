@@ -14,7 +14,12 @@ function StudyCard({title,imgUrl,body}) {
                         <h3>{title}</h3>
                     </div>
                     <div className="card-body">
-                        <p>{body}</p>
+                        <div className = "hashtagWrap">
+                            {body.map((x)=>{
+                                return (
+                                <>{'#'+x.hashtag+' '}</>
+                            )})}
+                        </div>
                     </div>
 
                 </div>
