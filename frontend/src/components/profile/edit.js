@@ -148,10 +148,10 @@ const Index = () => {
   }, []);
 
   //Input으로 변경할 value
-  const [editName, setEditName] = useState("");
-  const [beforePassword, setBefore_pw] = useState("");
-  const [password, setNew_pw] = useState("");
-  const [pwConfirm, setPwConfirm] = useState("");
+  const [editName, setEditName] = useState();
+  const [beforePassword, setBefore_pw] = useState();
+  const [password, setNew_pw] = useState();
+  const [pwConfirm, setPwConfirm] = useState();
   const [pwCheck, setPwCheck] = useState(false);
 
   const onChangehandler = (e) => {
@@ -180,8 +180,8 @@ const Index = () => {
   const onsubmit = useCallback(
     (e) => {
       e.preventDefault();
-      if (!pwCheck) {
-        alert("비밀번호를 확인해주세요");
+      if (!editName) {
+        alert("닉네임을 확인해주세요");
         return;
       }
       axios
