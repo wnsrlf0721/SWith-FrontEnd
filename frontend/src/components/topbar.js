@@ -166,7 +166,7 @@ const Topbar = () => {
           </Search>
         </Left>
         <Right>
-          <a className="rLink" href="/test-StudyRoom">
+          <a className="rLink" href="/MakeRoom">
             스터디 만들기
           </a>
           <a href="/dm">
