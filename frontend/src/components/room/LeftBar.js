@@ -53,5 +53,3 @@ const LeftBar = ()=>{
 }
 
 export default LeftBar
-
-//  <h1>스터디룸 페이지</h1>;
