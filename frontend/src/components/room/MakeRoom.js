@@ -333,7 +333,7 @@ const Index = () => {
             <div className="container">
               {roominfo.hashtag.map((tag, index) => (
                 <div className="tag">
-                  {tag}
+                  {"#"+tag}
                   <button onClick={() => deleteTag(index)}>x</button>
                 </div>
               ))}

@@ -273,30 +273,35 @@ const StudyRoom = ({ match }) => {
                             <img src = {user_invite} alt = "userInvite"/>
                         </div>
                     </div>
-                <div className = "disdplayAndListWrap">
-                    <div className= "disdplaytWrap">
-                        <div className="App" >
+                    <div className= "displaysWrap">
                             <div style={{margin : "10px"}}>
                                 <div>
-                                    <h1>Realtime communication with WebRTC</h1>
-                                    <video muted autoPlay playsInline ref={userVideoRef}></video>
                                     <button onClick={videoMute}>video mute</button>
                                     <button onClick={audioMute}>audio mute</button>
                                     <button onClick={startSharingScreen}>display sharing start</button>
                                     <button onClick={stopSharingScreen}>display sharing stop</button>
                                     <button onClick={disconnectSocket}>disconnect socket</button>
+                                </div>
+                                <div className= "videosWrap">
+                                    <div className="videoGrid" >
+                                        <video muted autoPlay playsInline ref={userVideoRef}></video>
+                                    </div>
                                     {connnectedUsers.map((user, index) => {
-                                        return <Video key={index} nickName={user.nickName} stream={user.stream} />;
+                                        return (
+                                            <div className="videoGrid" >
+                                                <Video key={index} nickName={user.nickName} stream={user.stream} />
+                                            </div>
+                                        );  
                                     })}
                                 </div>
+                                
                             </div>
-                        </div>
+                        
                     </div>
-                    <div className="ListtWrap">
+                    <div className="ListWrap">
                         <UserList/>
                         <Chat userNickName={userNickName} /> 
                     </div>
-                </div>
             </div>
         </div>
     );
