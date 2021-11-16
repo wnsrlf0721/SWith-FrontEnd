@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import logo from "../images/logo.png";
 import DM_icon from "../images/DM_icon.png";
-import axios from "../api/defaultaxios";
+import search_icon from "../images/search_gray.png";
 
 const Bar = styled.div`
   width: 100%;
@@ -58,12 +58,17 @@ const Search = styled.form`
   display: flex;
   align-items: center;
 `;
-const Input = styled.input`
+const Inputdiv = styled.div`
   width: 240px;
+  height: 40px;
   border-radius: 30px;
   border: 1px solid #eee;
-  padding: 11px 22px 11px 44px;
-  background: url(srh_icon) no-repeat center left 16px/16px auto;
+  align-items: center;
+  text-align: center;
+`;
+const Input = styled.input`
+  padding: 11px 0 11px 22px;
+  border: white;
   font-size: 14px;
   font-family: "Roboto";
 `;
@@ -117,7 +122,16 @@ const Right = styled.div`
 
 const Topbar = () => {
   const isLogined = window.sessionStorage.userInfo == null ? false : true;
+  const [search, setSearch] = useState("");
 
+  const onsearch = (e) => {
+    e.preventDefault();
+    if (search.length > 1) {
+      window.location.href = `/?search=${search}`;
+    } else {
+      alert(`검색어는 2자 이상 필요합니다.`);
+    }
+  };
   const onLogout = (e) => {
     const data = JSON.parse(window.sessionStorage.userInfo);
     console.log(data);
@@ -148,7 +162,11 @@ const Topbar = () => {
         <Left>
           <a href="/">
             <img
-              style={{ maxHeight: "50px", height: "40px", width: "90px" }}
+              style={{
+                maxHeight: "50px",
+                height: "40px",
+                width: "90px",
+              }}
               src={logo}
               alt="logo"
             />
@@ -161,8 +179,25 @@ const Topbar = () => {
             {/* <a href="/UserProfile">프로필편집</a> */}
             {/* <a href="/profile">프로필</a> */}
           </Link>
-          <Search>
-            <Input type="text" placeholder="스터디 검색" className="srh" />
+          <Search onSubmit={(e) => onsearch(e)}>
+            <Inputdiv>
+              <img
+                style={{
+                  height: "18px",
+                  width: "18px",
+                  padding: "0 12px",
+                  verticalAlign: "middle",
+                }}
+                src={search_icon}
+                alt="search_icon"
+              />
+              <Input
+                type="text"
+                value={search}
+                placeholder="스터디 검색"
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </Inputdiv>
           </Search>
         </Left>
         <Right>

@@ -141,6 +141,13 @@ const Statistics = ({ task }) => {
   const [weekcomp, setWeekcomp] = useState(0);
   const [wcCount, setWcCount] = useState(0);
 
+  const [monthcompRate, setMonthcompRate] = useState([
+    {
+      day: 0,
+      comp: 0,
+      count: 0,
+    },
+  ]);
   const [monthcomp, setMonthcomp] = useState(0);
   const [mcCount, setMcCount] = useState(0);
 
