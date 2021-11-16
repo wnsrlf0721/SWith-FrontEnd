@@ -16,6 +16,9 @@ import speaker_true from "../../images/speaker_true.png";
 import speaker_false from "../../images/speaker_false.png";
 import user_invite from "../../images/user_invite.png"
 
+import LeftBar from "./LeftBar"
+import UserList from './UserList';
+
 let senderMediaStream;
 let senderScreenStream;
 let currentStream;
@@ -272,20 +275,34 @@ const StudyRoom = ({ match }) => {
                             <img src = {user_invite} alt = "userInvite"/>
                         </div>
                     </div>
-                    <div style={{margin : "10px"}}>
-                        <Chat userNickName={userNickName} />
-                        <div>
-                            <h1>Realtime communication with WebRTC</h1>
-                            <video muted autoPlay playsInline ref={userVideoRef}></video>
-                            <button onClick={videoMute}>video mute</button>
-                            <button onClick={audioMute}>audio mute</button>
-                            <button onClick={startSharingScreen}>display sharing start</button>
-                            <button onClick={stopSharingScreen}>display sharing stop</button>
-                            <button onClick={disconnectSocket}>disconnect socket</button>
-                            {connnectedUsers.map((user, index) => {
-                                return <Video key={index} nickName={user.nickName} stream={user.stream} />;
-                            })}
+                    <div style={{
+                        padding : "0 20px", 
+                        marginRight : "20px"}}>
+                        <img src = {user_invite} alt = "userInvite"/>
+                    </div>
+                </div>
+                <div className = "disdplayAndListWrap">
+                    <div className= "disdplaytWrap">
+                        <div className="App" >
+                            <div style={{margin : "10px"}}>
+                                <Chat userNickName={userNickName} />
+                                <div>
+                                    <h1>Realtime communication with WebRTC</h1>
+                                    <video muted autoPlay playsInline ref={userVideoRef}></video>
+                                    <button onClick={videoMute}>video mute</button>
+                                    <button onClick={audioMute}>audio mute</button>
+                                    <button onClick={startSharingScreen}>display sharing start</button>
+                                    <button onClick={stopSharingScreen}>display sharing stop</button>
+                                    <button onClick={disconnectSocket}>disconnect socket</button>
+                                    {connnectedUsers.map((user, index) => {
+                                        return <Video key={index} nickName={user.nickName} stream={user.stream} />;
+                                    })}
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    <div className="ListtWrap">
+                        <UserList/>
                     </div>
                 </div>
             </div>
