@@ -83,11 +83,25 @@ const DateInput = styled(DatePicker)`
   font-weight: normal;
   font-family: Roboto;
 `;
+const TabWrap = styled.div`
+  width: 182px;
+  font-family: Roboto;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  display: table;
+  margin: 20px auto;
+  .active {
+    border: 1px solid #ef8585;
+    background-color: #ef8585;
+    font-weight: 700;
+    color: #fff;
+  }
+`;
 const Button = styled.button`
   align-items: center;
   width: 100%;
   height: 48px;
-  margin-top: 30px;
   background-color: #ef8585;
   font-size: 0.95rem;
   color: white;
@@ -96,6 +110,43 @@ const Button = styled.button`
   border: 0;
   outline: 0;
   text-decoration: none;
+`;
+const CategoryButton = styled.button`
+  margin: 4px;
+  border: 1px solid #d0d0d0;
+  border-radius: 100px;
+  padding: 3px 18px;
+  background-color: #fff;
+  font-size: 15px;
+  line-height: 34px;
+  cursor: pointer;
+  color: #454648;
+`;
+const KeyButton = styled.button`
+  width: 83px;
+  height: 40px;
+  margin: 4px;
+  border: 1px solid #d0d0d0;
+  background-color: #fff;
+  color: #454648;
+  border-radius: 17px;
+  padding: 3px 14px;
+  font-size: 15px;
+  line-height: 34px;
+  outline: 0;
+  text-decoration: none;
+  cursor: pointer;
+  align-items: center;
+`;
+
+const Cate = styled.div`
+  margin-left: 30px;
+  .activation {
+    border: 1px solid #ef8585;
+    background-color: #ef8585;
+    font-weight: 700;
+    color: #fff;
+  }
 `;
 const Index = () => {
   useEffect(() => {
@@ -106,19 +157,59 @@ const Index = () => {
     }
   }, []);
 
+  const [swapleft, setSwapleft] = useState(true);
   // title(방 제목), purpose(필터링), password(비밀번호), notice(공지사항), endDate, hashTag(해시태그)
-
   const [inputTag, setInputTag] = useState("");
   const [roominfo, setRoominfo] = useState({
     title: "",
     purpose: "",
     notice: "",
-    hashTag: [],
+    hashtag: [],
     endDate: new Date(), //'YYYY-MM-DD HH:MM:SS' 형식
     secret: 0,
     password: "",
   });
+  const [toggleState, setToggleState] = useState(1);
 
+  const category = [
+    {
+      id: 1,
+      name: "국가 고시",
+      purpose: "k-exam",
+    },
+    {
+      id: 2,
+      name: "독서",
+      purpose: "reading",
+    },
+    {
+      id: 3,
+      name: "수능",
+      purpose: "sat",
+    },
+    {
+      id: 4,
+      name: "어학",
+      purpose: "eng",
+    },
+    {
+      id: 5,
+      name: "자격증",
+      purpose: "cert",
+    },
+    {
+      id: 6,
+      name: "기타",
+      purpose: "order",
+    },
+  ];
+  const onclick = (data) => {
+    setToggleState(data.id);
+    setRoominfo((previnfo) => ({
+      ...previnfo,
+      purpose: data.purpose,
+    }));
+  };
   const onChangehandler = (e) => {
     const { name, value } = e.target;
     if (name === "title") {
@@ -131,7 +222,7 @@ const Index = () => {
         ...previnfo,
         purpose: value,
       }));
-    } else if (name === "hashTag") {
+    } else if (name === "hashtag") {
       setInputTag(value);
     } else if (name === "notice") {
       setRoominfo((previnfo) => ({
@@ -153,12 +244,12 @@ const Index = () => {
     if (
       key === "Enter" &&
       trimmedInput.length &&
-      !roominfo.hashTag.includes(trimmedInput)
+      !roominfo.hashtag.includes(trimmedInput)
     ) {
       e.preventDefault();
       setRoominfo((previnfo) => ({
         ...previnfo,
-        hashTag: [...previnfo.hashTag, trimmedInput],
+        hashtag: [...previnfo.hashtag, trimmedInput],
       }));
       setInputTag("");
     }
@@ -166,7 +257,7 @@ const Index = () => {
   const deleteTag = (index) => {
     setRoominfo((previnfo) => ({
       ...previnfo,
-      hashTag: previnfo.hashTag.filter((tag, i) => i !== index),
+      hashtag: previnfo.hashtag.filter((tag, i) => i !== index),
     }));
   };
   const onsubmit = useCallback(
@@ -209,15 +300,22 @@ const Index = () => {
             />
           </Rowarea>
           <Rowarea>
-            <Label>필터링</Label>
-            <Input
-              name="purpose"
-              onChange={(e) => onChangehandler(e)}
-              value={roominfo.purpose}
-            />
+            <Label>카테고리</Label>
+            {/* 국가고시, 독서, 수능, 어학, 자격증, 기타 */}
+            <Cate>
+              {category.map((data) => (
+                <CategoryButton
+                  name={data}
+                  className={toggleState === data.id ? "activation" : ""}
+                  onClick={() => onclick(data)}
+                >
+                  {data.name}
+                </CategoryButton>
+              ))}
+            </Cate>
           </Rowarea>
           <Rowarea>
-            <Label>기간</Label>
+            <Label>종료기간</Label>
             <DateInput
               selected={roominfo.endDate}
               onChange={(date) =>
@@ -233,14 +331,14 @@ const Index = () => {
           <Rowarea>
             <Label>해시태그</Label>
             <div className="container">
-              {roominfo.hashTag.map((tag, index) => (
+              {roominfo.hashtag.map((tag, index) => (
                 <div className="tag">
                   {tag}
                   <button onClick={() => deleteTag(index)}>x</button>
                 </div>
               ))}
               <Input
-                name="hashTag"
+                name="hashtag"
                 placeholder="Enter a tag"
                 onChange={(e) => onChangehandler(e)}
                 onKeyDown={(e) => onKeyDown(e)}
@@ -256,15 +354,35 @@ const Index = () => {
               value={roominfo.notice}
             />
           </Rowarea>
+          <TabWrap>
+            <KeyButton
+              className={swapleft ? "active" : ""}
+              onClick={() => setSwapleft(true)}
+            >
+              공개방
+            </KeyButton>
+            <KeyButton
+              className={!swapleft ? "active" : ""}
+              onClick={() => setSwapleft(false)}
+            >
+              비밀방
+            </KeyButton>
+          </TabWrap>
+          {!swapleft && (
+            <Rowarea>
+              <Label>비밀번호</Label>
+              <Input
+                name="password"
+                onChange={(e) => onChangehandler(e)}
+                value={roominfo.password}
+              />
+            </Rowarea>
+          )}
           <Rowarea>
-            <Label>비밀번호</Label>
-            <Input
-              name="password"
-              onChange={(e) => onChangehandler(e)}
-              value={roominfo.password}
-            />
+            <Button style={{ marginTop: "40px" }} onClick={onsubmit}>
+              스터디 생성
+            </Button>
           </Rowarea>
-          <Button onClick={onsubmit}>스터디 생성</Button>
         </div>
       </Container>
     </div>

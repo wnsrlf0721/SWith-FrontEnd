@@ -4,20 +4,7 @@ import axios from "../../api/defaultaxios";
 import Chart from "react-apexcharts";
 import moment from "moment";
 import Timer from "./Timer";
-
-const series_week = [
-  {
-    name: "Week Complete",
-    data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 3.2],
-  },
-];
-
-const series_month = [
-  {
-    name: "Month Complete",
-    data: [2.3, 3.1, 4.0, 10.1, 4.0],
-  },
-];
+import Progress from "./Progress";
 
 const options = {
   fill: {
@@ -100,37 +87,6 @@ const Label = styled.label`
   color: #595959;
 `;
 
-/********달성률 Progress Bar CSS style********/
-const ProgressBar = styled.div`
-  background-color: #d8d8d8;
-  border-radius: 20px;
-  position: relative;
-  margin-top: 60px;
-  height: 30px;
-  width: 300px;
-`;
-const Progress_done = styled.div`
-  background: linear-gradient(to left, #f2709c, #ff9472);
-  box-shadow: 0 3px 3px -5px #f2709c, 0 2px 5px #f2709c;
-  border-radius: 20px;
-  color: #595959;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 0;
-  opacity: 0;
-  transition: 1s ease 0.3s;
-  opacity: 1;
-`;
-const Progress = ({ done }) => {
-  return (
-    <ProgressBar>
-      <Progress_done style={{ width: `${done}%` }}>{done}%</Progress_done>
-    </ProgressBar>
-  );
-};
-
 const Statistics = ({ task }) => {
   const date = moment().format("YYYY-MM-DD"); //현재 날짜
   const Today = moment(date);
@@ -157,9 +113,31 @@ const Statistics = ({ task }) => {
   });
 
   // 달성률 기록
+  const series_week = [
+    {
+      name: "Week Complete",
+      data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 3.2],
+    },
+  ];
+
+  const series_month = [
+    {
+      name: "Month Complete",
+      data: [2.3, 3.1, 4.0, 10.1, 4.0],
+    },
+  ];
+  //오늘의 달성률
   const [todaycomp, setTodaycomp] = useState(0);
   const [tcCount, setTcCount] = useState(0);
 
+  //주간 달성률
+  const [weekcompRate, setWeekcompRate] = useState([
+    {
+      day: 0,
+      comp: 0,
+      count: 0,
+    },
+  ]);
   const [weekcomp, setWeekcomp] = useState(0);
   const [wcCount, setWcCount] = useState(0);
 
@@ -168,6 +146,7 @@ const Statistics = ({ task }) => {
 
   useEffect(() => {
     const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    console.log(weekcompRate);
 
     //공부시간
     axios
@@ -221,6 +200,7 @@ const Statistics = ({ task }) => {
         console.log(error.toJSON());
       });
     //달성률
+    let tempEvents = [];
     task.map((event) => {
       const D_event = moment(event.start);
       console.log(event);
@@ -233,12 +213,26 @@ const Statistics = ({ task }) => {
             setTcCount((tcCount) => tcCount + 1);
           }
           //주간 달성률
+          tempEvents = tempEvents.concat({
+            day: D_event.day(),
+            comp: event.complete,
+            count: 1,
+          });
+          setWeekcompRate(tempEvents);
           setWeekcomp((weekcomp) => weekcomp + event.complete);
           setWcCount((wcCount) => wcCount + 1);
+          //요일 - 0: 일, 1: 월, 2: 화. 3: 수, 4: 목, 5: 금, 6: 토
+          console.log(D_event.day());
         }
         //월간 달성률
         setMonthcomp((monthcomp) => monthcomp + event.complete);
         setMcCount((mcCount) => mcCount + 1);
+        const weekOfMonth = (m) =>
+          m.week() - moment(m).startOf("month").week() + 1;
+        console.log(
+          D_event.format("YYYY년 MM월 ") + weekOfMonth(D_event) + "주차"
+        );
+        console.log(weekcompRate);
       }
     });
   }, []);
@@ -263,13 +257,15 @@ const Statistics = ({ task }) => {
             <Box>
               <div>
                 <Label>오늘의 달성률</Label>
-                <Progress
-                  done={
-                    tcCount === 0
-                      ? 0
-                      : Math.round(Number(todaycomp / tcCount) * 100)
-                  }
-                />
+                <div style={{ marginTop: "60px" }}>
+                  <Progress
+                    done={
+                      tcCount === 0
+                        ? 0
+                        : Math.round(Number(todaycomp / tcCount) * 100)
+                    }
+                  />
+                </div>
               </div>
             </Box>
           </BoxPage>
@@ -313,13 +309,15 @@ const Statistics = ({ task }) => {
             <Box>
               <div>
                 <Label>주간 평균 달성률</Label>
-                <Progress
-                  done={
-                    wcCount === 0
-                      ? 0
-                      : Math.round(Number(weekcomp / wcCount) * 100)
-                  }
-                />
+                <div style={{ marginTop: "60px" }}>
+                  <Progress
+                    done={
+                      wcCount === 0
+                        ? 0
+                        : Math.round(Number(weekcomp / wcCount) * 100)
+                    }
+                  />
+                </div>
               </div>
             </Box>
           </BoxPage>
@@ -363,13 +361,15 @@ const Statistics = ({ task }) => {
             <Box>
               <div>
                 <Label>월간 평균 달성률</Label>
-                <Progress
-                  done={
-                    mcCount === 0
-                      ? 0
-                      : Math.round(Number(monthcomp / mcCount) * 100)
-                  }
-                />
+                <div style={{ marginTop: "60px" }}>
+                  <Progress
+                    done={
+                      mcCount === 0
+                        ? 0
+                        : Math.round(Number(monthcomp / mcCount) * 100)
+                    }
+                  />
+                </div>
               </div>
             </Box>
           </BoxPage>
