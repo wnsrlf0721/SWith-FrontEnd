@@ -1,0 +1,65 @@
+.Container{
+    
+    
+
+    
+}
+
+.TitleHeader{
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    box-sizing: border-box;
+    padding: 0 16px;
+    border-bottom: 1px solid rgba(0,0,0,0.3);
+    background-color: #fff;
+    line-height: 50px;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 12%);
+    z-index: 1;
+}
+.Title{
+
+    display: inline-block;
+    color: #333;
+    font-weight: bold;
+    font-size: 1.0rem;
+    line-height: inherit;
+}
+.ChatWrap{
+  height: 150px;
+    overflow: auto;
+}
+
+.Input{ 
+    width: 150px;
+    height: 10px;
+    border-radius: 30px;
+    border: 1px solid gray;
+    padding: 11px 22px 11px 44px;
+    font-size: 14px;
+    font-family: "Roboto";
+}
+
+.Button{
+    margin: 4px;
+    border: 1px solid #f8ad1d;
+    background-color: #f8ad1d;
+    color: #fff;
+    font-weight: 700;
+    border-radius: 100px;
+    padding: 3px 10px;
+    font-size: 14px;
+    line-height: 25px;
+    outline: 0;
+    text-decoration: none;
+    cursor: pointer;
+  
+    
+}
+
+.InputBox{
+    align-items:center;
+    padding: 10px;
+
+}

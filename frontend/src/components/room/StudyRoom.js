@@ -5,6 +5,7 @@ import socket from './utils/Socket';
 import configs from './utils/configs.json';
 import { Video } from './Video';
 import { Chat } from './Chat';
+import LeftBar from './LeftBar';
 
 import user_icon from "../../images/user_icon.png";
 import camera_true from "../../images/camera_true.png";
@@ -14,8 +15,6 @@ import mic_false from "../../images/mic_false.png";
 import speaker_true from "../../images/speaker_true.png";
 import speaker_false from "../../images/speaker_false.png";
 import user_invite from "../../images/user_invite.png"
-
-import LeftBar from "./LeftBar"
 
 let senderMediaStream;
 let senderScreenStream;
@@ -190,14 +189,16 @@ const StudyRoom = ({ match }) => {
 
     const videoMute = () => {
         currentStream.getVideoTracks().forEach((track) => (track.enabled = !track.enabled));
-        setCamera(false)
+        setCamera(!camera);
     };
 
     const audioMute = () => {
         currentStream.getAudioTracks().forEach((track) => (track.enabled = !track.enabled));
+        setSpeaker(!speaker);
     };
     
     const startSharingScreen = () => {
+        
         navigator.mediaDevices
             .getDisplayMedia({
                 audio: true,
@@ -223,6 +224,7 @@ const StudyRoom = ({ match }) => {
             .catch((error) => {
                 console.log(`getUserMedia error: ${error}`);
             });
+    
     };
 
     const stopSharingScreen = () => {
@@ -243,6 +245,11 @@ const StudyRoom = ({ match }) => {
     const [speaker, setSpeaker] = useState(true)
     const [sharing, setSharing] = useState(true)
 
+
+    
+
+
+
     return (
         <div className="Container" >
             <LeftBar/>
@@ -256,8 +263,8 @@ const StudyRoom = ({ match }) => {
                         </div>
                         <div className="ImageContainer">
                             <img src = {mic? mic_true:mic_false} alt = "mic"/>
-                            <img src = {camera? camera_true:camera_false} alt = "camera"/>
-                            <img src = {speaker? speaker_true:speaker_false} alt ="speaker"/>  
+                            <img src = {camera? camera_true:camera_false} onClick={videoMute} alt = "camera"/>
+                            <img src = {speaker? speaker_true:speaker_false} onClick={audioMute} alt ="speaker"/>  
                         </div>
                         <div style={{
                             padding : "0 20px", 
@@ -282,7 +289,6 @@ const StudyRoom = ({ match }) => {
                     </div>
                 </div>
             </div>
-            
         </div>
     );
 };
