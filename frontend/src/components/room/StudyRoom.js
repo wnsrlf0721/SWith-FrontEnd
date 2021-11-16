@@ -5,6 +5,7 @@ import socket from './utils/Socket';
 import configs from './utils/configs.json';
 import { Video } from './Video';
 import { Chat } from './Chat';
+import LeftBar from './LeftBar';
 
 import user_icon from "../../images/user_icon.png";
 import camera_true from "../../images/camera_true.png";
@@ -191,14 +192,16 @@ const StudyRoom = ({ match }) => {
 
     const videoMute = () => {
         currentStream.getVideoTracks().forEach((track) => (track.enabled = !track.enabled));
-        setCamera(false)
+        setCamera(!camera);
     };
 
     const audioMute = () => {
         currentStream.getAudioTracks().forEach((track) => (track.enabled = !track.enabled));
+        setSpeaker(!speaker);
     };
     
     const startSharingScreen = () => {
+        
         navigator.mediaDevices
             .getDisplayMedia({
                 audio: true,
@@ -224,6 +227,7 @@ const StudyRoom = ({ match }) => {
             .catch((error) => {
                 console.log(`getUserMedia error: ${error}`);
             });
+    
     };
 
     const stopSharingScreen = () => {
@@ -244,20 +248,32 @@ const StudyRoom = ({ match }) => {
     const [speaker, setSpeaker] = useState(true)
     const [sharing, setSharing] = useState(true)
 
+
+    
+
+
+
     return (
         <div className="Container" >
             <LeftBar/>
-            <div className= "RightWrap">           
-                <div className="RoomTopBarContainer">
-                    <div className="ImageContainer">
-                        <img src = {user_icon} alt = "userIcon"/>
-                        <p>3명 나중에 수정</p>
-                        <p>스터디룸 이름 나중에 수정</p>
-                    </div>
-                    <div className="ImageContainer">
-                        <img src = {mic? mic_true:mic_false} alt = "mic"/>
-                        <img src = {camera? camera_true:camera_false} alt = "camera"/>
-                        <img src = {speaker? speaker_true:speaker_false} alt ="speaker"/>  
+            <div className= "RightWrap">
+                <div className="App" >
+                    <div className="RoomTopBarContainer">
+                        <div className="ImageContainer">
+                            <img src = {user_icon} alt = "userIcon"/>
+                            <p>3명 나중에 수정</p>
+                            <p>스터디룸 이름 나중에 수정</p>
+                        </div>
+                        <div className="ImageContainer">
+                            <img src = {mic? mic_true:mic_false} alt = "mic"/>
+                            <img src = {camera? camera_true:camera_false} onClick={videoMute} alt = "camera"/>
+                            <img src = {speaker? speaker_true:speaker_false} onClick={audioMute} alt ="speaker"/>  
+                        </div>
+                        <div style={{
+                            padding : "0 20px", 
+                            marginRight : "20px"}}>
+                            <img src = {user_invite} alt = "userInvite"/>
+                        </div>
                     </div>
                     <div style={{
                         padding : "0 20px", 
@@ -289,7 +305,7 @@ const StudyRoom = ({ match }) => {
                         <UserList/>
                     </div>
                 </div>
-            </div>         
+            </div>
         </div>
     );
 };
