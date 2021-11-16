@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "../../api/defaultaxios";
-import { Link } from "react-router-dom";
-
 import StudyCard from "./StudyCard";
 import studyImage from "../../images/studyImage.jpg";
 import "./bottomPage.css";
@@ -26,6 +24,7 @@ const LinkContainer = styled.div`
   text-align: left;
 `;
 
+//카테고리 버튼 array
 const category = [
   {
     id: 1,
@@ -64,7 +63,7 @@ const category = [
   },
 ];
 
-const BottomPage = () => {
+const BottomPage = ({ search }) => {
   const [NickName, setNickName] = useState("");
   const [toggleState, setToggleState] = useState(1);
 
@@ -101,6 +100,7 @@ const BottomPage = () => {
       .get("/studyrooms")
       .then((response) => {
         const datas = response.data.data;
+        console.log(datas);
         datas.map((data) => {
           roomInfo = roomInfo.concat({
             id: data.id,
@@ -109,8 +109,28 @@ const BottomPage = () => {
             purpose: data.purpose,
           });
         });
-        setPosts(roomInfo);
-        setPurpose_list(roomInfo);
+
+        //스터디 검색
+        if (search) {
+          let srh_array = [];
+          roomInfo.map((data) => {
+            if (data.title.toLowerCase().indexOf(search.toLowerCase()) !== -1) {
+              srh_array = srh_array.concat({
+                id: data.id,
+                title: data.title,
+                hashtags: data.hashtags,
+                purpose: data.purpose,
+              });
+            }
+          });
+          setPosts(srh_array);
+          setPurpose_list(srh_array);
+        }
+        //일반적인 홈화면
+        else {
+          setPosts(roomInfo);
+          setPurpose_list(roomInfo);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -166,7 +186,7 @@ const BottomPage = () => {
                 lineHeight: "30px",
               }}
             >
-              스터디 목록
+              {!search ? "스터디 목록" : `"${search}"의 검색 결과`}
             </h3>
             <div className="StudiesHeaderNum">
               총 {purpose_list.length} 개 스터디
@@ -176,8 +196,6 @@ const BottomPage = () => {
 
         <div className="StudiesTabWrap">
           <div className="StudiesTabListWrap">
-            {/* {tempStudyRoom()} */}
-            {/* {StudyRoomSearch()} */}
             {category.map((data) => (
               <button
                 className={

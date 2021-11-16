@@ -109,47 +109,64 @@ const SendBT = styled.button`
 `;
 
 const Joinjs = () => {
-  const [email, setEmail] = useState(""); //email
+  //회원가입 정보
+  const [joinInfo, setJoinInfo] = useState({
+    email: "",
+    password: "",
+    nickname: "",
+    certificationCode: "",
+  });
+  //이메일 형식 체크
   const [emailtype, setEmailtype] = useState(false);
-  const [checkemail, setCheckEmail] = useState(false); //email dup check
   var reg_email =
     /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
-  //auth code
-  const [authcode, setAuthcode] = useState("");
+  //이메일 중복 체크
+  const [checkemail, setCheckEmail] = useState(false); //email dup check
+  //이메일 인증번호 확인
   const [checkcode, setCheckcode] = useState(false);
-
-  //pw value
-  const [password, setPassword] = useState("");
-
-  //nickname value
-  const [nickname, setNickname] = useState("");
+  //비밀번호 일치 확인
+  const [checkpw, setCheckpw] = useState(false);
+  const [repeatpw, setRepeatpw] = useState("");
 
   //input에 입력하는 값 onChange
   const onChangehandler = (e) => {
     const { name, value } = e.target;
-    if (name === "email") {
-      setEmail(value);
-      if (reg_email.test(value)) {
-        setEmailtype(true);
+    if (name === "repeatpw") {
+      setRepeatpw(value);
+      if (joinInfo.password === value) {
+        setCheckpw(true);
       } else {
-        setEmailtype(false);
+        setCheckpw(false);
       }
-    } else if (name === "certification_code") {
-      setAuthcode(value);
-    } else if (name === "password") {
-      setPassword(value);
     } else {
-      setNickname(value);
+      setJoinInfo((previnfo) => ({
+        ...previnfo,
+        [name]: value,
+      }));
+      if (name === "email") {
+        if (reg_email.test(value)) {
+          setEmailtype(true);
+        } else {
+          setEmailtype(false);
+        }
+      }
+      if (name === "password") {
+        if (repeatpw === value) {
+          setCheckpw(true);
+        } else {
+          setCheckpw(false);
+        }
+      }
     }
   };
 
   const dupcheck = (e) => {
-    if (!emailtype || !email) {
+    if (!emailtype || !joinInfo.email) {
       return alert("이메일 형식에 맞게 작성해주세요.");
     }
     axios
       .post("/signup/check-email", {
-        email: email,
+        email: joinInfo.email,
       })
       .then((response) => {
         const data = response.data;
@@ -169,14 +186,14 @@ const Joinjs = () => {
   const sendCode = (e) => {
     axios
       .post("/signup/recieve-certificate-code", {
-        email: email,
+        email: joinInfo.email,
       })
       .then((response) => {
         const data = response.data;
         console.log(data);
         if (data.status === "200" && data.message === "OK") {
           alert(
-            `${email}에 인증번호를 전송했습니다.\n이메일 인증번호를 확인해주세요.`
+            `${joinInfo.email}에 인증번호를 전송했습니다.\n이메일 인증번호를 확인해주세요.`
           );
         }
       })
@@ -188,8 +205,8 @@ const Joinjs = () => {
   const certificate = (e) => {
     axios
       .post("/signup/certificate-email", {
-        email: email,
-        certificationCode: authcode,
+        email: joinInfo.email,
+        certificationCode: joinInfo.certificationCode,
       })
       .then((response) => {
         const data = response.data;
@@ -204,15 +221,21 @@ const Joinjs = () => {
       });
   };
   const onSignup = (e) => {
-    console.log(nickname);
-    if (!emailtype || !checkemail || !checkcode || !password || !nickname) {
+    //console.log(joinInfo.nickname);
+    if (
+      !emailtype ||
+      !checkemail ||
+      !checkcode ||
+      !checkpw ||
+      !joinInfo.nickname
+    ) {
       return alert("빈칸을 다시 한번 확인해주세요.");
     }
     axios
       .post("/signup", {
-        email: email,
-        password: password,
-        nickname: nickname,
+        email: joinInfo.email,
+        password: joinInfo.password,
+        nickname: joinInfo.nickname,
       })
       .then((response) => {
         const data = response.data;
@@ -223,7 +246,7 @@ const Joinjs = () => {
         }
       })
       .catch((error) => {
-        console.log(nickname);
+        //console.log(joinInfo.nickname);
         console.log(error.toJSON());
         alert("빈칸이 없는지 확인해주세요.");
       });
@@ -239,7 +262,7 @@ const Joinjs = () => {
               placeholder="이메일"
               style={{ width: "60%" }}
               name="email"
-              value={email}
+              value={joinInfo.email}
               onChange={(e) => onChangehandler(e)}
             />
             <SendBT onClick={(e) => dupcheck(e)}>중복확인</SendBT>
@@ -268,8 +291,8 @@ const Joinjs = () => {
             <Input
               placeholder="인증번호를 입력해주세요."
               style={{ width: "70%" }}
-              name="certification_code"
-              value={authcode}
+              name="certificationCode"
+              value={joinInfo.authcode}
               onChange={(e) => onChangehandler(e)}
             />
             <SendBT onClick={(e) => certificate(e)}>확인</SendBT>
@@ -287,16 +310,35 @@ const Joinjs = () => {
               placeholder="비밀번호"
               type="password"
               name="password"
-              value={password}
+              value={joinInfo.password}
               onChange={(e) => onChangehandler(e)}
             />
+          </Text>
+          <Text>
+            <Label>비밀번호 확인</Label>
+            <Input
+              placeholder="비밀번호"
+              type="password"
+              name="repeatpw"
+              value={repeatpw}
+              onChange={(e) => onChangehandler(e)}
+            />
+            {!checkpw ? (
+              <div style={{ color: "red", fontSize: "12px" }}>
+                비밀번호가 일치하지 않습니다
+              </div>
+            ) : (
+              <div style={{ color: "green", fontSize: "12px" }}>
+                비밀번호가 일치합니다
+              </div>
+            )}
           </Text>
           <Text>
             <Label>닉네임</Label>
             <Input
               placeholder="닉네임"
               name="nickname"
-              value={nickname}
+              value={joinInfo.nickname}
               onChange={(e) => onChangehandler(e)}
             />
           </Text>

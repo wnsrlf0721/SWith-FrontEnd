@@ -1,6 +1,6 @@
 import React from "react";
-//import {StyleSheet, Text, View} from 'react-native';
 import styled from "styled-components";
+import queryString from "query-string";
 import Topbar from "../components/topbar";
 import Mypage from "../components/main/MyPage";
 import BottomPage from "../components/main/BottomPage";
@@ -17,12 +17,13 @@ const Wrap = styled.div`
   position: relative;
 `;
 
-const Index = () => {
+const Index = ({ location }) => {
+  const query = queryString.parse(location.search);
   return (
     <Wrap>
       <Topbar />
       <Mypage />
-      <BottomPage />
+      <BottomPage search={query.search} />
     </Wrap>
   );
 };
