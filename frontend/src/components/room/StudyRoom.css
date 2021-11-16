@@ -1,4 +1,4 @@
-.App{
+.videoGrid{
   /* display: flex;
   flex-direction: column;
   min-height: 800px;
@@ -6,20 +6,29 @@
   text-align: left;
   align-items: center; */
   display: flex;
-  width: 100%;
   position: relative;
   float: left;
   box-sizing: border-box;
   border: 1px solid rgba(0,0,0,0.4);
   
 }
+
 body {
   font-family: sans-serif;
 }
 
 video {
-  max-width: 100%;
-  width: 320px;
+  /* max-width: 100%;
+  width: 320px; */
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: auto; 
+  overflow: hidden;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 
@@ -47,12 +56,14 @@ video {
 }
 
 .RightWrap {
-  width:100%;
-  height: 100%;
   flex-direction: column;
   display: flex;
-  position: static;
-  vertical-align: top;
+  position: fixed;
+  top: 0;
+  left: 60px;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
 }
 
 .LeftTopIconWrap {
@@ -96,7 +107,7 @@ video {
 .RoomTopBarContainer{
   position: absolute;
   top: 0;
-  left: 60px;
+  left: 0;
   right: 0;
   height: 50px;
   display: flex;
@@ -127,20 +138,32 @@ video {
   vertical-align: top;
 
 }
-.disdplaytWrap {
+.displaysWrap {
   background-color: #666666;
-
   display: flex;
   position: absolute;
   top: 50px;
-  left: 60px;
-  right: 0;
+  left: 0;
+  right: 300px;
   bottom: 0;
   align-items: center;
   justify-content: center;
   z-index: 1;
+  display: flex;
 }
-.ListtWrap {
+
+.videosWrap {
+  display: flex;
+  height: auto;
+  margin: 0 auto;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 40%);
+  position: relative;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.ListWrap {
   width:300px;
   background-color: #ededed;
   vertical-align: top;
@@ -160,7 +183,7 @@ video {
   left: 0;
   right: 0;
   bottom: 64%;
-  overflow: auto;
+  
 }
 .UserList {
   height: 30px;
