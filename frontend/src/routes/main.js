@@ -10,10 +10,11 @@ import BottomPage from "../components/main/BottomPage";
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 800px;
-  min-width: 800px;
   text-align: left;
-  //align-items: center;
+  margin-top: 64px;
+  padding-bottom: 120px;
+  background-color: #fff;
+  position: relative;
 `;
 
 const Index = () => {

@@ -22,7 +22,6 @@ let senderMediaStream;
 let senderScreenStream;
 let currentStream;
 let senderTrcak;
-
 const pc_config = {
     iceServers: [configs['stun-server'], configs['turn-server']],
 };
@@ -33,6 +32,8 @@ const StudyRoom = ({ match }) => {
     const [PCs, setPCs] = useState(new Map());
     const studyRoomId = match.params.studyRoomId;
     const userNickName = match.params.nickName;
+    const [PeopleNum,setPeopleNum] = useState()
+    
     
 
     useBeforeunload(() => {
@@ -241,20 +242,24 @@ const StudyRoom = ({ match }) => {
     const disconnectSocket = () => {
         socket.disconnect();
     };
-    
+    const SplitScreen = ()=>{
+        let Number=1;
+        const PeopleNum= 1;
+        if(PeopleNum==2){Number=2;}
+        else if(PeopleNum==3||PeopleNum==4){Number=2.8;}
+        else if(PeopleNum==5||PeopleNum==6){Number=3;}
+        else if(PeopleNum>=7) {Number=4;}
+        return 'calc(100%/'+Number+')'
+    }
+
     const [camera, setCamera] = useState(true)
     const [mic, setMic] = useState(true)
     const [speaker, setSpeaker] = useState(true)
     const [sharing, setSharing] = useState(true)
-
-
-    
-
-
-
     return (
         <div className="Container" >
             <LeftBar/>
+           
             <div className= "RightWrap">
                     <div className="RoomTopBarContainer">
                         <div className="ImageContainer">
@@ -283,12 +288,12 @@ const StudyRoom = ({ match }) => {
                                     <button onClick={disconnectSocket}>disconnect socket</button>
                                 </div>
                                 <div className= "videosWrap">
-                                    <div className="videoGrid" >
+                                    <div className="videoGrid" style= {{ width: SplitScreen()}} >
                                         <video muted autoPlay playsInline ref={userVideoRef}></video>
                                     </div>
                                     {connnectedUsers.map((user, index) => {
                                         return (
-                                            <div className="videoGrid" >
+                                            <div className="videoGrid" style= {{ width: SplitScreen()}} >
                                                 <Video key={index} nickName={user.nickName} stream={user.stream} />
                                             </div>
                                         );  

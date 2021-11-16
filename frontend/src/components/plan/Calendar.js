@@ -1,5 +1,5 @@
 
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect,useMemo } from "react";
 //import styled from "styled-components";
 import "./styles.css";
 import axios from "../../api/defaultaxios";
@@ -105,7 +105,6 @@ const Calendar = () => {
     todo.map((x)=> { 
       if(x.id== IdNum) { 
         check = x.check;
-        
       } 
     })
     return check
@@ -128,7 +127,6 @@ const Calendar = () => {
       const start = [startDate.getFullYear(),fillZero((startDate.getMonth()+1).toString()),startDate.toString().substring(8,10)].join('-')+'T'+startDate.toTimeString().substring(0,8)
       const end = [endDate.getFullYear(),fillZero((endDate.getMonth()+1).toString()),endDate.toString().substring(8,10)].join('-')+'T'+endDate.toTimeString().substring(0,8)
       if(!getTodoCheck(event)){chch = 1}
-      console.log(todo)
       axios
       .put(`/planners/${userInfo.userId}/${event.id}`, {
         taskDescription:event.title,
@@ -304,4 +302,4 @@ const Calendar = () => {
 
 }
 
-export default Calendar;
+export default React.memo(Calendar);

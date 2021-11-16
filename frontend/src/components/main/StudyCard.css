@@ -34,14 +34,17 @@
 h3{
     margin: 0;
     padding: 0;
+    font-weight: bold;
     font-size: 15px;
-    color : #454648
+    color : #454648;
+    font-family: "Roboto";
 }
 p{
     margin: 0;
     padding: 0;
     font-size: 15px;
     color : #ccc;
+    font-family: "Roboto";
 }
 .card-title{
     margin-bottom:0.5rem;
@@ -59,6 +62,7 @@ p{
 a{
     color: #222222;
     font-weight: bold;
+    font-family: "Roboto";
 
 
 }
@@ -66,5 +70,12 @@ a{
     overflow: hidden;
 }
 .hashtagWrap{
+    display: flex;
     flex-direction: row;
+    overflow: auto;
+}
+
+.t{
+    font-family: "Roboto";
+    margin-right: 5px;
 }
