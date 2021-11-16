@@ -5,7 +5,6 @@ import socket from './utils/Socket';
 import configs from './utils/configs.json';
 import { Video } from './Video';
 import { Chat } from './Chat';
-import LeftBar from './LeftBar';
 
 import user_icon from "../../images/user_icon.png";
 import camera_true from "../../images/camera_true.png";
