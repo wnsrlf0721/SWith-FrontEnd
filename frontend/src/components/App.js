@@ -9,6 +9,7 @@ import profile from "../routes/profile";
 import dm from "./DM/index";
 import MakeRoom from "./room/MakeRoom";
 import StudyRoom from "./room/StudyRoom";
+// import testSR from "./room/index";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/dm" component={dm} />
           <Route path="/MakeRoom" component={MakeRoom} />
           <Route path="/StudyRoom/:studyRoomId/:nickName" component={StudyRoom} />
+          {/* <Route path="/testSR" component={testSR} /> */}
         </Switch>
       </BrowserRouter>
     </>

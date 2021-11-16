@@ -5,6 +5,16 @@ import socket from './utils/Socket';
 import configs from './utils/configs.json';
 import { Video } from './Video';
 import { Chat } from './Chat';
+import LeftBar from './LeftBar';
+
+import user_icon from "../../images/user_icon.png";
+import camera_true from "../../images/camera_true.png";
+import camera_false from "../../images/camera_false.png";
+import mic_true from "../../images/mic_true.png";
+import mic_false from "../../images/mic_false.png";
+import speaker_true from "../../images/speaker_true.png";
+import speaker_false from "../../images/speaker_false.png";
+import user_invite from "../../images/user_invite.png"
 
 let senderMediaStream;
 let senderScreenStream;
@@ -179,13 +189,16 @@ const StudyRoom = ({ match }) => {
 
     const videoMute = () => {
         currentStream.getVideoTracks().forEach((track) => (track.enabled = !track.enabled));
+        setCamera(!camera);
     };
 
     const audioMute = () => {
         currentStream.getAudioTracks().forEach((track) => (track.enabled = !track.enabled));
+        setSpeaker(!speaker);
     };
-
+    
     const startSharingScreen = () => {
+        
         navigator.mediaDevices
             .getDisplayMedia({
                 audio: true,
@@ -211,6 +224,7 @@ const StudyRoom = ({ match }) => {
             .catch((error) => {
                 console.log(`getUserMedia error: ${error}`);
             });
+    
     };
 
     const stopSharingScreen = () => {
@@ -225,22 +239,55 @@ const StudyRoom = ({ match }) => {
     const disconnectSocket = () => {
         socket.disconnect();
     };
+    
+    const [camera, setCamera] = useState(true)
+    const [mic, setMic] = useState(true)
+    const [speaker, setSpeaker] = useState(true)
+    const [sharing, setSharing] = useState(true)
+
+
+    
+
+
 
     return (
-        <div className="App">
-            <header className="App-header"></header>
-            <Chat userNickName={userNickName} />
-            <div>
-                <h1>Realtime communication with WebRTC</h1>
-                <video muted autoPlay playsInline ref={userVideoRef}></video>
-                <button onClick={videoMute}>video mute</button>
-                <button onClick={audioMute}>audio mute</button>
-                <button onClick={startSharingScreen}>display sharing start</button>
-                <button onClick={stopSharingScreen}>display sharing stop</button>
-                <button onClick={disconnectSocket}>disconnect socket</button>
-                {connnectedUsers.map((user, index) => {
-                    return <Video key={index} nickName={user.nickName} stream={user.stream} />;
-                })}
+        <div className="Container" >
+            <LeftBar/>
+            <div className= "RightWrap">
+                <div className="App" >
+                    <div className="RoomTopBarContainer">
+                        <div className="ImageContainer">
+                            <img src = {user_icon} alt = "userIcon"/>
+                            <p>3명 나중에 수정</p>
+                            <p>스터디룸 이름 나중에 수정</p>
+                        </div>
+                        <div className="ImageContainer">
+                            <img src = {mic? mic_true:mic_false} alt = "mic"/>
+                            <img src = {camera? camera_true:camera_false} onClick={videoMute} alt = "camera"/>
+                            <img src = {speaker? speaker_true:speaker_false} onClick={audioMute} alt ="speaker"/>  
+                        </div>
+                        <div style={{
+                            padding : "0 20px", 
+                            marginRight : "20px"}}>
+                            <img src = {user_invite} alt = "userInvite"/>
+                        </div>
+                    </div>
+                    <div style={{margin : "10px"}}>
+                        <Chat userNickName={userNickName} />
+                        <div>
+                            <h1>Realtime communication with WebRTC</h1>
+                            <video muted autoPlay playsInline ref={userVideoRef}></video>
+                            <button onClick={videoMute}>video mute</button>
+                            <button onClick={audioMute}>audio mute</button>
+                            <button onClick={startSharingScreen}>display sharing start</button>
+                            <button onClick={stopSharingScreen}>display sharing stop</button>
+                            <button onClick={disconnectSocket}>disconnect socket</button>
+                            {connnectedUsers.map((user, index) => {
+                                return <Video key={index} nickName={user.nickName} stream={user.stream} />;
+                            })}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
