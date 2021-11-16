@@ -16,7 +16,7 @@ function App() {
     <>
       <BrowserRouter>
         <Switch>
-          <Route path="/" component={main} exact={true} />
+          <Route path={"/"} component={main} exact={true} />
           <Route path="/login/" component={auth} />
           <Route path="/profile/" component={profile} />
           <Route path="/plan/" component={plan} />
@@ -24,7 +24,10 @@ function App() {
           <Route path="/friend/" component={friend} />
           <Route path="/dm" component={dm} />
           <Route path="/MakeRoom" component={MakeRoom} />
-          <Route path="/StudyRoom/:studyRoomId/:nickName" component={StudyRoom} />
+          <Route
+            path="/StudyRoom/:studyRoomId/:nickName"
+            component={StudyRoom}
+          />
           {/* <Route path="/testSR" component={testSR} /> */}
         </Switch>
       </BrowserRouter>

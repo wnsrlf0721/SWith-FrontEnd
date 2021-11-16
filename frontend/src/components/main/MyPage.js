@@ -62,11 +62,11 @@ const MyPage = () => {
         .get(`/statistics/${userInfo.userId}`)
         .then((response) => {
           const datas = response.data.data;
-          console.log(datas);
+          //console.log(datas);
           datas.map((data) => {
             //일간, 주간, 월간 공부시간 기록
             const D_date = moment(data.date);
-            console.log(D_date);
+            //console.log(D_date);
             const Diff = Math.abs(Today.diff(D_date, "days"));
 
             const hour = Number(data.studyTime.slice(0, 2));
@@ -106,6 +106,15 @@ const MyPage = () => {
         .catch((error) => {
           console.log(error.toJSON());
         });
+      //참여했던 스터디룸 조회 API
+      // axios
+      //   .get(`/studyrooms-history/${userInfo.userId}`)
+      //   .then((response) => {
+      //     console.log(response);
+      //   })
+      //   .catch((error) => {
+      //     console.log(error.toJSON());
+      //   });
     }
   }, []);
   return (
