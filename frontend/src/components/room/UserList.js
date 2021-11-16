@@ -89,21 +89,21 @@ const UserList = ()=>{
                             <div className = "text" style= {{maxWidth:"140px",overflow: "hidden"}} >{user.name}</div>
                         </div>
                         <div className="rowContainer">
-                            <div className="ImgIcon" style={{height: 'auto'}}>
+                            <div className="ImgIcon" style={{height: 'auto',cursor:"default"}}>
                                 <img
                                     style ={{width:'15px'}}
                                     src={cameraTrue}
                                     alt="cameraTrue"
                                 />
                             </div>
-                            {isUser(user)}
-                            <div className="ImgIcon" style={{height: 'auto'}}>
+                            <div className="ImgIcon" style={{height: 'auto',cursor:"default"}}>
                                 <img
                                     style ={{width:'15px'}}
                                     src={micTrue}
                                     alt="micTrue"
                                 />
                             </div>
+                            {isUser(user)}
                             <div className="ImgIcon" style={{height: 'auto'}}>
                                 <img
                                     style ={{width:'15px'}}

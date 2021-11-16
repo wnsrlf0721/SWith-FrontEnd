@@ -6,7 +6,7 @@ const ProgressBar = styled.div`
   border-radius: 20px;
   position: relative;
   height: 30px;
-  width: 300px;
+  width: 100%;
 `;
 const ProgressDone = styled.div`
   background: linear-gradient(to left, #f2709c, #ff9472);
