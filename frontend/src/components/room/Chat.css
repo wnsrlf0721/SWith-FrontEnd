@@ -1,8 +1,13 @@
-.Container{
-    
-    
-
-    
+.chatContainer{
+    vertical-align: top;
+    flex-direction: column;
+    display: flex;
+    overflow: auto;
+    position: absolute;
+    top: 36%;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .TitleHeader{
@@ -27,9 +32,13 @@
     line-height: inherit;
 }
 .ChatWrap{
-  height: 150px;
     overflow: auto;
-}
+    position: absolute;
+    top: 50px;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+} 
 
 .Input{ 
     width: 150px;
@@ -60,6 +69,13 @@
 
 .InputBox{
     align-items:center;
+    display: flex;
+    justify-content: center;
     padding: 10px;
-
+    position: absolute;
+    box-sizing: border-box;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
 }
