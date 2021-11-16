@@ -6,7 +6,7 @@ const Container = styled.div`
   display: flex;
   text-align: center;
   align-items: center;
-  margin-top: 100px;
+  margin-top: 150px;
 `;
 const LoginPage = styled.div`
   display: flex;
