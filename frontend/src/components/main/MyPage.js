@@ -95,6 +95,7 @@ const MyPage = () => {
             const plan_date = moment(task.startDate);
             const Diff = Math.abs(Today.diff(plan_date, "days"));
             if (Diff === 0) {
+              //console.log(task.complete);
               setTodaystudy((prev) => ({
                 ...prev,
                 complete: prev.complete + task.complete,
