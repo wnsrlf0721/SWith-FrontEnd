@@ -48,13 +48,10 @@ export const Chat = ({ userNickName }) => {
 
     return (
         <>
-            <div>
+            <div className   = "chatContainer">
                 <div className="TitleHeader">
                     <div className="Title">채팅</div>
                 </div>
-
-            
-
                 <div id="chat" >
                     <div className="ChatWrap">
                         {
@@ -65,8 +62,6 @@ export const Chat = ({ userNickName }) => {
                             
                         }
                         <div ref={messagesEndRef} />
-
-
                     </div>
                     
                     <div className="InputBox">

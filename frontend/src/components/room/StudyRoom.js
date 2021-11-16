@@ -5,7 +5,6 @@ import socket from './utils/Socket';
 import configs from './utils/configs.json';
 import { Video } from './Video';
 import { Chat } from './Chat';
-import LeftBar from './LeftBar';
 
 import user_icon from "../../images/user_icon.png";
 import camera_true from "../../images/camera_true.png";
@@ -257,7 +256,6 @@ const StudyRoom = ({ match }) => {
         <div className="Container" >
             <LeftBar/>
             <div className= "RightWrap">
-                <div className="App" >
                     <div className="RoomTopBarContainer">
                         <div className="ImageContainer">
                             <img src = {user_icon} alt = "userIcon"/>
@@ -275,17 +273,10 @@ const StudyRoom = ({ match }) => {
                             <img src = {user_invite} alt = "userInvite"/>
                         </div>
                     </div>
-                    <div style={{
-                        padding : "0 20px", 
-                        marginRight : "20px"}}>
-                        <img src = {user_invite} alt = "userInvite"/>
-                    </div>
-                </div>
                 <div className = "disdplayAndListWrap">
                     <div className= "disdplaytWrap">
                         <div className="App" >
                             <div style={{margin : "10px"}}>
-                                <Chat userNickName={userNickName} />
                                 <div>
                                     <h1>Realtime communication with WebRTC</h1>
                                     <video muted autoPlay playsInline ref={userVideoRef}></video>
@@ -303,6 +294,7 @@ const StudyRoom = ({ match }) => {
                     </div>
                     <div className="ListtWrap">
                         <UserList/>
+                        <Chat userNickName={userNickName} /> 
                     </div>
                 </div>
             </div>
