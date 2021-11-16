@@ -74,6 +74,7 @@ const UserList = ()=>{
                 </div>
             </div>
         </div>
+        <div className="List" style={{overflow: "auto"}}>
            {user.map((user)=>{
                 return (
                     <div className="UserList">
@@ -114,6 +115,7 @@ const UserList = ()=>{
                     </div>
                 )
             })}
+        </div>
     </div>
   );
 }

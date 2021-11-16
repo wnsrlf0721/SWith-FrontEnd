@@ -17,6 +17,7 @@
     height: 50px;
     box-sizing: border-box;
     padding: 0 16px;
+    border: solid 1px #ccc;
     border-bottom: 1px solid rgba(0,0,0,0.3);
     background-color: #fff;
     line-height: 50px;
