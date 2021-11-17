@@ -9,13 +9,14 @@ import "./bottomPage.css";
 const Bottompage = styled.div`
   padding: 70px 20px 0;
   width: 1200px;
+  height: 700px;
   margin: 0 auto;
 `;
 
 const LinkContainer = styled.div`
   width: calc(20% - 16px);
   margin: 8px;
-  height: auto;
+  height: 230px;
   background-color: #fff;
   position: relative;
   cursor: pointer;
