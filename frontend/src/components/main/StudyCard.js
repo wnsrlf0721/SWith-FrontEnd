@@ -9,12 +9,13 @@ function StudyCard({title,imgUrl,body,studyRoomID, nickName}) {
             alert("로그인이 필요합니다.");
             return;
         }
-        if(window.localStorage.getItem("enteredStudyRoom") === "true")
-            alert("이미 스터디룸에 입장하였습니다.");
-        else{
-            window.localStorage.setItem("enteredStudyRoom", "true");
-            window.open(`/StudyRoom/${studyRoomID}/${nickName}`, "_blank", "noopener noreferrer");
-        }
+        window.open(`/StudyRoom/${studyRoomID}/${nickName}`, "_blank", "noopener noreferrer");
+        // if(window.localStorage.getItem("enteredStudyRoom") === "true")
+        //     alert("이미 스터디룸에 입장하였습니다.");
+        // else{
+        //     window.localStorage.setItem("enteredStudyRoom", "true");
+        //     window.open(`/StudyRoom/${studyRoomID}/${nickName}`, "_blank", "noopener noreferrer");
+        // }
     }
     return(
         <>

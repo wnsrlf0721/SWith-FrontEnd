@@ -43,11 +43,7 @@ const Test_EnterStudyRoom = () => {
         닉네임: <input onChange={onChangeNickName} value={nickName} />
         StudyRoomId: <input onChange={onChangeStudyRoomId} value={studyRoomId} />
         <Link to={{
-          pathname: '/StudyRoom',
-          state: {
-            nickName: nickName,
-            studyRoomId: studyRoomId
-          },
+          pathname: `/StudyRoom/${studyRoomId}/${nickName}`
         }} >
           <button >입장하기</button>
         </Link>
