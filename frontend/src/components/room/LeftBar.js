@@ -31,13 +31,13 @@ const LeftBar = ()=>{
                 </div>
               </div>
               <div className="LeftBottomIconWrap">
-                <div className="ImgIcon">
+                {/* <div className="ImgIcon">
                 <img
                     style ={{width:'auto',backgroundColor:''}}
                     src={chat}
                     alt="chat"
                   />
-                </div>
+                </div> */}
                 <div className="ImgIcon">
                 <img
                     style ={{width:'auto',backgroundColor:''}}

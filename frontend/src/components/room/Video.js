@@ -13,6 +13,7 @@ export const Video = ({ nickName, stream, muted }) => {
 
     return (
       <>
+        {/* <div style={{backgroundColor:"white",width:"100%",height:"20px"}}></div> */}
         <video ref={videoRef} muted={isMuted} autoPlay></video>
         {nickName}
       </>
