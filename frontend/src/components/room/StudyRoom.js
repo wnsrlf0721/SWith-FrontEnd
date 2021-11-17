@@ -246,15 +246,12 @@ const StudyRoom = ({ match }) => {
         });
         setSharing(false);
     };
-
     const SplitScreen = () => {
         let Number = 1;
-        const PeopleNum = 1;
-        if (PeopleNum == 2) { Number = 2; }
-        else if (PeopleNum == 3 || PeopleNum == 4) { Number = 2.8; }
-        else if (PeopleNum == 5 || PeopleNum == 6) { Number = 3; }
-        else if (PeopleNum >= 7) { Number = 4; }
-        return 'calc(100%/' + Number + ')'
+        const PeopleNum = 7;//참가자수
+        if (PeopleNum >1 && PeopleNum <5) { Number = 2.1; }
+        else if (PeopleNum >4) { Number = 3.1; }
+        return Number
     }
 
     return (
@@ -287,24 +284,22 @@ const StudyRoom = ({ match }) => {
                     videoRef={userVideoRef} ></StudyRoomModal>
                     
                 <div className="displaysWrap">
-                    <div style={{ margin: "10px" }}>
-                        <div>
-
+                    
+                    <div className="videosWrap">
+                        <div className="videoGrid" style={{ height: 'calc(870px/' + SplitScreen() + ')', width: 'calc(1560px/' + SplitScreen() + ')', flexDirection:"column"}} >
+                            <label style= {{color:"gray"}}>나</label>
+                            <video muted autoPlay playsInline ref={userVideoRef}></video>
                         </div>
-                        <div className="videosWrap">
-                            <div className="videoGrid" style={{ width: SplitScreen() }} >
-                                <video muted autoPlay playsInline ref={userVideoRef}></video>
-                            </div>
-                            {connnectedUsers.map((user, index) => {
-                                return (
-                                    <div className="videoGrid" style={{ width: SplitScreen() }} >
-                                        <Video key={index} nickName={user.nickName} stream={user.stream} />
-                                    </div>
-                                );
-                            })}
-                        </div>
-
+                        {connnectedUsers.map((user, index) => {
+                            return (
+                                <div className="videoGrid" style={{ height: 'calc(870px/' + SplitScreen() + ')' , width: 'calc(1560px/' + SplitScreen() + ')'}} >
+                                    <Video key={index} nickName={user.nickName} stream={user.stream} />
+                                </div>
+                            );
+                        })}
                     </div>
+
+                    
 
                 </div>
                 <div className="ListWrap">
