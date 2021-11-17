@@ -44,6 +44,7 @@ const StudyRoom = ({ match }) => {
 
     useBeforeunload(() => {
         window.localStorage.setItem("enteredStudyRoom", "false");
+        socket.disconnect();
         // return ("Are you sure to close this tab?")
     });
 
@@ -202,7 +203,7 @@ const StudyRoom = ({ match }) => {
         navigator.mediaDevices
             .getDisplayMedia({
                 audio: true,
-                video: true,
+                video: true
             })
             .then((stream) => {
                 stream.getVideoTracks()[0].addEventListener('ended', () => {
@@ -247,9 +248,8 @@ const StudyRoom = ({ match }) => {
         setSharing(false);
     };
 
-    const SplitScreen = () => {
+    const SplitScreen = (PeopleNum) => {
         let Number = 1;
-        const PeopleNum = 1;
         if (PeopleNum == 2) { Number = 2; }
         else if (PeopleNum == 3 || PeopleNum == 4) { Number = 2.8; }
         else if (PeopleNum == 5 || PeopleNum == 6) { Number = 3; }
@@ -288,16 +288,16 @@ const StudyRoom = ({ match }) => {
                     
                 <div className="displaysWrap">
                     <div style={{ margin: "10px" }}>
-                        <div>
-
-                        </div>
                         <div className="videosWrap">
-                            <div className="videoGrid" style={{ width: SplitScreen() }} >
+                            <div className="videoGrid" style={{ fontWeight:"bold", textAlign: "center", color: "white", width: SplitScreen(connnectedUsers.length+1) }} >
+                                <>
                                 <video muted autoPlay playsInline ref={userVideoRef}></video>
+                                {userNickName}
+                                </>
                             </div>
                             {connnectedUsers.map((user, index) => {
                                 return (
-                                    <div className="videoGrid" style={{ width: SplitScreen() }} >
+                                    <div className="videoGrid" style={{ fontWeight:"bold", textAlign: "center", color: "white", width: SplitScreen(connnectedUsers.length+1) }} >
                                         <Video key={index} nickName={user.nickName} stream={user.stream} />
                                     </div>
                                 );
