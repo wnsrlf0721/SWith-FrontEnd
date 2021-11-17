@@ -17,19 +17,25 @@ export const StudyRoomModal = ({ setInitSetting, videoRef }) => {
     const [visible, setVisible] = useState(true);
     const [userMedia, setUserMedia] = useState(null);
     const [availableUserVideo, setAvailableUserVideo] = useState(false);
-    const [modalMedia, setModalMedia] = useState(null);
+    const [videoMuted, setVideoMuted] = useState(true);
+    const [modalMedia, setModalMedia] = useState(<div id="notAvailableVideo">Loading...</div>);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         navigator.mediaDevices
             .getUserMedia(constraints)
             .then((stream) => {
+                setLoading(true);
                 setAvailableUserVideo(true);
                 setUserMedia(stream);
+                
             })
             .catch((error) => {
                 console.log(`getUserMedia error: ${error}`);
+                setLoading(true);
                 setAvailableUserVideo(false);
             });
+            
     }, []);
 
     useEffect(() => {
@@ -42,23 +48,27 @@ export const StudyRoomModal = ({ setInitSetting, videoRef }) => {
             setModalMedia(userVideo);
         }
         else {
-            setModalMedia(<div id="notAvailableVideo">사용가능한 CAM을 찾을 수 없습니다.</div>);
+            if(loading)
+                setModalMedia(<div id="notAvailableVideo">사용가능한 CAM을 찾을 수 없습니다.</div>);
         }
 
-    }, [availableUserVideo]);
+    }, [availableUserVideo, loading]);
 
     const enterStudyRoomWithVideo = () => {
         if (videoRef.current && availableUserVideo){
             videoRef.current.srcObject = modalVideoRef.current.srcObject;
             modalVideoRef.current.srcObject.getAudioTracks().forEach((track) => (track.enabled = false));
         } 
-        setInitSetting(true, availableUserVideo);
+        setInitSetting(videoMuted, availableUserVideo);
         setVisible(false);
     };
 
     const videoMute = () => {
         if(availableUserVideo)
-            modalVideoRef.current.srcObject.getVideoTracks().forEach((track) => (track.enabled = !track.enabled));
+            modalVideoRef.current.srcObject.getVideoTracks().forEach((track) => {
+                track.enabled = !track.enabled
+                setVideoMuted(track.enabled)
+            });
     };
 
     return (
@@ -66,9 +76,9 @@ export const StudyRoomModal = ({ setInitSetting, videoRef }) => {
             <ModalOverlay visible={visible} />
             <ModalWrapper tabIndex="-1" visible={visible}>
                 <ModalInner tabIndex="0" className="modal-inner">
-                    <button onClick={videoMute}>video mute</button>
+                    <button disabled={loading? false : true} onClick={videoMute}>video mute</button>
                     {modalMedia}
-                    <button onClick={enterStudyRoomWithVideo}>enter studyroom</button>
+                    <button disabled={loading? false : true} onClick={enterStudyRoomWithVideo}>enter studyroom</button>
                 </ModalInner>
             </ModalWrapper>
         </>

@@ -19,10 +19,6 @@ import user_invite from "../../images/user_invite.png"
 import LeftBar from "./LeftBar"
 import UserList from './UserList';
 
-let senderMediaStream;
-let senderScreenStream;
-let currentStream;
-let senderTrcak;
 const pc_config = {
     iceServers: [configs['stun-server'], configs['turn-server']],
 };
@@ -35,18 +31,20 @@ const StudyRoom = ({ match }) => {
     const [connnectedUsers, setConnnectedUsers] = useState([]);
     const [PCs, setPCs] = useState(new Map());
     const [userMedia, setUserMedia] = useState(null);
-    const [displayMedia, setDisplayMedia] = useState(null);
     const [availableUserMedia, setAvailableUserMedia] = useState(false);
     const [RTCSenders, setRTCSenders] = useState(new Map());
 
-
+    const [camera, setCamera] = useState(true)
+    const [mic, setMic] = useState(true)
+    const [speaker, setSpeaker] = useState(true)
+    const [sharing, setSharing] = useState(false)
     const [PeopleNum, setPeopleNum] = useState()
 
 
 
     useBeforeunload(() => {
         window.localStorage.setItem("enteredStudyRoom", "false");
-        return ("Are you sure to close this tab?")
+        // return ("Are you sure to close this tab?")
     });
 
     useEffect(() => {
@@ -57,7 +55,8 @@ const StudyRoom = ({ match }) => {
         console.log(userVideoRef.current.srcObject);
         if (availableUserVideo)
             setUserMedia(userVideoRef.current.srcObject);
-
+        setMic(false);
+        setCamera(useUserVideo);
         setAvailableUserMedia(availableUserVideo);
         socket.emit('join_room', { room: studyRoomId, userName: userNickName });
     }
@@ -189,8 +188,15 @@ const StudyRoom = ({ match }) => {
 
     const audioMute = () => {
         userVideoRef.current.srcObject.getAudioTracks().forEach((track) => (track.enabled = !track.enabled));
-        setSpeaker(!speaker);
+        setMic(!mic);
     };
+
+    const sharingScreen = () =>{
+        if(sharing)
+            stopSharingScreen();
+        else
+            startSharingScreen();
+    }
 
     const startSharingScreen = () => {
         navigator.mediaDevices
@@ -208,6 +214,7 @@ const StudyRoom = ({ match }) => {
                             });
                         });
                     }
+                    setSharing(false);
                 });
 
                 if (connnectedUsers.length > 0) {
@@ -219,6 +226,7 @@ const StudyRoom = ({ match }) => {
                 }
 
                 if (userVideoRef.current) userVideoRef.current.srcObject = stream;
+                setSharing(true);
             })
             .catch((error) => {
                 console.log(`getUserMedia error: ${error}`);
@@ -236,11 +244,9 @@ const StudyRoom = ({ match }) => {
                 RTCSenders.get(user.id).replaceTrack(track);
             });
         });
+        setSharing(false);
     };
 
-    const disconnectSocket = () => {
-        socket.disconnect();
-    };
     const SplitScreen = () => {
         let Number = 1;
         const PeopleNum = 1;
@@ -251,10 +257,6 @@ const StudyRoom = ({ match }) => {
         return 'calc(100%/' + Number + ')'
     }
 
-    const [camera, setCamera] = useState(true)
-    const [mic, setMic] = useState(true)
-    const [speaker, setSpeaker] = useState(true)
-    const [sharing, setSharing] = useState(true)
     return (
         <div className="Container" >
             <LeftBar />
@@ -267,9 +269,10 @@ const StudyRoom = ({ match }) => {
                         <p>스터디룸 이름 나중에 수정</p>
                     </div>
                     <div className="ImageContainer">
-                        <img src={mic ? mic_true : mic_false} alt="mic" />
+                        <img src={mic ? mic_true : mic_false} onClick={audioMute} alt="mic" />
                         <img src={camera ? camera_true : camera_false} onClick={videoMute} alt="camera" />
-                        <img src={speaker ? speaker_true : speaker_false} onClick={audioMute} alt="speaker" />
+                        <img src={speaker ? speaker_true : speaker_false} alt="speaker" />
+                        <button onClick={sharingScreen}>{sharing ? "display sharing stop": "display sharing start"}</button>
                     </div>
                     <div style={{
                         padding: "0 20px",
@@ -286,11 +289,7 @@ const StudyRoom = ({ match }) => {
                 <div className="displaysWrap">
                     <div style={{ margin: "10px" }}>
                         <div>
-                            <button onClick={videoMute}>video mute</button>
-                            <button onClick={audioMute}>audio mute</button>
-                            <button onClick={startSharingScreen}>display sharing start</button>
-                            <button onClick={stopSharingScreen}>display sharing stop</button>
-                            <button onClick={disconnectSocket}>disconnect socket</button>
+
                         </div>
                         <div className="videosWrap">
                             <div className="videoGrid" style={{ width: SplitScreen() }} >
