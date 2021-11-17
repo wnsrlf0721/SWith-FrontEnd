@@ -289,6 +289,7 @@ const StudyRoom = ({ match }) => {
                         <div className="videosWrap">
                             <div className="videoGrid" style={{ fontWeight:"bold", textAlign: "center", color: "white", height: 'calc(870px/' + SplitScreen(connnectedUsers.length+1)+ ')', width: 'calc(1560px/' + SplitScreen(connnectedUsers.length+1) + ')' }} >
                                 <>
+                                {/* <div style={{backgroundColor:"white",width:"100%",height:"20px"}}></div> */}
                                 <video muted autoPlay playsInline ref={userVideoRef}></video>
                                 {userNickName}
                                 </>
@@ -303,9 +304,6 @@ const StudyRoom = ({ match }) => {
                         </div>
 
                     </div>
-
-                    
-
                 </div>
                 <div className="ListWrap">
                     <UserList />
