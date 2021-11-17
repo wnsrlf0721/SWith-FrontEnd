@@ -5,10 +5,7 @@ import './StudyRoomModal.css'
 
 const constraints = {
     audio: true,
-    video: {
-        width: 400,
-        height: 300,
-    },
+    video: true
 };
 
 export const StudyRoomModal = ({ setInitSetting, videoRef }) => {
