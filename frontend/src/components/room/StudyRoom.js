@@ -44,6 +44,7 @@ const StudyRoom = ({ match }) => {
 
     useBeforeunload(() => {
         window.localStorage.setItem("enteredStudyRoom", "false");
+        socket.disconnect();
         // return ("Are you sure to close this tab?")
     });
 
@@ -202,7 +203,7 @@ const StudyRoom = ({ match }) => {
         navigator.mediaDevices
             .getDisplayMedia({
                 audio: true,
-                video: true,
+                video: true
             })
             .then((stream) => {
                 stream.getVideoTracks()[0].addEventListener('ended', () => {
@@ -246,9 +247,9 @@ const StudyRoom = ({ match }) => {
         });
         setSharing(false);
     };
-    const SplitScreen = () => {
+
+    const SplitScreen = (PeopleNum) => {
         let Number = 1;
-        const PeopleNum = 7;//참가자수
         if (PeopleNum >1 && PeopleNum <5) { Number = 2.1; }
         else if (PeopleNum >4) { Number = 3.1; }
         return Number
@@ -284,19 +285,23 @@ const StudyRoom = ({ match }) => {
                     videoRef={userVideoRef} ></StudyRoomModal>
                     
                 <div className="displaysWrap">
-                    
-                    <div className="videosWrap">
-                        <div className="videoGrid" style={{ height: 'calc(870px/' + SplitScreen() + ')', width: 'calc(1560px/' + SplitScreen() + ')', flexDirection:"column"}} >
-                            <label style= {{color:"gray"}}>나</label>
-                            <video muted autoPlay playsInline ref={userVideoRef}></video>
+                    <div style={{ margin: "10px" }}>
+                        <div className="videosWrap">
+                            <div className="videoGrid" style={{ fontWeight:"bold", textAlign: "center", color: "white", height: 'calc(870px/' + SplitScreen(connnectedUsers.length+1)+ ')', width: 'calc(1560px/' + SplitScreen(connnectedUsers.length+1) + ')' }} >
+                                <>
+                                <video muted autoPlay playsInline ref={userVideoRef}></video>
+                                {userNickName}
+                                </>
+                            </div>
+                            {connnectedUsers.map((user, index) => {
+                                return (
+                                    <div className="videoGrid" style={{ fontWeight:"bold", textAlign: "center", color: "white", height: 'calc(870px/' + SplitScreen(connnectedUsers.length+1)+ ')', width: 'calc(1560px/' + SplitScreen(connnectedUsers.length+1) + ')' }} >
+                                        <Video key={index} nickName={user.nickName} stream={user.stream} />
+                                    </div>
+                                );
+                            })}
                         </div>
-                        {connnectedUsers.map((user, index) => {
-                            return (
-                                <div className="videoGrid" style={{ height: 'calc(870px/' + SplitScreen() + ')' , width: 'calc(1560px/' + SplitScreen() + ')'}} >
-                                    <Video key={index} nickName={user.nickName} stream={user.stream} />
-                                </div>
-                            );
-                        })}
+
                     </div>
 
                     
