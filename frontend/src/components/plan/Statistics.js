@@ -50,6 +50,10 @@ const Label = styled.label`
   width: 100%;
   color: #595959;
 `;
+const ProgressWrap = styled.div`
+  margin-top: 60px;
+  width:300px; 
+`
 
 const Statistics = ({ task }) => {
   //현재 날짜
@@ -243,7 +247,7 @@ const Statistics = ({ task }) => {
             <Box>
               <div>
                 <Label>오늘의 달성률</Label>
-                <div style={{ marginTop: "60px", width: "300px" }}>
+                <ProgressWrap>
                   <Progress
                     style={{ width: "300px" }}
                     done={
@@ -252,7 +256,7 @@ const Statistics = ({ task }) => {
                         : Math.round(Number(todaycomp / tcCount) * 100)
                     }
                   />
-                </div>
+                </ProgressWrap>
               </div>
             </Box>
           </BoxPage>
@@ -356,7 +360,7 @@ const Statistics = ({ task }) => {
             <Box>
               <div>
                 <Label>주간 평균 달성률</Label>
-                <div style={{ marginTop: "60px", width: "300px" }}>
+                <ProgressWrap>
                   <Progress
                     done={
                       wcCount === 0
@@ -364,7 +368,7 @@ const Statistics = ({ task }) => {
                         : Math.round(Number(weekcomp / wcCount) * 100)
                     }
                   />
-                </div>
+                </ProgressWrap>
               </div>
             </Box>
           </BoxPage>
@@ -451,7 +455,7 @@ const Statistics = ({ task }) => {
             <Box>
               <div>
                 <Label>월간 평균 달성률</Label>
-                <div style={{ marginTop: "60px", width: "300px" }}>
+                <ProgressWrap>
                   <Progress
                     done={
                       mcCount === 0
@@ -459,7 +463,7 @@ const Statistics = ({ task }) => {
                         : Math.round(Number(monthcomp / mcCount) * 100)
                     }
                   />
-                </div>
+                </ProgressWrap>
               </div>
             </Box>
           </BoxPage>

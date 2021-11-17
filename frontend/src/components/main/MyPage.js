@@ -76,17 +76,17 @@ const MyPage = () => {
               >
                 오늘의 할일 달성률
               </div>
-              <div style={{ marginTop: "15px", alignItems: "center" }}>
-                <Progress
-                  done={
-                    todaystudy.count === 0
-                      ? 0
-                      : Math.round(
-                          Number(todaystudy.complete / todaystudy.count) * 100
-                        )
-                  }
-                />
-              </div>
+            <div style={{ marginTop: "15px" ,alignItems: "center"}}>
+              <Progress
+                done={
+                  todaystudy.count === 0
+                    ? 0
+                    : Math.round(
+                        Number(todaystudy.complete / todaystudy.count) * 100
+                      )
+                }
+                // ProgressBar
+              />
             </div>
           </div>
         </div>
