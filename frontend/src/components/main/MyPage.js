@@ -79,6 +79,7 @@ const MyPage = () => {
                         Number(todaystudy.complete / todaystudy.count) * 100
                       )
                 }
+                // ProgressBar
               />
             </div>
           </div>

@@ -250,11 +250,9 @@ const StudyRoom = ({ match }) => {
 
     const SplitScreen = (PeopleNum) => {
         let Number = 1;
-        if (PeopleNum == 2) { Number = 2; }
-        else if (PeopleNum == 3 || PeopleNum == 4) { Number = 2.8; }
-        else if (PeopleNum == 5 || PeopleNum == 6) { Number = 3; }
-        else if (PeopleNum >= 7) { Number = 4; }
-        return 'calc(100%/' + Number + ')'
+        if (PeopleNum >1 && PeopleNum <5) { Number = 2.1; }
+        else if (PeopleNum >4) { Number = 3.1; }
+        return Number
     }
 
     return (
@@ -289,7 +287,7 @@ const StudyRoom = ({ match }) => {
                 <div className="displaysWrap">
                     <div style={{ margin: "10px" }}>
                         <div className="videosWrap">
-                            <div className="videoGrid" style={{ fontWeight:"bold", textAlign: "center", color: "white", width: SplitScreen(connnectedUsers.length+1) }} >
+                            <div className="videoGrid" style={{ fontWeight:"bold", textAlign: "center", color: "white", height: 'calc(870px/' + SplitScreen(connnectedUsers.length+1)+ ')', width: 'calc(1560px/' + SplitScreen(connnectedUsers.length+1) + ')' }} >
                                 <>
                                 <video muted autoPlay playsInline ref={userVideoRef}></video>
                                 {userNickName}
@@ -297,7 +295,7 @@ const StudyRoom = ({ match }) => {
                             </div>
                             {connnectedUsers.map((user, index) => {
                                 return (
-                                    <div className="videoGrid" style={{ fontWeight:"bold", textAlign: "center", color: "white", width: SplitScreen(connnectedUsers.length+1) }} >
+                                    <div className="videoGrid" style={{ fontWeight:"bold", textAlign: "center", color: "white", height: 'calc(870px/' + SplitScreen(connnectedUsers.length+1)+ ')', width: 'calc(1560px/' + SplitScreen(connnectedUsers.length+1) + ')' }} >
                                         <Video key={index} nickName={user.nickName} stream={user.stream} />
                                     </div>
                                 );
@@ -305,6 +303,8 @@ const StudyRoom = ({ match }) => {
                         </div>
 
                     </div>
+
+                    
 
                 </div>
                 <div className="ListWrap">
