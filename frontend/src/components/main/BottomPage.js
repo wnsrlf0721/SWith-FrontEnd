@@ -67,6 +67,7 @@ const category = [
 const BottomPage = ({ search }) => {
   const [NickName, setNickName] = useState("");
   const [toggleState, setToggleState] = useState(1);
+  const [Users, setUsers] = useState([]);
 
   const [posts, setPosts] = useState([]); //전체 카테고리 list
   const [purpose_list, setPurpose_list] = useState([]); //부분 카테고리 list
@@ -101,7 +102,7 @@ const BottomPage = ({ search }) => {
       .get("/studyrooms")
       .then((response) => {
         const datas = response.data.data;
-        console.log(datas);
+        //console.log(datas);
         datas.map((data) => {
           roomInfo = roomInfo.concat({
             id: data.id,
@@ -142,14 +143,20 @@ const BottomPage = ({ search }) => {
     const isLogined = window.sessionStorage.userInfo == null ? false : true;
     if (isLogined) {
       const session = JSON.parse(window.sessionStorage.userInfo);
+      //console.log(session)
       axios
         .get(`/users/${session.userId}`)
         .then((response) => {
           const data = response.data;
-          //console.log(data);
+          //console.log(data.data.nickname);
           if (data.status === "200" && data.message === "OK") {
             setNickName(data.data.nickname);
-          }
+            // setUsers({
+            //     id:data.data.id,
+            //     nickname:data.data.nickname
+            //   })
+            //console.log(NickName,Users.id)
+          } 
         })
         .catch((error) => {
           console.log(error.toJSON());

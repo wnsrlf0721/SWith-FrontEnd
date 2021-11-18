@@ -6,42 +6,6 @@ import moment from "moment";
 import Timer from "./Timer";
 import Progress from "./Progress";
 
-const options = {
-  fill: {
-    colors: "#ef8585",
-  },
-  chart: {
-    type: "bar",
-    toolbar: {
-      show: false,
-    },
-  },
-  plotOptions: {
-    bar: {
-      borderRadius: 4,
-      dataLabels: {
-        position: "top", // top, center, bottom
-      },
-    },
-  },
-  dataLabels: {
-    enabled: true,
-    formatter: function (val) {
-      return val + "%";
-    },
-    offsetY: -20,
-    style: {
-      fontSize: "12px",
-      colors: ["#304758"],
-    },
-  },
-
-  xaxis: {
-    categories: ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"],
-    position: "bottom",
-  },
-};
-
 const Container = styled.div`
   display: flex;
   text-align: center;
@@ -92,8 +56,14 @@ const ProgressWrap = styled.div`
 `
 
 const Statistics = ({ task }) => {
-  const date = moment().format("YYYY-MM-DD"); //현재 날짜
-  const Today = moment(date);
+  //현재 날짜
+  const Today = moment(moment().format("YYYY-MM-DD"));
+  //해당 달의 마지막일
+  const MonthsEndday = moment(moment().endOf("month").format("YYYY-MM-DD"));
+
+  //원하는 날짜의 주차 구하기
+  const weekOfMonth = (m) => m.week() - moment(m).startOf("month").week() + 1;
+
   // 공부시간 기록
   const [todaytime, setTodaytime] = useState({
     hour: 0,
@@ -117,58 +87,54 @@ const Statistics = ({ task }) => {
   });
 
   // 달성률 기록
-  const series_week = [
-    {
-      name: "Week Complete",
-      data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 3.2],
-    },
-  ];
 
-  const series_month = [
-    {
-      name: "Month Complete",
-      data: [2.3, 3.1, 4.0, 10.1, 4.0],
-    },
-  ];
   //오늘의 달성률
   const [todaycomp, setTodaycomp] = useState(0);
   const [tcCount, setTcCount] = useState(0);
 
-  //주간 달성률
-  const [weekcompRate, setWeekcompRate] = useState([
-    {
-      day: 0,
+  //주간 달성률: 요일 - 0: 일, 1: 월, 2: 화. 3: 수, 4: 목, 5: 금, 6: 토
+  let weekarray = [];
+  for (let i = 0; i < 7; i++) {
+    weekarray.push({
+      id: i,
       comp: 0,
       count: 0,
-    },
-  ]);
+    });
+  }
+  const [weekcompRate, setWeekcompRate] = useState(weekarray);
+
   const [weekcomp, setWeekcomp] = useState(0);
   const [wcCount, setWcCount] = useState(0);
 
-  const [monthcompRate, setMonthcompRate] = useState([
-    {
-      day: 0,
+  //월간 달성률(1주차 ~ endDay's week 표현)
+  const countweek = weekOfMonth(MonthsEndday);
+  let montharray = [];
+  for (let i = 1; i <= countweek; i++) {
+    montharray.push({
+      id: i,
       comp: 0,
       count: 0,
-    },
-  ]);
+    });
+  }
+  const [monthcompRate, setMonthcompRate] = useState(montharray);
+
   const [monthcomp, setMonthcomp] = useState(0);
   const [mcCount, setMcCount] = useState(0);
 
   useEffect(() => {
     const userInfo = JSON.parse(window.sessionStorage.userInfo);
-    console.log(weekcompRate);
+    //console.log(weekcompRate);
 
     //공부시간
     axios
       .get(`/statistics/${userInfo.userId}`)
       .then((response) => {
         const datas = response.data.data;
-        console.log(datas);
+        //console.log(datas);
         datas.map((data) => {
           //일간, 주간, 월간 공부시간 기록
           const D_date = moment(data.date);
-          console.log(D_date);
+          //console.log(D_date);
           const Diff = Math.abs(Today.diff(D_date, "days"));
 
           const hour = Number(data.studyTime.slice(0, 2));
@@ -211,39 +177,52 @@ const Statistics = ({ task }) => {
         console.log(error.toJSON());
       });
     //달성률
-    let tempEvents = [];
     task.map((event) => {
       const D_event = moment(event.start);
-      console.log(event);
-      const Diff = Today.diff(D_event.format("YYYY-MM-DD"), "days");
+      //console.log(event);
+
       if (Today.month() + 1 === D_event.month() + 1) {
+        //월간 달성률
+        setMonthcompRate((month) =>
+          month.map((week) =>
+            week.id === weekOfMonth(D_event)
+              ? {
+                  ...week,
+                  comp: week.comp + event.complete,
+                  count: week.count + 1,
+                }
+              : week
+          )
+        );
+        //console.log(weekOfMonth(D_event) + "주차: " + event);
+        setMonthcomp((monthcomp) => monthcomp + event.complete);
+        setMcCount((mcCount) => mcCount + 1);
+
         if (Today.week() === D_event.week()) {
-          //오늘의 달성률
-          if (Diff === 0) {
+          //주간 달성률
+          //console.log(D_event.day());
+          const id = D_event.day();
+          setWeekcompRate((week) =>
+            week.map((day) =>
+              day.id === id
+                ? {
+                    ...day,
+                    comp: day.comp + event.complete,
+                    count: day.count + 1,
+                  }
+                : day
+            )
+          );
+
+          setWeekcomp((weekcomp) => weekcomp + event.complete);
+          setWcCount((wcCount) => wcCount + 1);
+
+          if (Today.day() === D_event.day()) {
+            //오늘의 달성률
             setTodaycomp((todaycomp) => todaycomp + event.complete);
             setTcCount((tcCount) => tcCount + 1);
           }
-          //주간 달성률
-          tempEvents = tempEvents.concat({
-            day: D_event.day(),
-            comp: event.complete,
-            count: 1,
-          });
-          setWeekcompRate(tempEvents);
-          setWeekcomp((weekcomp) => weekcomp + event.complete);
-          setWcCount((wcCount) => wcCount + 1);
-          //요일 - 0: 일, 1: 월, 2: 화. 3: 수, 4: 목, 5: 금, 6: 토
-          console.log(D_event.day());
         }
-        //월간 달성률
-        setMonthcomp((monthcomp) => monthcomp + event.complete);
-        setMcCount((mcCount) => mcCount + 1);
-        const weekOfMonth = (m) =>
-          m.week() - moment(m).startOf("month").week() + 1;
-        console.log(
-          D_event.format("YYYY년 MM월 ") + weekOfMonth(D_event) + "주차"
-        );
-        console.log(weekcompRate);
       }
     });
   }, []);
@@ -270,6 +249,7 @@ const Statistics = ({ task }) => {
                 <Label>오늘의 달성률</Label>
                 <ProgressWrap>
                   <Progress
+                    style={{ width: "300px" }}
                     done={
                       tcCount === 0
                         ? 0
@@ -310,11 +290,71 @@ const Statistics = ({ task }) => {
               <div>
                 <Label>주간 달성률</Label>
                 <Chart
-                  options={options}
-                  series={series_week}
+                  options={{
+                    fill: {
+                      colors: "#ef8585",
+                    },
+                    chart: {
+                      type: "bar",
+                      toolbar: {
+                        show: false,
+                      },
+                    },
+                    plotOptions: {
+                      bar: {
+                        borderRadius: 4,
+                        dataLabels: {
+                          position: "top", // top, center, bottom
+                        },
+                      },
+                    },
+                    dataLabels: {
+                      enabled: true,
+                      formatter: function (val) {
+                        return val + "%";
+                      },
+                      offsetY: -20,
+                      style: {
+                        fontSize: "12px",
+                        colors: ["#304758"],
+                      },
+                    },
+                    xaxis: {
+                      categories: [
+                        "일요일",
+                        "월요일",
+                        "화요일",
+                        "수요일",
+                        "목요일",
+                        "금요일",
+                        "토요일",
+                        "일요일",
+                      ],
+                    },
+                  }}
+                  series={[
+                    {
+                      name: "Week Complete",
+                      data: weekcompRate.map((data) => {
+                        return data.count === 0
+                          ? 0
+                          : Math.round((data.comp / data.count) * 100);
+                      }),
+                    },
+                  ]}
                   type="bar"
                   height={200}
                 />
+                {/* {weekcompRate.map((day) => {
+                  return (
+                    <div>
+                      <p>{`${day.id}요일`}</p>
+                      {day.count === 0
+                        ? 0
+                        : Math.round((day.comp / day.count) * 100)}
+                    </div>
+                  );
+                })} */}
               </div>
             </Box>
             <Box>
@@ -362,8 +402,51 @@ const Statistics = ({ task }) => {
               <div>
                 <Label>월간 달성률</Label>
                 <Chart
-                  options={options}
-                  series={series_month}
+                  options={{
+                    fill: {
+                      colors: "#ef8585",
+                    },
+                    chart: {
+                      type: "bar",
+                      toolbar: {
+                        show: false,
+                      },
+                    },
+                    plotOptions: {
+                      bar: {
+                        borderRadius: 4,
+                        dataLabels: {
+                          position: "top", // top, center, bottom
+                        },
+                      },
+                    },
+                    dataLabels: {
+                      enabled: true,
+                      formatter: function (val) {
+                        return val + "%";
+                      },
+                      offsetY: -20,
+                      style: {
+                        fontSize: "12px",
+                        colors: ["#304758"],
+                      },
+                    },
+                    xaxis: {
+                      categories: monthcompRate.map((data) => {
+                        return `${data.id}주차`;
+                      }),
+                    },
+                  }}
+                  series={[
+                    {
+                      name: "Month Complete",
+                      data: monthcompRate.map((data) => {
+                        return data.count === 0
+                          ? 0
+                          : Math.round((data.comp / data.count) * 100);
+                      }),
+                    },
+                  ]}
                   type="bar"
                   height={200}
                 />
