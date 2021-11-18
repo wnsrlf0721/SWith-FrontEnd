@@ -11,6 +11,7 @@ import StudyCard from "./StudyCard";
 
 const MyPage = () => {
   const [NickName, setNickName] = useState("");
+  const [posts,setPosts] = useState([]);
   const [todaystudy, setTodaystudy] = useState({
     hour: 0,
     minute: 0,
@@ -179,6 +180,8 @@ const MyPage = () => {
         .catch((error) => {
           console.log(error.toJSON());
         });
+
+        
       //참여했던 스터디룸 조회 API
       // axios
       //   .get(`/studyrooms-history/${userInfo.userId}`)
@@ -188,8 +191,30 @@ const MyPage = () => {
       //   .catch((error) => {
       //     console.log(error.toJSON());
       //   });
+
+      let roomInfo = [];
+      axios
+        .get("/studyrooms")
+        .then((response) => {
+          const datas = response.data.data;
+          //console.log(datas);
+          datas.map((data) => {
+            roomInfo = roomInfo.concat({
+              id: data.id,
+              title: data.title,
+              hashtags: data.hashtags,
+              purpose: data.purpose,
+            });
+          });
+            setPosts(roomInfo);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }, []);
+
+
 
   return (
     <div className="MainContainer">
