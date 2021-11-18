@@ -101,7 +101,7 @@ const BottomPage = ({ search }) => {
       .get("/studyrooms")
       .then((response) => {
         const datas = response.data.data;
-        console.log(datas);
+        //console.log(datas);
         datas.map((data) => {
           roomInfo = roomInfo.concat({
             id: data.id,
@@ -147,7 +147,7 @@ const BottomPage = ({ search }) => {
         .get(`/users/${session.userId}`)
         .then((response) => {
           const data = response.data;
-          console.log(data.data.nickname);
+          //console.log(data.data.nickname);
           if (data.status === "200" && data.message === "OK") {
             setNickName(data.data.nickname);
             // setUsers({

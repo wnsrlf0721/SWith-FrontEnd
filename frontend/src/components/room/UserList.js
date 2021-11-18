@@ -1,4 +1,7 @@
 import './StudyRoom.css';
+import React, { useState, useEffect } from "react";
+import axios from "../../api/defaultaxios";
+
 import searchGray from "../../images/search_gray.png";
 import heartTrue from "../../images/heart_true.png";
 import defaultProfile from "../../images/default_profile_Image.png";
@@ -40,7 +43,6 @@ const user = [
         name : '유저3'
     }
 ]
-let uu=0;
 
 const isUser = (user) => {
     if(user.id!=1){
@@ -65,9 +67,38 @@ const isUser = (user) => {
     }
 }
 
+export const UserList = (userNickName,connnectedUsers)=>{
+    const [imUser,setImUser]= useState([]);
+    const users =[{
+        id: "",
+        nickName: userNickName,
+        stream:"",
+    }]
+    
+    useEffect(()=>{
+        
+        //console.log(connnectedUsers);
+            // axios
+            // .get(`/users/${session.userId}`)
+            // .then((response) => {
+            //   const data = response.data;
+            //   console.log(data);
+            //   if (data.status === "200" && data.message === "OK") {
+                
+            //     // setImUser({
+            //     //     id:data.data.id,
+            //     //     nickName:data.data.
+            //     // })
+            //   }
+            // })
+            // .catch((error) => {
+            //   console.log(error.toJSON());
+            // });
+            setImUser(users.concat(connnectedUsers))
+            //console.log(imUser)
+            //console.log(connnectedUsers)
+    },[connnectedUsers])
 
-export const UserList = (connnectedUsers)=>{
-    console.log(connnectedUsers);
   return (
     <div className="UserListtWrap">
         <div className="UserList">
@@ -86,7 +117,7 @@ export const UserList = (connnectedUsers)=>{
             </div>
         </div>
         <div className="List" style={{overflow: "auto"}}>
-           {connnectedUsers.map((user)=>{
+           {imUser.map((user)=>{
                 return (
                     <div className="UserList">
                         <div className="rowContainer">
