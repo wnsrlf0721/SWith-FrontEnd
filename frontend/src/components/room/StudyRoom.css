@@ -15,6 +15,7 @@
   margin: 5px;
   text-align: center;
   flex-direction: column;
+
 }
 
 body {
@@ -61,6 +62,8 @@ video {
   top: 0px;
   left: 0px;
   flex-direction: row;
+  max-height: 880px;
+  max-width: 1560px;
 }
 
 .Container {
@@ -149,7 +152,7 @@ video {
   
 }
 .ImageContainer{
-    width: 400px;
+    width: auto;
     height: 28px;
     flex-grow: 0;
     display: flex;
