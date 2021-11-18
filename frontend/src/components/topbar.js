@@ -117,6 +117,7 @@ const Right = styled.div`
     font-weight: 700;
     text-decoration: none;
     padding: 0 6px;
+    margin: 0 3px;
   }
 `;
 

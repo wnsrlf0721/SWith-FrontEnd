@@ -4,7 +4,19 @@ import menu from "../../images/menu.png";
 import planner from "../../images/planner.png";
 import chat from "../../images/chat.png";
 import back from "../../images/back.png";
-const LeftBar = ()=>{
+import StudyEditModal from './StudyEditModal';
+import {useState} from 'react';
+
+const LeftBar = ({studyRoomId})=>{
+  const [modalVisible, setModalVisible] = useState(false)
+  const openModal = () => {
+    setModalVisible(true)
+  }
+  const closeModal = () => {
+    setModalVisible(false)
+  }
+
+
   return (
             <div className="LeftBarWrap">
               <div className="LeftTopIconWrap">
@@ -19,9 +31,19 @@ const LeftBar = ()=>{
                 <img
                     style ={{width:'auto',backgroundColor:''}}
                     src={menu}
+                    onClick={openModal}
                     alt="menu"
+                    
                   />
                 </div>
+                  {
+                    modalVisible && <StudyEditModal
+                      visible={modalVisible}
+                      closable={true}
+                      maskClosable={true}
+                      onClose={closeModal}
+                      studyRoomId={studyRoomId}></StudyEditModal>
+                  }
                 <div className="ImgIcon">
                 <img
                     style ={{width:'auto',backgroundColor:''}}

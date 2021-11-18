@@ -95,28 +95,11 @@ const MyPage = () => {
       );
     } else {
       return (
-        <div
-          className="StudyTimeBox"
-          style={{ justifyContent: "center", flexDirection: "row" }}
-        >
-          <div
-            className="studyText"
-            style={{ color: "#454648", margin: "3px" }}
-          >
-            나의 학습 시간을 보고 싶다면
-          </div>
-          <div
-            className="studyText"
-            style={{ color: "#ef8585", margin: "3px" }}
-          >
-            로그인
-          </div>
-          <div
-            className="studyText"
-            style={{ color: "#454648", margin: "3px" }}
-          >
-            하세요!
-          </div>
+        <div className= "StudyTimeBox" style={{justifyContent: "center",flexDirection:"row"}}>
+          <div className= "studyText" style= {{color:"#454648", margin:"3px"}}>나의 학습 시간과 달성률을 보고 싶다면?</div>
+          <a href="/login" className="login" style= {{color:"#ef8585", margin:"3px",textDecorationLine: "none"}}>
+              로그인
+            </a>
         </div>
       );
     }
