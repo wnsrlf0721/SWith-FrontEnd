@@ -1,10 +1,7 @@
 import styled from "styled-components";
+import { useEffect,useRef } from "react";
 
 export const ChatMessage = ({ chat_message }) => {
-
-    const Container = styled.div`
-
-    `
 
     const ChatBox = styled.div`
         font-size: 1rem;
@@ -25,11 +22,19 @@ export const ChatMessage = ({ chat_message }) => {
         font-family: "Roboto";
         font-size:16px;
     `
+    const messagesEndRef = useRef(null)
+
+    const scrollToBottom = () => {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+    }
+  
+    useEffect(scrollToBottom, [chat_message]);
 
     return (
         <ChatBox>
             <UserBox>{chat_message.name}</UserBox>
             <ContentBox>{chat_message.content}</ContentBox>
+            <div ref={messagesEndRef} />
         </ChatBox>
     );
 };

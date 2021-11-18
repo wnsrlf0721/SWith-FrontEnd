@@ -1,4 +1,4 @@
-import {useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { ChatMessage } from "./ChatMessage";
 import socket from "./utils/Socket"
 import './Chat.css';
@@ -6,13 +6,6 @@ export const Chat = ({ userNickName }) => {
     const [content, setContent] = useState("");
     const [messages, setMessages] = useState([]);
  
-
-    
-    const messagesEndRef = useRef(null);
-    useEffect(()=>{
-        messagesEndRef.current.scrollIntoView({behavior:"smooth"})
-    })
-
  
 
     useEffect(() => {
@@ -61,7 +54,6 @@ export const Chat = ({ userNickName }) => {
                             })
                             
                         }
-                        <div ref={messagesEndRef} />
                     </div>
                     
                     <div className="InputBox">
