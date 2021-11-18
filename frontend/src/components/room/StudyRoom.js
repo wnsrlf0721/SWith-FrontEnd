@@ -6,6 +6,7 @@ import configs from './utils/configs.json';
 import { Video } from './Video';
 import { Chat } from './Chat';
 import { StudyRoomModal } from './StudyRoomModal';
+import axios from "../../api/defaultaxios";
 
 import user_icon from "../../images/user_icon.png";
 import camera_true from "../../images/camera_true.png";
@@ -17,15 +18,18 @@ import speaker_false from "../../images/speaker_false.png";
 import user_invite from "../../images/user_invite.png"
 
 import LeftBar from "./LeftBar"
-import UserList from './UserList';
+import {UserList} from './UserList';
 
 const pc_config = {
     iceServers: [configs['stun-server'], configs['turn-server']],
 };
 
+
 const StudyRoom = ({ match }) => {
     const studyRoomId = match.params.studyRoomId;
     const userNickName = match.params.nickName;
+    console.log(userNickName)
+
 
     const userVideoRef = useRef(null);
     const [connnectedUsers, setConnnectedUsers] = useState([]);
@@ -39,6 +43,7 @@ const StudyRoom = ({ match }) => {
     const [speaker, setSpeaker] = useState(true)
     const [sharing, setSharing] = useState(false)
     const [PeopleNum, setPeopleNum] = useState()
+    const [studyRoomInfo,setStudyRoomInfo]= useState([])
 
 
 
@@ -50,6 +55,21 @@ const StudyRoom = ({ match }) => {
 
     useEffect(() => {
         initSocket();
+        axios
+        .get(`/studyrooms/${studyRoomId}`)
+        .then((response) => {
+            const data = response.data;
+            console.log(data.data);
+            setStudyRoomInfo({
+                id:data.data.id,
+                title:data.data.title
+            })
+            console.log(studyRoomInfo);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
     }, [])
 
     const initSettings = (useUserVideo, availableUserVideo) => {
@@ -178,6 +198,7 @@ const StudyRoom = ({ match }) => {
                     stream: e.streams[0],
                 },
             ]);
+            console.log(connnectedUsers)
         };
 
         return newPC;
@@ -250,8 +271,8 @@ const StudyRoom = ({ match }) => {
 
     const SplitScreen = (PeopleNum) => {
         let Number = 1;
-        if (PeopleNum >1 && PeopleNum <5) { Number = 2.1; }
-        else if (PeopleNum >4) { Number = 3.1; }
+        if (PeopleNum >1 && PeopleNum <5) { Number = 2.8; }
+        else if (PeopleNum >4) { Number = 3.3; }
         return Number
     }
 
@@ -262,9 +283,11 @@ const StudyRoom = ({ match }) => {
             <div className="RightWrap">
                 <div className="RoomTopBarContainer">
                     <div className="ImageContainer">
-                        <img src={user_icon} alt="userIcon" />
-                        <p>3명 나중에 수정</p>
-                        <p>스터디룸 이름 나중에 수정</p>
+                        <p>{studyRoomInfo.title}</p>
+                        <div style= {{display:"flex",flexDirection:"row"}}>
+                            <img src={user_icon} alt="userIcon" style={{width:'17px',height:"auto"}}/>
+                            <p>{connnectedUsers.length+1}명</p>
+                        </div>
                     </div>
                     <div className="ImageContainer">
                         <img src={mic ? mic_true : mic_false} onClick={audioMute} alt="mic" />
@@ -287,7 +310,7 @@ const StudyRoom = ({ match }) => {
                 <div className="displaysWrap">
                     <div style={{ margin: "10px" }}>
                         <div className="videosWrap">
-                            <div className="videoGrid" style={{ fontWeight:"bold", textAlign: "center", color: "white", height: 'calc(870px/' + SplitScreen(connnectedUsers.length+1)+ ')', width: 'calc(1560px/' + SplitScreen(connnectedUsers.length+1) + ')' }} >
+                            <div className="videoGrid" style={{ fontWeight:"bold", textAlign: "center", color: "white", height: 'calc(100%/' + SplitScreen(connnectedUsers.length+1)+ ')', width: 'calc(100%/' + SplitScreen(connnectedUsers.length+1) + ')' }} >
                                 <>
                                 {/* <div style={{backgroundColor:"white",width:"100%",height:"20px"}}></div> */}
                                 <video muted autoPlay playsInline ref={userVideoRef}></video>
@@ -296,7 +319,7 @@ const StudyRoom = ({ match }) => {
                             </div>
                             {connnectedUsers.map((user, index) => {
                                 return (
-                                    <div className="videoGrid" style={{ fontWeight:"bold", textAlign: "center", color: "white", height: 'calc(870px/' + SplitScreen(connnectedUsers.length+1)+ ')', width: 'calc(1560px/' + SplitScreen(connnectedUsers.length+1) + ')' }} >
+                                    <div className="videoGrid" style={{ fontWeight:"bold", textAlign: "center", color: "white", height: 'calc(100%/' + SplitScreen(connnectedUsers.length+1)+ ')', width: 'calc(100%/' + SplitScreen(connnectedUsers.length+1) + ')' }} >
                                         <Video key={index} nickName={user.nickName} stream={user.stream} />
                                     </div>
                                 );
@@ -306,7 +329,7 @@ const StudyRoom = ({ match }) => {
                     </div>
                 </div>
                 <div className="ListWrap">
-                    <UserList />
+                    {UserList(connnectedUsers)}
                     <Chat userNickName={userNickName} />
                 </div>
             </div>

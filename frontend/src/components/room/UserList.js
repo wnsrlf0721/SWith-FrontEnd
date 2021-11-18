@@ -40,29 +40,40 @@ const user = [
         name : '유저3'
     }
 ]
-
+let uu=0;
 
 const isUser = (user) => {
     if(user.id!=1){
         return (
-            <div className="ImgIcon" style={{height: 'auto'}}>
+            <>
+                {/* <div className="ImgIcon" style={{height: 'auto'}}>
+                    <img
+                        style ={{width:'15px'}}
+                        src={heartTrue}
+                        alt="heartTrue"
+                    />
+                </div> */}
+                <div className="ImgIcon" style={{height: 'auto'}}>
                 <img
                     style ={{width:'15px'}}
-                    src={heartTrue}
-                    alt="heartTrue"
+                    src={planner}
+                    alt="planner"
                 />
-            </div>
+                </div>
+            </>
         )
     }
 }
 
-const UserList = ()=>{
+
+export const UserList = (connnectedUsers)=>{
+    console.log(connnectedUsers);
   return (
     <div className="UserListtWrap">
         <div className="UserList">
             <div className="rowContainer">
                 <div className = "text" style={{fontWeight:'bold'}}>참여자 목록</div>
-                <div className = "text" style={{fontSize:'12px'}}>4/4</div>
+                <div className = "text" style={{fontSize:'12px'}}>{connnectedUsers.length+1}/4</div>
             </div>
             <div className="rowContainer">
                 <div className="ImgIcon" style={{height: 'auto'}}>
@@ -75,7 +86,7 @@ const UserList = ()=>{
             </div>
         </div>
         <div className="List" style={{overflow: "auto"}}>
-           {user.map((user)=>{
+           {connnectedUsers.map((user)=>{
                 return (
                     <div className="UserList">
                         <div className="rowContainer">
@@ -86,14 +97,14 @@ const UserList = ()=>{
                                     alt="defaultProfile"
                                 />
                             </div>
-                            <div className = "text" style= {{maxWidth:"140px",overflow: "hidden"}} >{user.name}</div>
+                            <div className = "text" style= {{maxWidth:"140px",overflow: "hidden"}} >{user.nickName}</div>
                         </div>
                         <div className="rowContainer">
-                            <div className="ImgIcon" style={{height: 'auto',cursor:"default"}}>
+                            {/* <div className="ImgIcon" style={{height: 'auto',cursor:"default"}}>
                                 <img
                                     style ={{width:'15px'}}
                                     src={cameraTrue}
-                                    alt="cameraTrue"
+                                    alt="cameraTrue" 
                                 />
                             </div>
                             <div className="ImgIcon" style={{height: 'auto',cursor:"default"}}>
@@ -102,15 +113,9 @@ const UserList = ()=>{
                                     src={micTrue}
                                     alt="micTrue"
                                 />
-                            </div>
-                            {isUser(user)}
-                            <div className="ImgIcon" style={{height: 'auto'}}>
-                                <img
-                                    style ={{width:'15px'}}
-                                    src={planner}
-                                    alt="planner"
-                                />
-                            </div>
+                            </div> */}
+                            {/* {isUser(user)} */}
+                            
                         </div>
                     </div>
                 )
@@ -119,5 +124,3 @@ const UserList = ()=>{
     </div>
   );
 }
-
-export default UserList
