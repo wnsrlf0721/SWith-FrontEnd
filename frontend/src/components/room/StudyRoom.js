@@ -7,6 +7,7 @@ import { Video } from './Video';
 import { Chat } from './Chat';
 import { StudyRoomModal } from './StudyRoomModal';
 
+
 import user_icon from "../../images/user_icon.png";
 import camera_true from "../../images/camera_true.png";
 import camera_false from "../../images/camera_false.png";
@@ -254,10 +255,10 @@ const StudyRoom = ({ match }) => {
         else if (PeopleNum >4) { Number = 3.1; }
         return Number
     }
-
+    
     return (
         <div className="Container" >
-            <LeftBar />
+            <LeftBar studyRoomId={studyRoomId} />
 
             <div className="RightWrap">
                 <div className="RoomTopBarContainer">
@@ -279,7 +280,7 @@ const StudyRoom = ({ match }) => {
                         <img src={user_invite} alt="userInvite" />
                     </div>
                 </div>
-
+                        
                 <StudyRoomModal
                     setInitSetting={initSettings}
                     videoRef={userVideoRef} ></StudyRoomModal>
