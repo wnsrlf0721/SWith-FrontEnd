@@ -28,7 +28,7 @@ const pc_config = {
 const StudyRoom = ({ match }) => {
     const studyRoomId = match.params.studyRoomId;
     const userNickName = match.params.nickName;
-    console.log(userNickName)
+    //console.log(userNickName)
 
 
     const userVideoRef = useRef(null);
@@ -59,12 +59,12 @@ const StudyRoom = ({ match }) => {
         .get(`/studyrooms/${studyRoomId}`)
         .then((response) => {
             const data = response.data;
-            console.log(data.data);
+            //console.log(data.data);
             setStudyRoomInfo({
                 id:data.data.id,
                 title:data.data.title
             })
-            console.log(studyRoomInfo);
+            //console.log(studyRoomInfo);
         })
         .catch((error) => {
             console.log(error);
@@ -198,7 +198,7 @@ const StudyRoom = ({ match }) => {
                     stream: e.streams[0],
                 },
             ]);
-            console.log(connnectedUsers)
+            //console.log(connnectedUsers)
         };
 
         return newPC;
@@ -329,7 +329,7 @@ const StudyRoom = ({ match }) => {
                     </div>
                 </div>
                 <div className="ListWrap">
-                    {UserList(connnectedUsers)}
+                    {UserList(userNickName,connnectedUsers)}
                     <Chat userNickName={userNickName} />
                 </div>
             </div>
