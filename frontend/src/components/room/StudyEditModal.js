@@ -88,7 +88,6 @@ function StudyEditModal({
     require('moment-timezone'); 
     moment.tz.setDefault("Asia/Seoul");
     // console.log({studyRoomId});
-    
     axios
       .get(`/studyrooms/${studyRoomId}`)
       .then((response) => {

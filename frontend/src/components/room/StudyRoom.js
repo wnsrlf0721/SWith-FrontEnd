@@ -112,7 +112,7 @@ const StudyRoom = ({ match }) => {
         const userId = JSON.parse(userInfo)["userId"];
         const now = new Date();
         const today = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
-
+        // console.log(userId,studyTimer,today)    
         axios
             .post('/statistics', {
                 userId: userId,
@@ -121,6 +121,7 @@ const StudyRoom = ({ match }) => {
             })
             .then((response) => {
                 console.log(response);
+                
             })
             .catch((error) => {
                 console.log(error.response.data);
@@ -352,6 +353,7 @@ const StudyRoom = ({ match }) => {
                         <img src={camera ? camera_true : camera_false} onClick={videoMute} alt="camera" />
                         <img src={speaker ? speaker_true : speaker_false} alt="speaker" />
                         <img  src = {sharing ? screen_true: screen_false} onClick={sharingScreen} />
+                        {/* <button onClick={postStatistics}></button> */}
                     </div>
                     <div style={{
                         padding: "0 20px",
