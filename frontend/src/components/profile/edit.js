@@ -140,6 +140,10 @@ const Index = () => {
           };
           setEmail(user.email);
           setNickname(user.nickname);
+          setEditInfo((prevInfo) => ({
+            ...prevInfo,
+            nickname: user.nickname,
+          }));
         }
       })
       .catch((error) => {
@@ -148,58 +152,69 @@ const Index = () => {
   }, []);
 
   //Input으로 변경할 value
-  const [editName, setEditName] = useState();
-  const [beforePassword, setBefore_pw] = useState();
-  const [password, setNew_pw] = useState();
-  const [pwConfirm, setPwConfirm] = useState();
-  const [pwCheck, setPwCheck] = useState(false);
+  const [editInfo, setEditInfo] = useState({
+    nickname: "",
+    beforePassword: "",
+    password: "",
+  });
+  const [pwConfirm, setPwConfirm] = useState("");
 
   const onChangehandler = (e) => {
     const { name, value } = e.target;
-    if (name === "nickname") {
-      setEditName(value);
-    } else if (name === "beforePassword") {
-      setBefore_pw(value);
-    } else if (name === "password") {
-      setNew_pw(value);
-      if (pwConfirm === value) {
-        setPwCheck(true);
-      } else {
-        setPwCheck(false);
-      }
-    } else {
+    if (name === "PWconfirm") {
       setPwConfirm(value);
-      if (password === value) {
-        setPwCheck(true);
-      } else {
-        setPwCheck(false);
-      }
+    } else {
+      setEditInfo((prevInfo) => ({
+        ...prevInfo,
+        [name]: value,
+      }));
     }
   };
 
   const onsubmit = useCallback(
     (e) => {
       e.preventDefault();
-      if (!editName) {
-        alert("닉네임을 확인해주세요");
+      if (!editInfo.nickname) {
+        alert("닉네임을 한 글자 이상 입력해야합니다");
         return;
       }
-      axios
-        .patch(`/users/${session.userId}`, {
-          beforePassword: beforePassword,
-          password: password,
-          nickname: editName,
-        })
-        .then((response) => {
-          alert("프로필 정보를 변경하였습니다.");
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.log(error.toJSON());
-          alert("프로필 정보 수정에 문제가 발생했습니다");
-        });
+      if (!editInfo.beforePassword) {
+        alert("비밀번호를 입력해야합니다");
+        return;
+      }
+      if (editInfo.password !== pwConfirm) {
+        alert("비밀번호 일치하는지 확인해주세요");
+        return;
+      }
+      if (!editInfo.password) {
+        axios
+          .patch(`/users/${session.userId}`, {
+            nickname: editInfo.nickname,
+            beforePassword: editInfo.beforePassword,
+            password: editInfo.beforePassword,
+          })
+          .then((response) => {
+            alert("프로필 정보를 변경하였습니다.");
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.log(error.toJSON());
+            alert("프로필 정보 수정에 문제가 발생했습니다");
+          });
+      } else {
+        axios
+          .patch(`/users/${session.userId}`, editInfo)
+          .then((response) => {
+            alert("프로필 정보를 변경하였습니다.");
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.log(error.toJSON());
+            alert("프로필 정보 수정에 문제가 발생했습니다");
+          });
+      }
     },
-    [editName, beforePassword, password]
+    [editInfo.nickname, editInfo.beforePassword, editInfo.password, pwConfirm]
   );
   return (
     <Container>
@@ -225,7 +240,7 @@ const Index = () => {
             <TextInputBox
               placeholder="닉네임"
               name="nickname"
-              value={editName}
+              value={editInfo.nickname}
               onChange={(e) => onChangehandler(e)}
               style={{ margin: "5px 0 25px" }}
             />
@@ -233,7 +248,7 @@ const Index = () => {
             <TextG>현재 비밀번호</TextG>
             <TextInputBox
               name="beforePassword"
-              value={beforePassword}
+              value={editInfo.beforePassword}
               type="password"
               placeholder="기존 비밀번호를 입력하세요."
               onChange={(e) => onChangehandler(e)}
@@ -242,7 +257,7 @@ const Index = () => {
             <TextInputBox
               name="password"
               type="password"
-              value={password}
+              value={editInfo.password}
               onChange={(e) => onChangehandler(e)}
               placeholder="새로운 비밀번호를 입력하세요."
             />
@@ -254,7 +269,7 @@ const Index = () => {
               onChange={(e) => onChangehandler(e)}
               placeholder="새로운 비밀번호를 한번 더 입력하세요."
             />
-            {!pwCheck ? (
+            {editInfo.password !== pwConfirm ? (
               <div style={{ textAlign: "right", color: "red" }}>
                 비밀번호가 일치하지 않습니다
               </div>
