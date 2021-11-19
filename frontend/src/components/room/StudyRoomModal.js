@@ -73,9 +73,9 @@ export const StudyRoomModal = ({ setInitSetting, videoRef }) => {
             <ModalOverlay visible={visible} />
             <ModalWrapper tabIndex="-1" visible={visible}>
                 <ModalInner tabIndex="0" className="modal-inner">
-                    <button disabled={loading? false : true} onClick={videoMute}>video mute</button>
+                    <button disabled={availableUserVideo&&loading? false : true} onClick={videoMute}>video mute</button>
                     {modalMedia}
-                    <button disabled={loading? false : true} onClick={enterStudyRoomWithVideo}>enter studyroom</button>
+                    <button disabled={availableUserVideo&&loading? false : true} onClick={enterStudyRoomWithVideo}>enter studyroom</button>
                 </ModalInner>
             </ModalWrapper>
         </>

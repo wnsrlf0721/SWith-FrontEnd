@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Topbar from "../components/topbar";
 import view from "../components/profile/view";
+import viewOtherUser from "../components/profile/viewOtherUser";
 import edit from "../components/profile/edit";
 import plan from "../components/plan/index";
 
@@ -22,6 +23,7 @@ const Index = () => {
         <BrowserRouter>
           <Switch>
             <Route exact path={baseUrl} component={view} />
+            <Route path="/profile/:userId/other" component={viewOtherUser} />
             <Route path={baseUrl + "edit"} component={edit} />
             <Route path="/plan" component={plan} />
           </Switch>
