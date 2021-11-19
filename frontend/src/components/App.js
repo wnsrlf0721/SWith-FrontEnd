@@ -25,7 +25,7 @@ function App() {
           <Route path="/dm" component={dm} />
           <Route path="/MakeRoom" component={MakeRoom} />
           <Route
-            path="/StudyRoom/:studyRoomId/:nickName"
+            path="/StudyRoom/:studyRoomId/:nickName/:userInfo"
             component={StudyRoom}
           />
           {/* <Route path="/testSR" component={testSR} /> */}

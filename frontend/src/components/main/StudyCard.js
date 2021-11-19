@@ -18,29 +18,24 @@ function StudyCard({title,imgUrl,body,studyRoomID,nickName}) {
         //setStudyRoomId(studyRoomID);
         //setId(user.id);
 
-        //window.open(`/StudyRoom/${studyRoomID}/${user.nickname}`, "_blank", "noopener noreferrer");
-
+        window.open(`/StudyRoom/${studyRoomID}/${nickName}/${window.sessionStorage.userInfo}`, "_blank", "noopener noreferrer");
+        // window.open(`/StudyRoom/${studyRoomID}/${nickName}`, "_blank", "noopener noreferrer");
         // if(window.localStorage.getItem("enteredStudyRoom") === "true")
         //     alert("이미 스터디룸에 입장하였습니다.");
         // else{
-        //     window.localStorage.setItem("enteredStudyRoom", "true");
+            // window.localStorage.setItem("enteredStudyRoom", "true");
         //     window.open(`/StudyRoom/${studyRoomID}/${nickName}`, "_blank", "noopener noreferrer");
         // }
 
     }
     return(
         <> 
-            <Link to={{
-                    pathname: `/StudyRoom/${studyRoomID}/${nickName}`,
-                    state: {
-                        id:id,
-                        nickName: nickName,
-                        studyRoomId:studyRoomId
-                    }
+            {/* <Link to={{
+                    pathname: `/StudyRoom/${studyRoomID}/${nickName}/${window.sessionStorage.userInfo}`
                     }}
                     target= "_blank"
                     rel="noopener noreferrer"
-                >
+                > */}
                 <button className="card-container" onClick={enterStudyRoom}>
                     <div className="image-container">
                         <img src ={imgUrl} alt='기본스터디이미지'/>
@@ -62,7 +57,7 @@ function StudyCard({title,imgUrl,body,studyRoomID,nickName}) {
                     </div>
 
                 </button>
-            </Link>
+            {/* </Link> */}
         </>
     );
 }
