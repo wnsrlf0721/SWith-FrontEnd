@@ -23,7 +23,7 @@ const Index = () => {
         <BrowserRouter>
           <Switch>
             <Route exact path={baseUrl} component={view} />
-            <Route path="/profile/:userId" component={viewOtherUser} />
+            <Route path="/profile/:userId/other" component={viewOtherUser} />
             <Route path={baseUrl + "edit"} component={edit} />
             <Route path="/plan" component={plan} />
           </Switch>
