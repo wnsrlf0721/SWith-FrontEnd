@@ -291,7 +291,7 @@ const StudyRoom = ({ match }) => {
                     if (connnectedUsers.length > 0) {
                         userMedia.getTracks().forEach((track) => {
                             connnectedUsers.map((user) => {
-                                RTCSenders.get(user.id).replaceTrack(track);
+                                RTCSenders.get(user.socketId).replaceTrack(track);
                             });
                         });
                     }
@@ -300,7 +300,7 @@ const StudyRoom = ({ match }) => {
 
                 if (connnectedUsers.length > 0) {
                     stream.getTracks().forEach((track) => {
-                        connnectedUsers.map((user) => RTCSenders.get(user.id).replaceTrack(track));
+                        connnectedUsers.map((user) => RTCSenders.get(user.socketId).replaceTrack(track));
                     });
                 }
 
@@ -319,7 +319,7 @@ const StudyRoom = ({ match }) => {
 
         if (userVideoRef.current) userVideoRef.current.srcObject = userMedia;
         userMedia.getTracks().forEach((track) => {
-            connnectedUsers.map((user) => RTCSenders.get(user.id).replaceTrack(track));
+            connnectedUsers.map((user) => RTCSenders.get(user.socketId).replaceTrack(track));
         });
         setSharing(false);
     };
