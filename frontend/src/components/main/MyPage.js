@@ -20,31 +20,80 @@ const MyPage = () => {
     count: 0,
   });
 
-  const hashtags = [{ hashtag: "hashtag1" }];
-
-  //스터디 히스토리 추가
   const studyBox = () => {
     return (
-      <div className="LinkContainer">
-        <StudyCard
-          title={"스터디기록1"}
-          imgUrl={studyImage}
-          body={hashtags}
-          studyRoomID={"1"}
-          nickName={NickName}
-        ></StudyCard>
-      </div>
-    );
+      <>
+        {
+          currentPosts.map((data) => {
+            return (
+              <div className="LinkContainer">
+                <StudyCard
+                  title={data.title}
+                  imgUrl={studyImage}
+                  body={data.hashtags}
+                  studyRoomID={data.id}
+                  nickName={NickName}
+                ></StudyCard>
+              </div>
+            );
+          })
+        }
+      </>
+    )
   };
+
   const LoginStudy = (isLogined) => {
-    if (isLogined) {
+    const postsNum = posts.length
+    if(!isLogined||postsNum==0){
+      return(
+        <div
+        className="LinkContainer"
+        style={{
+          width:"100%",
+          cursor: "default",
+          backgroundColor: "#454648",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <div className="studyText">
+          내가 만든 스터디 또는 초대 받은 스터디가 등록됩니다
+        </div>
+      </div>
+      )
+    }
+    else if (postsNum<4) {
       return (
         <>
           {studyBox()}
+          <div
+          className="LinkContainer"
+          style={{
+            width:"100%",
+            cursor: "default",
+            backgroundColor: "#454648",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <div className="studyText">
+            내가 만든 스터디 또는 초대 받은 스터디가 등록됩니다
+          </div>
+        </div>
+        </>
+      );
+    
+    }
+    else if (postsNum>3) {
+      return (
+        <>
           {studyBox()}
         </>
       );
+    
     }
+
+
   };
   const LoginStudyTime = (isLogined) => {
     if (isLogined) {
@@ -164,16 +213,18 @@ const MyPage = () => {
           console.log(error.toJSON());
         });
 
-        
+
       //참여했던 스터디룸 조회 API
-      // axios
-      //   .get(`/studyrooms-history/${userInfo.userId}`)
-      //   .then((response) => {
-      //     console.log(response);
-      //   })
-      //   .catch((error) => {
-      //     console.log(error.toJSON());
-      //   });
+      if(isLogined){
+        axios
+        .get(`/studyrooms-history/${userInfo.userId}`)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error.toJSON());
+        });
+      }
 
       let roomInfo = [];
       axios
@@ -197,7 +248,29 @@ const MyPage = () => {
     }
   }, []);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 3;
 
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+  const pageRight = () => {
+    let pageNum = Math.ceil(posts.length / postsPerPage);
+    if(currentPage==pageNum){
+      //setCurrentPage(1)
+    }else{
+      setCurrentPage(currentPage+1);
+    }
+  }
+  const pageLeft = () => {
+    let pageNum = Math.ceil(posts.length / postsPerPage);
+    if(currentPage==1){
+      //setCurrentPage(pageNum)
+    }else{
+      setCurrentPage(currentPage-1);
+    }
+  }
 
   return (
     <div className="MainContainer">
@@ -205,34 +278,24 @@ const MyPage = () => {
         <div className="StudyHistoryWrap">
           <div className="StudyHistoryHeader">
             <div className="TextBox">내 스터디</div>
+            {/* <button onClick={console.log(currentPage)}></button> */}
             <div>
-              <img
-                style={{ height: "auto", width: "30px", cursor: "pointer" }}
-                src={BtnPrev}
-                alt="BtnPrev"
-              />
-              <img
-                style={{ height: "auto", width: "30px", cursor: "pointer" }}
-                src={BtnNext}
-                alt="BtnNext"
-              />
+                <img
+                  style={{ height: "auto", width: "30px", cursor: "pointer" }}
+                  src={BtnPrev}
+                  alt="BtnPrev"
+                  onClick={pageLeft}
+                />
+                <img
+                  style={{ height: "auto", width: "30px", cursor: "pointer" }}
+                  src={BtnNext}
+                  alt="BtnNext"
+                  onClick={pageRight}
+                />
             </div>
           </div>
           <div className="cardWrap">
             {LoginStudy(isLogined)}
-            <div
-              className="LinkContainer"
-              style={{
-                cursor: "default",
-                backgroundColor: "#454648",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <div className="studyText">
-                내가 만든 스터디 또는 초대 받은 스터디가 등록됩니다
-              </div>
-            </div>
           </div>
         </div>
         <div className="StudyTimeWrap">
