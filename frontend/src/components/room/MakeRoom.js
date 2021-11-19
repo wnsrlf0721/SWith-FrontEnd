@@ -162,7 +162,7 @@ const Index = () => {
   const [inputTag, setInputTag] = useState("");
   const [roominfo, setRoominfo] = useState({
     title: "",
-    purpose: "",
+    purpose: "k-exam",
     notice: "",
     hashtag: [],
     endDate: new Date(), //'YYYY-MM-DD HH:MM:SS' 형식
@@ -267,7 +267,11 @@ const Index = () => {
         return alert("스터디룸 이름이 비어있으면 안됩니다");
       }
       const room = roominfo;
-      room.endDate = moment(room.endDate).format("YYYY-MM-DD 00:00:00");
+      var moment = require('moment'); 
+      require('moment-timezone'); 
+      //moment.tz.setDefault("Asia/Seoul");
+      room.endDate = moment(room.endDate).tz("Asia/Seoul").format("YYYY-MM-DD 00:00:00");
+      console.log(room.endDate)
       if (room.password) {
         room.secret = 1;
       }
@@ -321,7 +325,7 @@ const Index = () => {
               onChange={(date) =>
                 setRoominfo((previnfo) => ({
                   ...previnfo,
-                  endDate: date,
+                  endDate: moment(date)._d,
                 }))
               }
               locale={ko}
