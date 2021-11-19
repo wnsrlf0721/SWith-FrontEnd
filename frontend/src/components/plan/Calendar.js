@@ -117,8 +117,10 @@ const Calendar = () => {
         info.id == IdNum ? { ...info, check: !info.check, } : info
       )
     );
-    HandleTodoUpdate(event);
+    HandleTodoUpdate(event)
   }
+  
+
   const HandleTodoUpdate = (event) => {
       const userInfo = JSON.parse(window.sessionStorage.userInfo);
       const startDate = event.start;
