@@ -105,6 +105,9 @@ function StudyEditModal({
             secret: roomData.secret,
             password: roomData.password,
           })
+          category.map((data) => (
+            roomData.purpose == data.purpose ? setToggleState(data.id) : data
+          ))
         }
       })
       .catch((error) => { 

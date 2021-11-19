@@ -162,7 +162,7 @@ const Index = () => {
   const [inputTag, setInputTag] = useState("");
   const [roominfo, setRoominfo] = useState({
     title: "",
-    purpose: "",
+    purpose: "k-exam",
     notice: "",
     hashtag: [],
     endDate: new Date(), //'YYYY-MM-DD HH:MM:SS' 형식
