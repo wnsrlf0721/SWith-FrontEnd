@@ -17,6 +17,8 @@ import mic_false from "../../images/mic_false.png";
 import speaker_true from "../../images/speaker_true.png";
 import speaker_false from "../../images/speaker_false.png";
 import user_invite from "../../images/user_invite.png"
+import screen_false from "../../images/screen_false.png"
+import screen_true from "../../images/screen_true.png"
 
 import LeftBar from "./LeftBar"
 import {UserList} from './UserList';
@@ -294,7 +296,7 @@ const StudyRoom = ({ match }) => {
                         <img src={mic ? mic_true : mic_false} onClick={audioMute} alt="mic" />
                         <img src={camera ? camera_true : camera_false} onClick={videoMute} alt="camera" />
                         <img src={speaker ? speaker_true : speaker_false} alt="speaker" />
-                        <button onClick={sharingScreen}>{sharing ? "display sharing stop": "display sharing start"}</button>
+                        <img  src = {sharing ? screen_true: screen_false} onClick={sharingScreen} />
                     </div>
                     <div style={{
                         padding: "0 20px",
