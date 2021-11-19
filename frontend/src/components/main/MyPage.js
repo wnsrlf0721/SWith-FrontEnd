@@ -47,15 +47,7 @@ const MyPage = () => {
     if(!isLogined||postsNum==0){
       return(
         <div
-        className="LinkContainer"
-        style={{
-          width:"100%",
-          cursor: "default",
-          backgroundColor: "#454648",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
+        className="blackBox">
         <div className="studyText">
           내가 만든 스터디 또는 초대 받은 스터디가 등록됩니다
         </div>
@@ -67,15 +59,7 @@ const MyPage = () => {
         <>
           {studyBox()}
           <div
-          className="LinkContainer"
-          style={{
-            width:"100%",
-            cursor: "default",
-            backgroundColor: "#454648",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
+          className="blackBox">
           <div className="studyText">
             내가 만든 스터디 또는 초대 받은 스터디가 등록됩니다
           </div>
@@ -281,13 +265,13 @@ const MyPage = () => {
             {/* <button onClick={console.log(currentPage)}></button> */}
             <div>
                 <img
-                  style={{ height: "auto", width: "30px", cursor: "pointer" }}
+                  style={{ height: "auto", width: "30px"}}
                   src={BtnPrev}
                   alt="BtnPrev"
                   onClick={pageLeft}
                 />
                 <img
-                  style={{ height: "auto", width: "30px", cursor: "pointer" }}
+                  style={{ height: "auto", width: "30px"}}
                   src={BtnNext}
                   alt="BtnNext"
                   onClick={pageRight}
