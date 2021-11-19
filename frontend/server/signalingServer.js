@@ -16,16 +16,16 @@ io.on('connection', socket => {
                 socket.to(socket.id).emit('room_full');
                 return;
             }
-            users[data.room].push({id: socket.id, userName: data.userName});
+            users[data.room].push({socketId: socket.id, userName: data.userName, userId: data.userId});
         } else {
-            users[data.room] = [{id: socket.id, userName: data.userName}];
+            users[data.room] = [{socketId: socket.id, userName: data.userName, userId: data.userId}];
         }
         socketToRoom[socket.id] = data.room;
 
         socket.join(data.room);
         console.log(`[${socketToRoom[socket.id]}]: ${socket.id} enter`);
 
-        const usersInThisRoom = users[data.room].filter(user => user.id !== socket.id);
+        const usersInThisRoom = users[data.room].filter(user => user.socketId !== socket.id);
 
         console.log(usersInThisRoom);
 
@@ -33,11 +33,11 @@ io.on('connection', socket => {
     });
 
     socket.on('offer', data => {
-        socket.to(data.offerReceiveID).emit('getOffer', {sdp: data.sdp, offerSendID: data.offerSendID, offerSendUserName: data.offerSendUserName});
+        socket.to(data.offerReceiveID).emit('getOffer', {sdp: data.sdp, offerSendID: data.offerSendID, offerSendUserName: data.offerSendUserName, offerSendUserId: data.offerSendUserId, offerStudyTimer: data.offerStudyTimer });
     });
 
     socket.on('answer', data => {
-        socket.to(data.answerReceiveID).emit('getAnswer', {sdp: data.sdp, answerSendID: data.answerSendID});
+        socket.to(data.answerReceiveID).emit('getAnswer', {sdp: data.sdp, answerSendID: data.answerSendID, answerStudyTimer: data.answerStudyTimer});
     });
 
     socket.on('candidate', data => {
@@ -48,7 +48,7 @@ io.on('connection', socket => {
         console.log(data);
         const room = socketToRoom[data.messageSendID];
         users[room].map(user => {
-            socket.to(user.id).emit('chatting', data);
+            socket.to(user.socketId).emit('chatting', data);
         })
     });
 
@@ -57,14 +57,14 @@ io.on('connection', socket => {
         const roomID = socketToRoom[socket.id];
         let room = users[roomID];
         if (room) {
-            room = room.filter(user => user.id !== socket.id);
+            room = room.filter(user => user.socketId !== socket.id);
             users[roomID] = room;
             if (room.length === 0) {
                 delete users[roomID];
                 return;
             }
         }
-        socket.to(roomID).emit('user_exit', {id: socket.id});
+        socket.to(roomID).emit('user_exit', {socketId: socket.id});
         console.log(users);
     })
 });

@@ -18,14 +18,7 @@ function StudyEditModal({
   visible,
   studyRoomId,
 }) {
-    console.log({
-      className,
-      onClose,
-      maskClosable,
-      closable,
-      visible,
-      studyRoomId,
-    });
+
     const [swapleft, setSwapleft] = useState(true);
     // title(방 제목), purpose(필터링), password(비밀번호), notice(공지사항), endDate, hashTag(해시태그)
     const [inputTag, setInputTag] = useState("");
@@ -89,22 +82,39 @@ function StudyEditModal({
  
 //기존 정보 받아오기
   useEffect(() => {
-    console.log({studyRoomId});
+    // const tempDay = roomData.endDate.substring(0,10);
+    // console.log(moment(roomData.endDate.substring(0,10), "YYYY-MM-DD")._d)
+    // var moment = require('moment'); 
+    require('moment-timezone'); 
+    moment.tz.setDefault("Asia/Seoul");
+    // console.log({studyRoomId});
+    
     axios
       .get(`/studyrooms/${studyRoomId}`)
       .then((response) => {
         const data = response.data;
+        const roomData = data.data
         console.log(data.data);
         if (data.status === "200" && data.message === "OK") {
-         
-          
+          setRoominfo({
+            title: roomData.title,
+            purpose: roomData.purpose,
+            notice: roomData.notice,
+            hashtag: roomData.hashtags,
+            endDate: moment(roomData.endDate)._d, //'YYYY-MM-DD HH:MM:SS' 형식
+            secret: roomData.secret,
+            password: roomData.password,
+          })
+          category.map((data) => (
+            roomData.purpose == data.purpose ? setToggleState(data.id) : data
+          ))
         }
-        
       })
-      .catch((error) => {
+      .catch((error) => { 
         console.log(error);
       });
   }, []);
+
 
 
 
@@ -173,6 +183,7 @@ function StudyEditModal({
 
     return (
         <>
+        {console.log(roominfo)}
             <ModalOverlay visible={visible} />
             <ModalWrapper
                 className={className}
@@ -190,7 +201,6 @@ function StudyEditModal({
                         </div>
                         <Rowarea>
                             <Label>스터디 이름</Label>
-                            <BeforeInfo>here 스터디 이름</BeforeInfo>
                             <Input
                             name="title"
                             onChange={(e) => onChangehandler(e)}
@@ -240,7 +250,7 @@ function StudyEditModal({
                             <div style={{marginTop:"5px",display: "flex",justifyContent: "flex-start"}}>
                             {roominfo.hashtag.map((tag, index) => (
                                 <div className="tag">
-                                {"#"+tag}
+                                {"#"+tag.hashtag}
                                 <button onClick={() => deleteTag(index)}>x</button>
                                 </div>
                             ))}
@@ -249,7 +259,6 @@ function StudyEditModal({
                         <Rowarea style={{flexDirection:"column"}}>
                             <div  style={{ display: "flex",justifyContent: "space-between",marginBottom:"10px"}}>
                               <Label>공지사항</Label>
-                              <BeforeInfo style={{fontSize:"10px"}}>here 공지사항 내용 </BeforeInfo>
                             </div>
                             <Input
                             name="notice"
