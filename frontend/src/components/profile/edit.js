@@ -214,7 +214,7 @@ const Index = () => {
           });
       }
     },
-    [editInfo.nickname, editInfo.beforePassword, editInfo.password, pwConfirm]
+    [editInfo, pwConfirm]
   );
   return (
     <Container>
