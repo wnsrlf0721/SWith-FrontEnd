@@ -94,13 +94,15 @@ const MyPage = () => {
               >
                 오늘 공부한 시간
               </div>
-              <div className="TextBox">{`${todaystudy.hour
-                .toString()
-                .padStart(2, "0")}:${todaystudy.minute
-                .toString()
-                .padStart(2, "0")}:${todaystudy.second
-                .toString()
-                .padStart(2, "0")}`}</div>
+              <div className="TextBox">
+                {`${todaystudy.hour
+                  .toString()
+                  .padStart(2, "0")}:${todaystudy.minute
+                  .toString()
+                  .padStart(2, "0")}:${todaystudy.second
+                  .toString()
+                  .padStart(2, "0")}`}
+              </div>
             </div>
             <div className="Line"></div>
             <div className="ColumnWrap">

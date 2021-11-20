@@ -149,6 +149,7 @@ const Cate = styled.div`
   }
 `;
 const Index = () => {
+  const userInfo = JSON.parse(window.sessionStorage.userInfo);
   useEffect(() => {
     const isLogined = window.sessionStorage.userInfo == null ? false : true;
     if (!isLogined) {
@@ -158,7 +159,7 @@ const Index = () => {
   }, []);
 
   const [swapleft, setSwapleft] = useState(true);
-  // title(방 제목), purpose(필터링), password(비밀번호), notice(공지사항), endDate, hashTag(해시태그)
+  // title(방 제목), purpose(필터링), password(비밀번호), notice(공지사항), endDate, hashTag(해시태그), maxUserCount(최대인원)
   const [inputTag, setInputTag] = useState("");
   const [roominfo, setRoominfo] = useState({
     title: "",
@@ -168,6 +169,8 @@ const Index = () => {
     endDate: new Date(), //'YYYY-MM-DD HH:MM:SS' 형식
     secret: 0,
     password: "",
+    maxUserCount: "4",
+    masterId: userInfo.userId,
   });
   const [toggleState, setToggleState] = useState(1);
 
@@ -229,6 +232,11 @@ const Index = () => {
         ...previnfo,
         notice: value,
       }));
+    } else if (name === "maxUserCount") {
+      setRoominfo((previnfo) => ({
+        ...previnfo,
+        maxUserCount: value,
+      }));
     } else if (name === "password") {
       setRoominfo((previnfo) => ({
         ...previnfo,
@@ -267,11 +275,13 @@ const Index = () => {
         return alert("스터디룸 이름이 비어있으면 안됩니다");
       }
       const room = roominfo;
-      var moment = require('moment'); 
-      require('moment-timezone'); 
+      var moment = require("moment");
+      require("moment-timezone");
       //moment.tz.setDefault("Asia/Seoul");
-      room.endDate = moment(room.endDate).tz("Asia/Seoul").format("YYYY-MM-DD 00:00:00");
-      console.log(room.endDate)
+      room.endDate = moment(room.endDate)
+        .tz("Asia/Seoul")
+        .format("YYYY-MM-DD 00:00:00");
+      console.log(room.endDate);
       if (room.password) {
         room.secret = 1;
       }
@@ -337,7 +347,7 @@ const Index = () => {
             <div className="container">
               {roominfo.hashtag.map((tag, index) => (
                 <div className="tag">
-                  {"#"+tag}
+                  {"#" + tag}
                   <button onClick={() => deleteTag(index)}>x</button>
                 </div>
               ))}
@@ -356,6 +366,15 @@ const Index = () => {
               name="notice"
               onChange={(e) => onChangehandler(e)}
               value={roominfo.notice}
+            />
+          </Rowarea>
+          <Rowarea>
+            <Label>최대인원</Label>
+            <Input
+              name="maxUserCount"
+              onChange={(e) => onChangehandler(e)}
+              placeholder="최대인원은 8명까지 가능"
+              value={roominfo.maxUserCount}
             />
           </Rowarea>
           <TabWrap>
