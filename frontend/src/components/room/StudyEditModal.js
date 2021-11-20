@@ -82,13 +82,12 @@ function StudyEditModal({
     // var moment = require('moment');
     require("moment-timezone");
     moment.tz.setDefault("Asia/Seoul");
-    // console.log({studyRoomId});
+     console.log(studyRoomId);
     axios
       .get(`/studyrooms/${studyRoomId}`)
       .then((response) => {
         const data = response.data;
         const roomData = data.data;
-        console.log(roomData);
         let temphash = [];
         roomData.hashtags.map((x) => {
           temphash = temphash.concat(x.hashtag);

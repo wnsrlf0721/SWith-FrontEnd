@@ -7,6 +7,7 @@ import { Video } from './Video';
 import { Chat } from './Chat';
 import { StudyRoomModal } from './StudyRoomModal';
 import axios from '../../api/defaultaxios';
+import { Link } from 'react-router-dom';
 
 import user_icon from '../../images/user_icon.png';
 import camera_true from '../../images/camera_true.png';
@@ -54,6 +55,7 @@ const StudyRoom = ({ match }) => {
   const [studyRoomInfo, setStudyRoomInfo] = useState([]);
   const [masterId, setMasterId] = useState('');
   const [userId, setUserId] = useState('');
+  let input = '';
 
   useBeforeunload(async (event) => {
     event.preventDefault();
@@ -79,6 +81,23 @@ const StudyRoom = ({ match }) => {
         });
         //console.log(studyRoomInfo);
         setMasterId(data.data.masterId);
+
+        const sc = data.data.secret;
+        const pw = data.data.password;
+        let pwTest = '';
+        for (let i = 0; i < 5; i++) {
+          if (input == null) window.open('', '_self').close();
+          else if (sc == 1 && pwTest != pw) {
+            input = prompt('비밀번호를 입력해주세요');
+            pwTest = input;
+          } else {
+            return;
+          }
+          console.log(i);
+          if (i > 3) {
+            window.open('', '_self').close();
+          }
+        }
       })
       .catch((error) => {
         console.log(error);
