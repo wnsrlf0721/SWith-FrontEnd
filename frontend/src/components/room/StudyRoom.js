@@ -50,6 +50,8 @@ const StudyRoom = ({ match }) => {
   const [sharing, setSharing] = useState(false);
   const [PeopleNum, setPeopleNum] = useState();
   const [studyRoomInfo, setStudyRoomInfo] = useState([]);
+  const [masterId, setMasterId] = useState("");
+  const [userId, setUserId] = useState("");
 
   useBeforeunload(() => {
     socket.disconnect();
@@ -72,11 +74,13 @@ const StudyRoom = ({ match }) => {
           title: data.data.title,
         });
         //console.log(studyRoomInfo);
+        setMasterId(data.data.masterId);
       })
       .catch((error) => {
         console.log(error);
       });
     const userId = JSON.parse(userInfo)["userId"];
+    setUserId(userId);
     axios
       .post("/studyrooms/history", {
         userId: userId,
@@ -397,7 +401,7 @@ const StudyRoom = ({ match }) => {
 
   return (
     <div className="Container">
-      <LeftBar studyRoomId={studyRoomId} />
+      <LeftBar studyRoomId={studyRoomId} masterId={masterId} userId={userId} />
 
       <div className="RightWrap">
         <div className="RoomTopBarContainer">

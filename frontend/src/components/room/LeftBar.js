@@ -8,11 +8,17 @@ import StudyEditModal from "./StudyEditModal";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const LeftBar = ({ studyRoomId }) => {
+const LeftBar = ({ studyRoomId, masterId, userId }) => {
   //console.log(studyRoomId);
+  //console.log(masterId, userId);
   const [modalVisible, setModalVisible] = useState(false);
   const openModal = () => {
-    setModalVisible(true);
+    if (masterId === userId) {
+      setModalVisible(true);
+    } else {
+      alert("방장만 스터디룸 수정할 수 있습니다!");
+      return;
+    }
   };
   const closeModal = () => {
     setModalVisible(false);

@@ -202,7 +202,7 @@ const MyPage = () => {
               setTodaystudy((prev) => ({
                 ...prev,
                 complete: prev.complete + task.complete,
-                count: prev.complete + 1,
+                count: prev.count + 1,
               }));
             }
           });
