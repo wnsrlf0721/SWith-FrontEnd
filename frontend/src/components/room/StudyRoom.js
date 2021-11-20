@@ -7,6 +7,7 @@ import { Video } from './Video';
 import { Chat } from './Chat';
 import { StudyRoomModal } from './StudyRoomModal';
 import axios from "../../api/defaultaxios";
+import { Link } from "react-router-dom";
 
 import user_icon from "../../images/user_icon.png";
 import camera_true from "../../images/camera_true.png";
@@ -50,6 +51,7 @@ const StudyRoom = ({ match }) => {
     const [sharing, setSharing] = useState(false)
     const [PeopleNum, setPeopleNum] = useState()
     const [studyRoomInfo, setStudyRoomInfo] = useState([])
+    let input=""
 
     useBeforeunload(() => {
         socket.disconnect();
@@ -58,26 +60,43 @@ const StudyRoom = ({ match }) => {
         //sessionStorage.setItem("userInfo", userInfo);
         // return ("Are you sure to close this tab?")
     });
+    
 
     useEffect(() => {
         initSocket();
-        
         axios
             .get(`/studyrooms/${studyRoomId}`)
             .then((response) => {
                 const data = response.data;
-                //console.log(data.data);
+                console.log(data.data);
+                const sc =data.data.secret;
+                const pw = data.data.password;
+                let pwTest =""
                 setStudyRoomInfo({
                     id: data.data.id,
-                    title: data.data.title
+                    title: data.data.title,
                 })
-                //console.log(studyRoomInfo);
+                for(let i = 0 ;i<5;i++){
+                    if(input == null)window.open('','_self').close(); 
+                    else if(sc==1&&pwTest != pw){
+                        input = prompt('비밀번호를 입력해주세요');
+                        pwTest = input
+                    }else{
+                        return;
+                    }
+                    console.log(i)
+                    if(i>3){
+                    window.open('','_self').close(); 
+                    }
+                }
             })
             .catch((error) => {
                 console.log(error);
             });
+        
 
     }, [])
+
 
     const initSettings = (useUserVideo, availableUserVideo) => {
         if (availableUserVideo)
@@ -338,8 +357,7 @@ const StudyRoom = ({ match }) => {
 
     return (
         <div className="Container" >
-            <LeftBar studyRoomId={studyRoomId} />
-
+            {LeftBar(studyRoomId)}
             <div className="RightWrap">
                 <div className="RoomTopBarContainer">
                     <div className="ImageContainer">

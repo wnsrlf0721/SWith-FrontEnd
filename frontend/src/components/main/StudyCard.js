@@ -2,12 +2,35 @@ import React from "react";
 import './StudyCard.css'
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import axios from "../../api/defaultaxios";
 
 function StudyCard({title,imgUrl,body,studyRoomID,nickName}) {
     const isLogined = window.sessionStorage.userInfo == null ? false : true;
     const [NickName, setNickName] = useState("");
     const [studyRoomId, setStudyRoomId] = useState("");
     const [id, setId] = useState("");
+    const [pwInput,setPwInput] = useState("");
+    const [pwInfo,setPwInfo] = useState([]);
+
+    // useEffect(() => {        
+    //     console.log(studyRoomId)
+    //     axios
+    //         .get(`/studyrooms/${studyRoomId}`)
+    //         .then((response) => {
+    //             const data = response.data;
+    //             console.log(data.data);
+    //             setPwInfo({
+    //                 secret: data.data.secret,
+    //                 password:data.data.password
+    //             })
+    //             //console.log(studyRoomInfo);
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    //         //console.log(studyRoomId)
+    // }, [])
+
 
     const enterStudyRoom = () =>{
         if(!isLogined){
@@ -18,6 +41,8 @@ function StudyCard({title,imgUrl,body,studyRoomID,nickName}) {
         //setStudyRoomId(studyRoomID);
         //setId(user.id);
 
+        
+        
         window.open(`/StudyRoom/${studyRoomID}/${nickName}/${window.sessionStorage.userInfo}`, "_blank", "noopener noreferrer");
         // window.open(`/StudyRoom/${studyRoomID}/${nickName}`, "_blank", "noopener noreferrer");
         // if(window.localStorage.getItem("enteredStudyRoom") === "true")
