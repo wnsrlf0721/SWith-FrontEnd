@@ -1,8 +1,8 @@
-import axios from "../../api/defaultaxios";
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import UserImage from "../../images/default_profile_Image.png";
+import axios from '../../api/defaultaxios';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import UserImage from '../../images/default_profile_Image.png';
 
 const Container = styled.div`
   display: flex;
@@ -80,8 +80,8 @@ const ButtonWrap = styled.div`
 
 const Index = () => {
   const UserimgUrl = UserImage;
-  const [email, setEmail] = useState("");
-  const [nickname, setNickname] = useState("");
+  const [email, setEmail] = useState('');
+  const [nickname, setNickname] = useState('');
   const [following, setFollowing] = useState(0);
   const [boards, setBoards] = useState(0);
 
@@ -92,22 +92,22 @@ const Index = () => {
       .then((response) => {
         const data = response.data;
         console.log(data);
-        if (data.status === "200" && data.message === "OK") {
+        if (data.status === '200' && data.message === 'OK') {
           const api_data = data.data;
           let user = {
             email: api_data.email,
             nickname: api_data.nickname,
-            following: api_data.following.length,
-            boards: api_data.boards.length,
+            // following: api_data.following.length,
+            // boards: api_data.boards.length,
           };
           setEmail(user.email);
           setNickname(user.nickname);
-          setFollowing(user.following);
-          setBoards(user.boards);
+          // setFollowing(user.following);
+          // setBoards(user.boards);
         }
       })
       .catch((error) => {
-        console.log(error.toJSON());
+        console.log(error);
       });
   }, []);
 
@@ -116,28 +116,28 @@ const Index = () => {
       <Wrap>
         <PictureWrap>
           <ProfileImg>
-            <img src={UserimgUrl} alt="기본사용자이미지" />
+            <img src={UserimgUrl} alt='기본사용자이미지' />
           </ProfileImg>
         </PictureWrap>
 
         <InfoWrap>
-          <TextB style={{ marginBottom: "15px" }}>
+          <TextB style={{ marginBottom: '15px' }}>
             <h2>{email}</h2>
-            <h3 style={{ fontSize: "20px" }}>{nickname}</h3>
+            <h3 style={{ fontSize: '20px' }}>{nickname}</h3>
           </TextB>
 
           <div>
             <p>팔로우: {following}</p>
-            <p style={{ display: "flex" }}>게시글: {boards}</p>
+            <p style={{ display: 'flex' }}>게시글: {boards}</p>
           </div>
         </InfoWrap>
 
         <ButtonWrap>
-          <Link to="/profile/edit">
-            <Button style={{ backgroundColor: "#f8ad1d" }}>프로필 편집</Button>
+          <Link to='/profile/edit'>
+            <Button style={{ backgroundColor: '#f8ad1d' }}>프로필 편집</Button>
           </Link>
-          <Link to="/plan">
-            <Button style={{ color: "#595959" }}>학습관리</Button>
+          <Link to='/plan'>
+            <Button style={{ color: '#595959' }}>학습관리</Button>
           </Link>
         </ButtonWrap>
       </Wrap>
