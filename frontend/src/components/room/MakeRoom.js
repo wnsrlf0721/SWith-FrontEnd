@@ -149,18 +149,23 @@ const Cate = styled.div`
   }
 `;
 const Index = () => {
-  const userInfo = JSON.parse(window.sessionStorage.userInfo);
   useEffect(() => {
     const isLogined = window.sessionStorage.userInfo == null ? false : true;
     if (!isLogined) {
       alert("로그인이 필요합니다.");
       return (window.location.href = "/login");
+    } else {
+      const userInfo = JSON.parse(window.sessionStorage.userInfo);
+      setRoominfo((previnfo) => ({
+        ...previnfo,
+        masterId: userInfo.userId,
+      }));
     }
   }, []);
-
   const [swapleft, setSwapleft] = useState(true);
   // title(방 제목), purpose(필터링), password(비밀번호), notice(공지사항), endDate, hashTag(해시태그), maxUserCount(최대인원)
   const [inputTag, setInputTag] = useState("");
+  const [toggleState, setToggleState] = useState(1);
   const [roominfo, setRoominfo] = useState({
     title: "",
     purpose: "k-exam",
@@ -170,10 +175,8 @@ const Index = () => {
     secret: 0,
     password: "",
     maxUserCount: "4",
-    masterId: userInfo.userId,
+    masterId: "",
   });
-  const [toggleState, setToggleState] = useState(1);
-
   const category = [
     {
       id: 1,
