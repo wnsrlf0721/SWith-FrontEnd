@@ -68,6 +68,7 @@ const BottomPage = ({ search }) => {
   const [NickName, setNickName] = useState("");
   const [toggleState, setToggleState] = useState(1);
   const [Users, setUsers] = useState([]);
+  const [hashcheck, setHashcheck] = useState(false);
 
   const [posts, setPosts] = useState([]); //전체 카테고리 list
   const [purpose_list, setPurpose_list] = useState([]); //부분 카테고리 list
@@ -123,6 +124,23 @@ const BottomPage = ({ search }) => {
                 hashtags: data.hashtags,
                 purpose: data.purpose,
               });
+            } else {
+              for (var i in data.hashtags) {
+                //console.log(data.hashtags[i].hashtag);
+                if (
+                  data.hashtags[i].hashtag
+                    .toLowerCase()
+                    .indexOf(search.toLowerCase()) !== -1
+                ) {
+                  srh_array = srh_array.concat({
+                    id: data.id,
+                    title: data.title,
+                    hashtags: data.hashtags,
+                    purpose: data.purpose,
+                  });
+                  break;
+                }
+              }
             }
           });
           setPosts(srh_array);
@@ -156,7 +174,7 @@ const BottomPage = ({ search }) => {
             //     nickname:data.data.nickname
             //   })
             //console.log(NickName,Users.id)
-          } 
+          }
         })
         .catch((error) => {
           console.log(error.toJSON());
