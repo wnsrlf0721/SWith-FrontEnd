@@ -1,4 +1,4 @@
-import './StudyRoom.css';
+import "./StudyRoom.css";
 import logo from "../../images/logoBack.png";
 import menu from "../../images/menu.png";
 import planner from "../../images/planner.png";
@@ -11,12 +11,11 @@ import { Link } from "react-router-dom";
 const LeftBar = (studyRoomId)=>{
   const [modalVisible, setModalVisible] = useState(false)
   const openModal = () => {
-    setModalVisible(true)
-  }
+    setModalVisible(true);
+  };
   const closeModal = () => {
-    setModalVisible(false)
-  }
-
+    setModalVisible(false);
+  };
 
   return (
             <div className="LeftBarWrap">
@@ -53,16 +52,16 @@ const LeftBar = (studyRoomId)=>{
                     target= "_blank"
                     rel="noopener noreferrer"
                 > */}
-                <Link to="/plan"
+                {/* <Link to="/plan"
                     target= "_blank"
                     rel="noopener noreferrer"
-                >
+                > */}
                 <img
                     style ={{width:'auto',backgroundColor:''}}
                     src={planner}
                     alt="planner"
                   />
-                </Link>
+                {/* </Link> */}
                 </div>
               </div>
               <div className="LeftBottomIconWrap">
@@ -83,6 +82,6 @@ const LeftBar = (studyRoomId)=>{
               </div>
             </div>
   );
-}
+};
 
-export default LeftBar
+export default LeftBar;

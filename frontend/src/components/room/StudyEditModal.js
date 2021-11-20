@@ -1,14 +1,11 @@
-
-import React,{useState,useEffect,useCallback} from 'react'
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import React, { useState, useEffect, useCallback } from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 import axios from "../../api/defaultaxios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/esm/locale";
 import moment from "moment";
-
-
 
 function StudyEditModal({
   className,
@@ -18,33 +15,33 @@ function StudyEditModal({
   visible,
   studyRoomId,
 }) {
-
-    const [swapleft, setSwapleft] = useState(true);
-    // title(방 제목), purpose(필터링), password(비밀번호), notice(공지사항), endDate, hashTag(해시태그)
-    const [inputTag, setInputTag] = useState("");
-    const [roominfo, setRoominfo] = useState({
-      title: "",
-      purpose: "",
-      notice: "",
-      hashtag: [],
-      endDate: new Date(), //'YYYY-MM-DD HH:MM:SS' 형식
-      secret: 0,
-      password: "",
-    });
-    
-    const [toggleState, setToggleState] = useState(1);
-    const onMaskClick = (e) => {
-        if (e.target === e.currentTarget) {
-            onClose(e)
-        }
+  const [swapleft, setSwapleft] = useState(true);
+  // title(방 제목), purpose(필터링), password(비밀번호), notice(공지사항), endDate, hashTag(해시태그)
+  const [inputTag, setInputTag] = useState("");
+  const [roominfo, setRoominfo] = useState({
+    title: "",
+    purpose: "",
+    notice: "",
+    hashtag: [],
+    endDate: new Date(), //'YYYY-MM-DD HH:MM:SS' 형식
+    secret: 0,
+    password: "",
+    masterId: "",
+    maxUserCount: "",
+  });
+  const [toggleState, setToggleState] = useState(1);
+  const onMaskClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose(e);
     }
+  };
 
-    const close = (e) => {
-        if (onClose) {
-            onClose(e)
-        }
+  const close = (e) => {
+    if (onClose) {
+      onClose(e);
     }
-    
+  };
+
   const category = [
     {
       id: 1,
@@ -78,24 +75,23 @@ function StudyEditModal({
     },
   ];
 
- 
-//기존 정보 받아오기
+  //기존 정보 받아오기
   useEffect(() => {
     // const tempDay = roomData.endDate.substring(0,10);
     // console.log(moment(roomData.endDate.substring(0,10), "YYYY-MM-DD")._d)
-    // var moment = require('moment'); 
-    require('moment-timezone'); 
+    // var moment = require('moment');
+    require("moment-timezone");
     moment.tz.setDefault("Asia/Seoul");
     // console.log({studyRoomId});
     axios
       .get(`/studyrooms/${studyRoomId}`)
       .then((response) => {
         const data = response.data;
-        const roomData = data.data
-        let temphash=[];
-        roomData.hashtags.map((x)=>{
-          temphash = temphash.concat(x.hashtag)
-        })
+        const roomData = data.data;
+        let temphash = [];
+        roomData.hashtags.map((x) => {
+          temphash = temphash.concat(x.hashtag);
+        });
         console.log(data.data);
         if (data.status === "200" && data.message === "OK") {
           setRoominfo({
@@ -106,13 +102,15 @@ function StudyEditModal({
             endDate: moment(roomData.endDate)._d, //'YYYY-MM-DD HH:MM:SS' 형식
             secret: roomData.secret,
             password: roomData.password,
-          })
-          category.map((data) => (
-            roomData.purpose == data.purpose ? setToggleState(data.id) : data
-          ))
+            maxUserCount: roomData.maxUserCount,
+            masterId: roomData.masterId,
+          });
+          category.map((data) =>
+            roomData.purpose === data.purpose ? setToggleState(data.id) : data
+          );
         }
       })
-      .catch((error) => { 
+      .catch((error) => {
         console.log(error);
       });
   }, []);
@@ -143,6 +141,11 @@ function StudyEditModal({
         ...previnfo,
         notice: value,
       }));
+    } else if (name === "maxUserCount") {
+      setRoominfo((previnfo) => ({
+        ...previnfo,
+        maxUserCount: value,
+      }));
     } else if (name === "password") {
       setRoominfo((previnfo) => ({
         ...previnfo,
@@ -151,190 +154,208 @@ function StudyEditModal({
     }
   };
 
-    const onKeyDown = (e) => {
-        const { key } = e;
-        const trimmedInput = inputTag.trim();
+  const onKeyDown = (e) => {
+    const { key } = e;
+    const trimmedInput = inputTag.trim();
 
-        if (
-        key === "Enter" &&
-        trimmedInput.length &&
-        !roominfo.hashtag.includes(trimmedInput)
-        ) {
-        e.preventDefault();
-        setRoominfo((previnfo) => ({
-            ...previnfo,
-            hashtag: [...previnfo.hashtag, trimmedInput],
-        }));
-        setInputTag("");
-        }
-    };
-    const deleteTag = (index) => {
-        setRoominfo((previnfo) => ({
+    if (
+      key === "Enter" &&
+      trimmedInput.length &&
+      !roominfo.hashtag.includes(trimmedInput)
+    ) {
+      e.preventDefault();
+      setRoominfo((previnfo) => ({
         ...previnfo,
-        hashtag: previnfo.hashtag.filter((tag, i) => i !== index),
-        }));
-    };
+        hashtag: [...previnfo.hashtag, trimmedInput],
+      }));
+      setInputTag("");
+    }
+  };
+  const deleteTag = (index) => {
+    setRoominfo((previnfo) => ({
+      ...previnfo,
+      hashtag: previnfo.hashtag.filter((tag, i) => i !== index),
+    }));
+  };
 
+  const onsubmit = useCallback(
+    //api patch 요청시 500에러
+    (e) => {
+      e.preventDefault();
+      const room = roominfo;
+      var moment = require("moment");
+      require("moment-timezone");
+      //moment.tz.setDefault("Asia/Seoul");
+      room.endDate = moment(room.endDate)
+        .tz("Asia/Seoul")
+        .format("YYYY-MM-DD 00:00:00");
+      if (room.password) {
+        room.secret = 1;
+      }
+      console.log(room);
+      axios
+        .patch(`/studyrooms/${studyRoomId}`, room)
+        .then((response) => {
+          console.log(response);
+          alert("스터디룸 수정 완료");
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.log(error.toJSON());
+          console.log(roominfo.title);
+          alert("input 입력이 잘못된 것 같습니다.");
+        });
+    },
+    [roominfo]
+  );
 
-    const onsubmit = useCallback(//api patch 요청시 500에러
-      (e) => {
-        e.preventDefault();
-        const room = roominfo;
-        var moment = require('moment'); 
-        require('moment-timezone'); 
-        moment.tz.setDefault("Asia/Seoul");
-        //room.endDate = moment(room.endDate).format("YYYY-MM-DD 00:00:00");//디비 넣을 때 시간
-        //console.log(room.endDate)
-        if (room.password) {
-          room.secret = 1;
-        }
-        axios
-          .patch(`/studyrooms/${studyRoomId}`, {
-            title: "testtest",
-          })
-          .then((response) => {
-            console.log(response);
-            alert("스터디룸 수정 완료");
-           
-          })
-          .catch((error) => {
-            console.log(error.toJSON());
-            console.log(roominfo.title);
-            alert("input 입력이 잘못된 것 같습니다.");
-          });
-      },
-      [roominfo]
-    );
+  return (
+    <>
+      {/* {console.log(roominfo)} */}
+      <ModalOverlay visible={visible} />
+      <ModalWrapper
+        className={className}
+        onClick={maskClosable ? onMaskClick : null}
+        tabIndex="-1"
+        visible={visible}
+      >
+        <ModalInner tabIndex="0" className="modal-inner">
+          <Container>
+            <div className="page">
+              <div
+                style={{ margin: "5px", fontSize: "18px", fontWeight: "bold" }}
+              >
+                스터디 수정
+              </div>
+              <Rowarea>
+                <Label>스터디 이름</Label>
+                <Input
+                  name="title"
+                  onChange={(e) => onChangehandler(e)}
+                  value={roominfo.title}
+                />
+              </Rowarea>
+              <Rowarea>
+                <Label>카테고리</Label>
+                {/* 국가고시, 독서, 수능, 어학, 자격증, 기타 */}
+                <Cate>
+                  {category.map((data) => (
+                    <CategoryButton
+                      name={data}
+                      className={toggleState === data.id ? "activation" : ""}
+                      onClick={() => onclick(data)}
+                    >
+                      {data.name}
+                    </CategoryButton>
+                  ))}
+                </Cate>
+              </Rowarea>
+              <Rowarea>
+                <Label>종료기간</Label>
+                <DateInput
+                  selected={roominfo.endDate}
+                  onChange={(date) =>
+                    setRoominfo((previnfo) => ({
+                      ...previnfo,
+                      endDate: date,
+                    }))
+                  }
+                  locale={ko}
+                  dateFormat="yyyy-MM-dd"
+                />
+              </Rowarea>
+              <Rowarea style={{ flexDirection: "column" }}>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <Label>해시태그</Label>
+                  <Input
+                    name="hashtag"
+                    placeholder="Enter a tag"
+                    onChange={(e) => onChangehandler(e)}
+                    onKeyDown={(e) => onKeyDown(e)}
+                    value={inputTag}
+                  />
+                </div>
+                <div
+                  style={{
+                    marginTop: "5px",
+                    display: "flex",
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  {roominfo.hashtag.map((tag, index) => (
+                    <div className="tag">
+                      {"#" + tag}
+                      <button onClick={() => deleteTag(index)}>x</button>
+                    </div>
+                  ))}
+                </div>
+              </Rowarea>
+              <Rowarea style={{ flexDirection: "column" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <Label>공지사항</Label>
+                </div>
+                <Input
+                  name="notice"
+                  onChange={(e) => onChangehandler(e)}
+                  value={roominfo.notice}
+                />
+              </Rowarea>
+              <Rowarea>
+                <Label>최대인원</Label>
+                <Input
+                  name="maxUserCount"
+                  onChange={(e) => onChangehandler(e)}
+                  placeholder="최대인원은 8명까지 가능"
+                  value={roominfo.maxUserCount}
+                />
+              </Rowarea>
+              <TabWrap>
+                <KeyButton
+                  className={swapleft ? "active" : ""}
+                  onClick={() => setSwapleft(true)}
+                >
+                  공개방
+                </KeyButton>
+                <KeyButton
+                  className={!swapleft ? "active" : ""}
+                  onClick={() => setSwapleft(false)}
+                >
+                  비밀방
+                </KeyButton>
+              </TabWrap>
+              {!swapleft && (
+                <Rowarea>
+                  <Label>비밀번호</Label>
+                  <Input
+                    name="password"
+                    onChange={(e) => onChangehandler(e)}
+                    value={roominfo.password}
+                  />
+                </Rowarea>
+              )}
 
-
-
-
-
-    return (
-        <>
-        {/* {console.log(roominfo)} */}
-            <ModalOverlay visible={visible} />
-            <ModalWrapper
-                className={className}
-                onClick={maskClosable ? onMaskClick : null}
-                tabIndex="-1"
-                visible={visible}
-                
-            >
-                <ModalInner tabIndex="0" className="modal-inner">
-                <Container>
-                        
-                        <div className="page">
-                        <div style={{margin:"5px",fontSize:"18px",fontWeight:"bold"}}>
-                            스터디 수정
-                        </div>
-                        <Rowarea>
-                            <Label>스터디 이름</Label>
-                            <Input
-                            name="title"
-                            onChange={(e) => onChangehandler(e)}
-                            value={roominfo.title}
-                            />
-                        </Rowarea>
-                        <Rowarea>
-                            <Label>카테고리</Label>
-                            {/* 국가고시, 독서, 수능, 어학, 자격증, 기타 */}
-                            <Cate>
-                            {category.map((data) => (
-                                <CategoryButton
-                                name={data}
-                                className={toggleState === data.id ? "activation" : ""}
-                                onClick={() => onclick(data)}
-                                >
-                                {data.name}
-                                </CategoryButton>
-                            ))}
-                            </Cate>
-                        </Rowarea>
-                        <Rowarea>
-                            <Label>종료기간</Label>
-                            <DateInput
-                            selected={roominfo.endDate}
-                            onChange={(date) =>
-                                setRoominfo((previnfo) => ({
-                                ...previnfo,
-                                endDate: date,
-                                }))
-                            }
-                            locale={ko}
-                            dateFormat="yyyy-MM-dd"
-                            />
-                        </Rowarea>
-                        <Rowarea style={{flexDirection: "column"}}>
-                            <div style={{ display: "flex",justifyContent: "space-between"}}>
-                            <Label>해시태그</Label>
-                            <Input
-                                name="hashtag"
-                                placeholder="Enter a tag"
-                                onChange={(e) => onChangehandler(e)}
-                                onKeyDown={(e) => onKeyDown(e)}
-                                value={inputTag}
-                            />
-                            </div>
-                            <div style={{marginTop:"5px",display: "flex",justifyContent: "flex-start"}}>
-                            {roominfo.hashtag.map((tag, index) => (
-                                <div className="tag">
-                                {"#"+tag}
-                                <button onClick={() => deleteTag(index)}>x</button>
-                                </div>
-                            ))}
-                            </div>
-                        </Rowarea>
-                        <Rowarea style={{flexDirection:"column"}}>
-                            <div  style={{ display: "flex",justifyContent: "space-between",marginBottom:"10px"}}>
-                              <Label>공지사항</Label>
-                            </div>
-                            <Input
-                            name="notice"
-                            onChange={(e) => onChangehandler(e)}
-                            value={roominfo.notice}
-                            />
-                        </Rowarea>
-                        <TabWrap>
-                            <KeyButton
-                            className={swapleft ? "active" : ""}
-                            onClick={() => setSwapleft(true)}
-                            >
-                            공개방
-                            </KeyButton>
-                            <KeyButton
-                            className={!swapleft ? "active" : ""}
-                            onClick={() => setSwapleft(false)}
-                            >
-                            비밀방
-                            </KeyButton>
-                        </TabWrap>
-                        {!swapleft && (
-                            <Rowarea>
-                            <Label>비밀번호</Label>
-                            <Input
-                                name="password"
-                                onChange={(e) => onChangehandler(e)}
-                                value={roominfo.password}
-                            />
-                            </Rowarea>
-                        )}
-                        
-                            <Button style={{ marginTop: "40px" }} onClick={onsubmit}>
-                            수정 완료
-                            </Button>
-                        
-                        </div>
-                    </Container>
-                </ModalInner>
-            </ModalWrapper>
-        </>
-    )
+              <Button style={{ marginTop: "40px" }} onClick={onsubmit}>
+                수정 완료
+              </Button>
+            </div>
+          </Container>
+        </ModalInner>
+      </ModalWrapper>
+    </>
+  );
 }
 
 StudyEditModal.propTypes = {
   visible: PropTypes.bool,
-}
+};
 
 const Container = styled.div`
   display: flex;
@@ -344,13 +365,11 @@ const Container = styled.div`
   .page {
     display: flex;
     position: relative;
-    width:100%;
+    width: 100%;
     margin: 0 10px;
     padding: 50px 0;
     flex-direction: column;
-
   }
-
 `;
 const Rowarea = styled.div`
   display: flex;
@@ -375,7 +394,7 @@ const Rowarea = styled.div`
     background-color: #ef8585;
     white-space: nowrap;
     color: white;
-    width:fit-content;
+    width: fit-content;
   }
 
   .tag button {
@@ -394,17 +413,16 @@ const Label = styled.label`
   font-weight: 500;
   color: #333;
   line-height: 1;
-  width:180px;
+  width: 180px;
   align-items: center;
-  
 `;
 const BeforeInfo = styled.div`
-  display:flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  color:gray;
-  width:100%;
-`
+  color: gray;
+  width: 100%;
+`;
 const Input = styled.input`
   padding: 10px;
   margin-left: 10px;
@@ -414,7 +432,7 @@ const Input = styled.input`
   font-size: 12px;
   font-weight: normal;
   font-family: Roboto;
-  height:20px;
+  height: 20px;
 `;
 const DateInput = styled(DatePicker)`
   padding: 10px;
@@ -490,10 +508,9 @@ const Cate = styled.div`
   }
 `;
 
-
 const ModalWrapper = styled.div`
   box-sizing: border-box;
-  display: ${(props) => (props.visible ? 'block' : 'none')};
+  display: ${(props) => (props.visible ? "block" : "none")};
   position: fixed;
   top: 0;
   right: 0;
@@ -502,11 +519,11 @@ const ModalWrapper = styled.div`
   z-index: 1000;
   overflow: auto;
   outline: 0;
-`
+`;
 
 const ModalOverlay = styled.div`
   box-sizing: border-box;
-  display: ${(props) => (props.visible ? 'block' : 'none')};
+  display: ${(props) => (props.visible ? "block" : "none")};
   position: fixed;
   top: 0;
   left: 0;
@@ -514,7 +531,7 @@ const ModalOverlay = styled.div`
   right: 0;
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 999;
-`
+`;
 
 const ModalInner = styled.div`
   box-sizing: border-box;
@@ -524,12 +541,11 @@ const ModalInner = styled.div`
   border-radius: 10px;
   width: 100%;
   max-width: 600px;
-  min-width:600;
+  min-width: 600;
   min-height: 500px;
   top: 50%;
   transform: translateY(-50%);
   margin: 0 auto;
-
-`
+`;
 
 export default StudyEditModal;
