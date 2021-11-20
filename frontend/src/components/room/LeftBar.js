@@ -77,6 +77,7 @@ const LeftBar = (studyRoomId)=>{
                     style ={{width:'auto',backgroundColor:''}}
                     src={back}
                     alt="back"
+                    onClick={()=>{window.open('','_self').close()}}
                   />
                 </div>
               </div>
