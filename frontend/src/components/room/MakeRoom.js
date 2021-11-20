@@ -399,6 +399,7 @@ const Index = () => {
               <Label>비밀번호</Label>
               <Input
                 name="password"
+                type="password"
                 onChange={(e) => onChangehandler(e)}
                 value={roominfo.password}
               />
