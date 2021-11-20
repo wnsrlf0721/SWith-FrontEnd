@@ -11,7 +11,7 @@ import StudyCard from "./StudyCard";
 
 const MyPage = () => {
   const [NickName, setNickName] = useState("");
-  const [posts,setPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [todaystudy, setTodaystudy] = useState({
     hour: 0,
     minute: 0,
@@ -23,61 +23,47 @@ const MyPage = () => {
   const studyBox = () => {
     return (
       <>
-        {
-          currentPosts.map((data) => {
-            return (
-              <div className="LinkContainer">
-                <StudyCard
-                  title={data.title}
-                  imgUrl={studyImage}
-                  body={data.hashtags}
-                  studyRoomID={data.id}
-                  nickName={NickName}
-                ></StudyCard>
-              </div>
-            );
-          })
-        }
+        {currentPosts.map((data) => {
+          return (
+            <div className="LinkContainer">
+              <StudyCard
+                title={data.title}
+                imgUrl={studyImage}
+                body={data.hashtags}
+                studyRoomID={data.id}
+                nickName={NickName}
+              ></StudyCard>
+            </div>
+          );
+        })}
       </>
-    )
+    );
   };
 
   const LoginStudy = (isLogined) => {
-    const postsNum = posts.length
-    if(!isLogined||postsNum==0){
-      return(
-        <div
-        className="blackBox">
-        <div className="studyText">
-          내가 만든 스터디 또는 초대 받은 스터디가 등록됩니다
-        </div>
-      </div>
-      )
-    }
-    else if (postsNum<4) {
+    const postsNum = posts.length;
+    if (!isLogined || postsNum === 0) {
       return (
-        <>
-          {studyBox()}
-          <div
-          className="blackBox">
+        <div className="blackBox">
           <div className="studyText">
             내가 만든 스터디 또는 초대 받은 스터디가 등록됩니다
           </div>
         </div>
-        </>
       );
-    
-    }
-    else if (postsNum>3) {
+    } else if (postsNum < 4) {
       return (
         <>
           {studyBox()}
+          <div className="blackBox">
+            <div className="studyText">
+              내가 만든 스터디 또는 초대 받은 스터디가 등록됩니다
+            </div>
+          </div>
         </>
       );
-    
+    } else if (postsNum > 3) {
+      return <>{studyBox()}</>;
     }
-
-
   };
   const LoginStudyTime = (isLogined) => {
     if (isLogined) {
@@ -130,11 +116,27 @@ const MyPage = () => {
       );
     } else {
       return (
-        <div className= "StudyTimeBox" style={{justifyContent: "center",flexDirection:"row"}}>
-          <div className= "studyText" style= {{color:"#454648", margin:"3px"}}>나의 학습 시간과 달성률을 보고 싶다면?</div>
-          <a href="/login" className="login" style= {{color:"#ef8585", margin:"3px",textDecorationLine: "none"}}>
-              로그인
-            </a>
+        <div
+          className="StudyTimeBox"
+          style={{ justifyContent: "center", flexDirection: "row" }}
+        >
+          <div
+            className="studyText"
+            style={{ color: "#454648", margin: "3px" }}
+          >
+            나의 학습 시간과 달성률을 보고 싶다면?
+          </div>
+          <a
+            href="/login"
+            className="login"
+            style={{
+              color: "#ef8585",
+              margin: "3px",
+              textDecorationLine: "none",
+            }}
+          >
+            로그인
+          </a>
         </div>
       );
     }
@@ -199,17 +201,16 @@ const MyPage = () => {
           console.log(error.toJSON());
         });
 
-
       //참여했던 스터디룸 조회 API
-      if(isLogined){
+      if (isLogined) {
         axios
-        .get(`/studyrooms-history/${userInfo.userId}`)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error.toJSON());
-        });
+          .get(`/studyrooms-history/${userInfo.userId}`)
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error.toJSON());
+          });
       }
 
       let roomInfo = [];
@@ -226,7 +227,7 @@ const MyPage = () => {
               purpose: data.purpose,
             });
           });
-            setPosts(roomInfo);
+          setPosts(roomInfo);
         })
         .catch((error) => {
           console.log(error);
@@ -243,20 +244,20 @@ const MyPage = () => {
 
   const pageRight = () => {
     let pageNum = Math.ceil(posts.length / postsPerPage);
-    if(currentPage==pageNum){
+    if (currentPage == pageNum) {
       //setCurrentPage(1)
-    }else{
-      setCurrentPage(currentPage+1);
+    } else {
+      setCurrentPage(currentPage + 1);
     }
-  }
+  };
   const pageLeft = () => {
     let pageNum = Math.ceil(posts.length / postsPerPage);
-    if(currentPage==1){
+    if (currentPage == 1) {
       //setCurrentPage(pageNum)
-    }else{
-      setCurrentPage(currentPage-1);
+    } else {
+      setCurrentPage(currentPage - 1);
     }
-  }
+  };
 
   return (
     <div className="MainContainer">
@@ -266,23 +267,21 @@ const MyPage = () => {
             <div className="TextBox">내 스터디</div>
             {/* <button onClick={console.log(currentPage)}></button> */}
             <div>
-                <img
-                  style={{ height: "auto", width: "30px"}}
-                  src={BtnPrev}
-                  alt="BtnPrev"
-                  onClick={pageLeft}
-                />
-                <img
-                  style={{ height: "auto", width: "30px"}}
-                  src={BtnNext}
-                  alt="BtnNext"
-                  onClick={pageRight}
-                />
+              <img
+                style={{ height: "auto", width: "30px" }}
+                src={BtnPrev}
+                alt="BtnPrev"
+                onClick={pageLeft}
+              />
+              <img
+                style={{ height: "auto", width: "30px" }}
+                src={BtnNext}
+                alt="BtnNext"
+                onClick={pageRight}
+              />
             </div>
           </div>
-          <div className="cardWrap">
-            {LoginStudy(isLogined)}
-          </div>
+          <div className="cardWrap">{LoginStudy(isLogined)}</div>
         </div>
         <div className="StudyTimeWrap">
           <div className="StudyTimeHeader">
