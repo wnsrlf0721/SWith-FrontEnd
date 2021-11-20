@@ -31,7 +31,6 @@ function StudyEditModal({
       secret: 0,
       password: "",
     });
-    const [studyRoomInfo,setStudyRoomInfo] = useState([]);
     
     const [toggleState, setToggleState] = useState(1);
     const onMaskClick = (e) => {
@@ -88,19 +87,22 @@ function StudyEditModal({
     require('moment-timezone'); 
     moment.tz.setDefault("Asia/Seoul");
     // console.log({studyRoomId});
-    
     axios
       .get(`/studyrooms/${studyRoomId}`)
       .then((response) => {
         const data = response.data;
         const roomData = data.data
+        let temphash=[];
+        roomData.hashtags.map((x)=>{
+          temphash = temphash.concat(x.hashtag)
+        })
         console.log(data.data);
         if (data.status === "200" && data.message === "OK") {
           setRoominfo({
             title: roomData.title,
             purpose: roomData.purpose,
             notice: roomData.notice,
-            hashtag: roomData.hashtags,
+            hashtag: temphash,
             endDate: moment(roomData.endDate)._d, //'YYYY-MM-DD HH:MM:SS' 형식
             secret: roomData.secret,
             password: roomData.password,
@@ -114,10 +116,6 @@ function StudyEditModal({
         console.log(error);
       });
   }, []);
-
-
-
-
 
   const onclick = (data) => {
     setToggleState(data.id);
@@ -178,12 +176,43 @@ function StudyEditModal({
     };
 
 
+    const onsubmit = useCallback(//api patch 요청시 500에러
+      (e) => {
+        e.preventDefault();
+        const room = roominfo;
+        var moment = require('moment'); 
+        require('moment-timezone'); 
+        moment.tz.setDefault("Asia/Seoul");
+        //room.endDate = moment(room.endDate).format("YYYY-MM-DD 00:00:00");//디비 넣을 때 시간
+        //console.log(room.endDate)
+        if (room.password) {
+          room.secret = 1;
+        }
+        axios
+          .patch(`/studyrooms/${studyRoomId}`, {
+            title: roominfo.title,
+          })
+          .then((response) => {
+            console.log(response);
+            alert("스터디룸 수정 완료");
+           
+          })
+          .catch((error) => {
+            console.log(error.toJSON());
+            console.log(roominfo.title);
+            alert("input 입력이 잘못된 것 같습니다.");
+          });
+      },
+      [roominfo]
+    );
+
+
 
 
 
     return (
         <>
-        {console.log(roominfo)}
+        {/* {console.log(roominfo)} */}
             <ModalOverlay visible={visible} />
             <ModalWrapper
                 className={className}
@@ -250,7 +279,7 @@ function StudyEditModal({
                             <div style={{marginTop:"5px",display: "flex",justifyContent: "flex-start"}}>
                             {roominfo.hashtag.map((tag, index) => (
                                 <div className="tag">
-                                {"#"+tag.hashtag}
+                                {"#"+tag}
                                 <button onClick={() => deleteTag(index)}>x</button>
                                 </div>
                             ))}
