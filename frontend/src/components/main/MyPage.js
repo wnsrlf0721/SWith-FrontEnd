@@ -148,11 +148,20 @@ const MyPage = () => {
       const date = moment().format("YYYY-MM-DD"); //현재 날짜
       const Today = moment(date);
       axios
+      .get(`/users/${userInfo.userId}`)
+      .then((response) => {
+        const data = response.data;
+        if (data.status === "200" && data.message === "OK") {
+          setNickName(data.data.nickname);
+        }
+      })
+      .catch((error) => {
+        console.log(error.toJSON());
+      });
+      axios
         .get(`/statistics/${userInfo.userId}`)
         .then((response) => {
           const datas = response.data.data;
-          setNickName(datas.nickname);
-          //console.log(datas);
           datas.map((data) => {
             //일간, 주간, 월간 공부시간 기록
             const D_date = moment(data.date);

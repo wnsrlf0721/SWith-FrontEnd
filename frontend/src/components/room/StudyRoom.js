@@ -55,11 +55,13 @@ const StudyRoom = ({ match }) => {
         socket.disconnect();
         postStatistics();
         window.localStorage.setItem("enteredStudyRoom", "false");
+        //sessionStorage.setItem("userInfo", userInfo);
         // return ("Are you sure to close this tab?")
     });
 
     useEffect(() => {
         initSocket();
+        
         axios
             .get(`/studyrooms/${studyRoomId}`)
             .then((response) => {
