@@ -190,7 +190,7 @@ function StudyEditModal({
         }
         axios
           .patch(`/studyrooms/${studyRoomId}`, {
-            title: roominfo.title,
+            title: "testtest",
           })
           .then((response) => {
             console.log(response);

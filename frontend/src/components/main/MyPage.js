@@ -146,11 +146,20 @@ const MyPage = () => {
       const date = moment().format("YYYY-MM-DD"); //현재 날짜
       const Today = moment(date);
       axios
+      .get(`/users/${userInfo.userId}`)
+      .then((response) => {
+        const data = response.data;
+        if (data.status === "200" && data.message === "OK") {
+          setNickName(data.data.nickname);
+        }
+      })
+      .catch((error) => {
+        console.log(error.toJSON());
+      });
+      axios
         .get(`/statistics/${userInfo.userId}`)
         .then((response) => {
           const datas = response.data.data;
-          setNickName(datas.nickname);
-          //console.log(datas);
           datas.map((data) => {
             //일간, 주간, 월간 공부시간 기록
             const D_date = moment(data.date);
@@ -199,13 +208,14 @@ const MyPage = () => {
           console.log(error.toJSON());
         });
 
-
+        console.log(userInfo.userId)
       //참여했던 스터디룸 조회 API
       if(isLogined){
         axios
-        .get(`/studyrooms-history/${userInfo.userId}`)
+        .get(`/studyrooms/history/${userInfo.userId}`)
         .then((response) => {
-          console.log(response);
+          const data = response.data.data
+          console.log(data.studyroomIds);
         })
         .catch((error) => {
           console.log(error.toJSON());
