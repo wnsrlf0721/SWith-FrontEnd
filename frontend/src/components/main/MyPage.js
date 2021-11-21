@@ -8,6 +8,16 @@ import moment from "moment";
 import "./StudyCard.css";
 import "./MyPage.css";
 import StudyCard from "./StudyCard";
+import styled from "styled-components";
+const Img = styled.img`
+  height: auto;
+  width: 30px;
+  &:hover {
+    cursor: pointer;
+    background-color: #ef8585;
+    border: solid 1px #ef8585;
+  }
+`;
 
 const MyPage = () => {
   const [NickName, setNickName] = useState("");
@@ -41,7 +51,7 @@ const MyPage = () => {
   };
 
   const LoginStudy = (isLogined) => {
-    const postsNum = posts.length;
+    const postsNum = currentPosts.length;
     if (!isLogined || postsNum === 0) {
       return (
         <div className="blackBox">
@@ -259,15 +269,15 @@ const MyPage = () => {
   const pageRight = () => {
     let pageNum = Math.ceil(posts.length / postsPerPage);
     if (currentPage === pageNum) {
-      //setCurrentPage(1)
+      setCurrentPage(1);
     } else {
       setCurrentPage(currentPage + 1);
     }
   };
   const pageLeft = () => {
     let pageNum = Math.ceil(posts.length / postsPerPage);
-    if (currentPage == 1) {
-      //setCurrentPage(pageNum)
+    if (currentPage === 1) {
+      setCurrentPage(pageNum);
     } else {
       setCurrentPage(currentPage - 1);
     }
@@ -281,18 +291,8 @@ const MyPage = () => {
             <div className="TextBox">내 스터디</div>
             {/* <button onClick={console.log(currentPage)}></button> */}
             <div>
-              <img
-                style={{ height: "auto", width: "30px" }}
-                src={BtnPrev}
-                alt="BtnPrev"
-                onClick={pageLeft}
-              />
-              <img
-                style={{ height: "auto", width: "30px" }}
-                src={BtnNext}
-                alt="BtnNext"
-                onClick={pageRight}
-              />
+              <Img src={BtnPrev} alt="BtnPrev" onClick={pageLeft} />
+              <Img src={BtnNext} alt="BtnNext" onClick={pageRight} />
             </div>
           </div>
           <div className="cardWrap">{LoginStudy(isLogined)}</div>
