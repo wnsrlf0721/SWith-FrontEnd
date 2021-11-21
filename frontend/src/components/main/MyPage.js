@@ -8,6 +8,16 @@ import moment from "moment";
 import "./StudyCard.css";
 import "./MyPage.css";
 import StudyCard from "./StudyCard";
+import styled from "styled-components";
+const Img = styled.img`
+  height: auto;
+  width: 30px;
+  &:hover {
+    cursor: pointer;
+    background-color: #ef8585;
+    border: solid 1px #ef8585;
+  }
+`;
 
 const MyPage = () => {
   const [NickName, setNickName] = useState("");
@@ -41,7 +51,7 @@ const MyPage = () => {
   };
 
   const LoginStudy = (isLogined) => {
-    const postsNum = posts.length;
+    const postsNum = currentPosts.length;
     if (!isLogined || postsNum === 0) {
       return (
         <div className="blackBox">
@@ -50,7 +60,7 @@ const MyPage = () => {
           </div>
         </div>
       );
-    } else if (postsNum < 4) {
+    } else if (postsNum < 3) {
       return (
         <>
           {studyBox()}
@@ -61,7 +71,7 @@ const MyPage = () => {
           </div>
         </>
       );
-    } else if (postsNum > 3) {
+    } else if (postsNum >= 3) {
       return <>{studyBox()}</>;
     }
   };
@@ -147,23 +157,24 @@ const MyPage = () => {
       const userInfo = JSON.parse(window.sessionStorage.userInfo);
       const date = moment().format("YYYY-MM-DD"); //현재 날짜
       const Today = moment(date);
+      //닉네임 설정
       axios
-      .get(`/users/${userInfo.userId}`)
-      .then((response) => {
-        const data = response.data;
-        if (data.status === "200" && data.message === "OK") {
-          setNickName(data.data.nickname);
-        }
-      })
-      .catch((error) => {
-        console.log(error.toJSON());
-      });
+        .get(`/users/${userInfo.userId}`)
+        .then((response) => {
+          const data = response.data;
+          if (data.status === "200" && data.message === "OK") {
+            setNickName(data.data.nickname);
+          }
+        })
+        .catch((error) => {
+          console.log(error.toJSON());
+        });
+      //오늘의 공부시간
       axios
         .get(`/statistics/${userInfo.userId}`)
         .then((response) => {
           const datas = response.data.data;
           datas.map((data) => {
-            //일간, 주간, 월간 공부시간 기록
             const D_date = moment(data.date);
             //console.log(D_date);
             const Diff = Math.abs(Today.diff(D_date, "days"));
@@ -172,7 +183,6 @@ const MyPage = () => {
             const minute = Number(data.studyTime.slice(3, 5));
             const second = Number(data.studyTime.slice(6, 8));
 
-            //오늘의 공부시간
             if (Diff === 0) {
               setTodaystudy((prev) => ({
                 ...prev,
@@ -186,6 +196,7 @@ const MyPage = () => {
         .catch((error) => {
           console.log(error.toJSON());
         });
+      //오늘의 달성률
       axios
         .get(`/planners/${userInfo.userId}`)
         .then((response) => {
@@ -201,7 +212,7 @@ const MyPage = () => {
               setTodaystudy((prev) => ({
                 ...prev,
                 complete: prev.complete + task.complete,
-                count: prev.complete + 1,
+                count: prev.count + 1,
               }));
             }
           });
@@ -209,37 +220,41 @@ const MyPage = () => {
         .catch((error) => {
           console.log(error.toJSON());
         });
-
-      //참여했던 스터디룸 조회 API
-      if (isLogined) {
-        axios
-          .get(`/studyrooms-history/${userInfo.userId}`)
-          .then((response) => {
-            console.log(response);
-          })
-          .catch((error) => {
-            console.log(error.toJSON());
-          });
-      }
-
-      let roomInfo = [];
       axios
-        .get("/studyrooms")
+        .get(`/studyrooms/history/${userInfo.userId}`)
         .then((response) => {
-          const datas = response.data.data;
-          //console.log(datas);
-          datas.map((data) => {
-            roomInfo = roomInfo.concat({
-              id: data.id,
-              title: data.title,
-              hashtags: data.hashtags,
-              purpose: data.purpose,
+          const roomId = response.data.data.studyroomIds;
+          for (var i in roomId) {
+            console.log(roomId[i]);
+          }
+          let roomInfo = [];
+          axios
+            .get("/studyrooms")
+            .then((response) => {
+              const datas = response.data.data;
+              //console.log(datas);
+              datas.map((data) => {
+                for (var i in roomId) {
+                  if (data.id === roomId[i]) {
+                    roomInfo = roomInfo.concat({
+                      id: data.id,
+                      title: data.title,
+                      hashtags: data.hashtags,
+                      purpose: data.purpose,
+                    });
+                  } else {
+                    continue;
+                  }
+                }
+              });
+              setPosts(roomInfo);
+            })
+            .catch((error) => {
+              console.log(error);
             });
-          });
-          setPosts(roomInfo);
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error.toJSON());
         });
     }
   }, []);
@@ -253,16 +268,16 @@ const MyPage = () => {
 
   const pageRight = () => {
     let pageNum = Math.ceil(posts.length / postsPerPage);
-    if (currentPage == pageNum) {
-      //setCurrentPage(1)
+    if (currentPage === pageNum) {
+      setCurrentPage(1);
     } else {
       setCurrentPage(currentPage + 1);
     }
   };
   const pageLeft = () => {
     let pageNum = Math.ceil(posts.length / postsPerPage);
-    if (currentPage == 1) {
-      //setCurrentPage(pageNum)
+    if (currentPage === 1) {
+      setCurrentPage(pageNum);
     } else {
       setCurrentPage(currentPage - 1);
     }
@@ -276,18 +291,8 @@ const MyPage = () => {
             <div className="TextBox">내 스터디</div>
             {/* <button onClick={console.log(currentPage)}></button> */}
             <div>
-              <img
-                style={{ height: "auto", width: "30px" }}
-                src={BtnPrev}
-                alt="BtnPrev"
-                onClick={pageLeft}
-              />
-              <img
-                style={{ height: "auto", width: "30px" }}
-                src={BtnNext}
-                alt="BtnNext"
-                onClick={pageRight}
-              />
+              <Img src={BtnPrev} alt="BtnPrev" onClick={pageLeft} />
+              <Img src={BtnNext} alt="BtnNext" onClick={pageRight} />
             </div>
           </div>
           <div className="cardWrap">{LoginStudy(isLogined)}</div>
