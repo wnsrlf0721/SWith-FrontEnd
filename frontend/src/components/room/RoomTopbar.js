@@ -1,12 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import user_icon from "../../images/user_icon.png";
-import user_icon3x from "../../images/user_icon_3x.png";
-import camera from "../../images/camera_true.png";
-import mic from "../../images/mic_true.png";
-import speaker from "../../images/speaker_true.png";
-
-
+import React from 'react';
+import styled from 'styled-components';
+import user_icon from '../../images/user_icon.png';
+import user_icon3x from '../../images/user_icon_3x.png';
+import camera from '../../images/camera_true.png';
+import mic from '../../images/mic_true.png';
+import speaker from '../../images/speaker_true.png';
 
 const Bar = styled.div`
   width: 100%;
@@ -21,27 +19,27 @@ const Bar = styled.div`
   position: fixed;
 `;
 const NamePeopleNumBox = styled.div`
-    width: 215px;
-    height: 26px;
-    flex-grow: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 25px;
-    padding: 0 0 0 65px;
+  width: 215px;
+  height: 26px;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  padding: 0 0 0 65px;
 `;
 
 const MicSpeakerCameraBox = styled.div`
-    width: 150px;
-    height: 24px;
-    flex-grow: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 37px;
-    padding: 0;
+  width: 150px;
+  height: 24px;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 37px;
+  padding: 0;
 `;
 
 const Container = styled.div`
@@ -76,7 +74,7 @@ const Link = styled.ul`
   a {
     font-size: 17px;
     font-weight: 400;
-    font-family: "Roboto";
+    font-family: 'Roboto';
     color: #828282;
     line-height: 20px;
     padding: 0 6px;
@@ -95,7 +93,7 @@ const Input = styled.input`
   padding: 11px 22px 11px 44px;
   background: url(srh_icon) no-repeat center left 16px/16px auto;
   font-size: 14px;
-  font-family: "Roboto";
+  font-family: 'Roboto';
 `;
 
 const Right = styled.div`
@@ -126,7 +124,7 @@ const Right = styled.div`
     border-radius: 100px;
 
     /* Inside Auto Layout */
-    font-family: "Roboto";
+    font-family: 'Roboto';
     flex: none;
     order: 0;
     flex-grow: 0;
@@ -150,20 +148,19 @@ const RoomTopbar = () => {
 
   return (
     <Bar>
-        <NamePeopleNumBox>
-            <p>스터디룸 이름 나중에 수정</p>
-            <img src = {user_icon} alt = "userIcon"/>
-            <h3>3명 나중에 수정</h3>
-        </NamePeopleNumBox>
-        <MicSpeakerCameraBox>
-            <img src = {mic} alt = "mic"/>
-            <img src = {camera} alt = "camera"/>
-            <img src = {speaker} alt ="speaker"/>
-        </MicSpeakerCameraBox>
-        <div style={{paddingRight : "30px", marginRight : "20px"}}>
-            <img src = {user_icon} alt = "userIcon"/>
-        </div>
-     
+      <NamePeopleNumBox>
+        <p>스터디룸 이름 나중에 수정</p>
+        <img src={user_icon} alt="userIcon" />
+        <h3>3명 나중에 수정</h3>
+      </NamePeopleNumBox>
+      <MicSpeakerCameraBox>
+        <img src={mic} alt="mic" />
+        <img src={camera} alt="camera" />
+        <img src={speaker} alt="speaker" />
+      </MicSpeakerCameraBox>
+      <div style={{ paddingRight: '30px', marginRight: '20px' }}>
+        <img src={user_icon} alt="userIcon" />
+      </div>
     </Bar>
   );
 };

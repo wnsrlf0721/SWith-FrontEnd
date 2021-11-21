@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
-import styled from "styled-components";
-import axios from "../../api/defaultaxios";
-import UserImage from "../../images/default_profile_Image.png";
+import React, { useState, useEffect, useCallback } from 'react';
+import styled from 'styled-components';
+import axios from '../../api/defaultaxios';
+import UserImage from '../../images/default_profile_Image.png';
 
 const Container = styled.div`
   display: flex;
@@ -121,8 +121,8 @@ const EditProfilePictureButton = styled.button`
 const Index = () => {
   //UI에 보여지는 value
   const UserimgUrl = UserImage;
-  const [email, setEmail] = useState("");
-  const [nickname, setNickname] = useState("");
+  const [email, setEmail] = useState('');
+  const [nickname, setNickname] = useState('');
 
   const session = JSON.parse(window.sessionStorage.userInfo);
 
@@ -132,7 +132,7 @@ const Index = () => {
       .then((response) => {
         const data = response.data;
         console.log(data);
-        if (data.status === "200" && data.message === "OK") {
+        if (data.status === '200' && data.message === 'OK') {
           const api_data = data.data;
           let user = {
             email: api_data.email,
@@ -153,15 +153,15 @@ const Index = () => {
 
   //Input으로 변경할 value
   const [editInfo, setEditInfo] = useState({
-    nickname: "",
-    beforePassword: "",
-    password: "",
+    nickname: '',
+    beforePassword: '',
+    password: '',
   });
-  const [pwConfirm, setPwConfirm] = useState("");
+  const [pwConfirm, setPwConfirm] = useState('');
 
   const onChangehandler = (e) => {
     const { name, value } = e.target;
-    if (name === "PWconfirm") {
+    if (name === 'PWconfirm') {
       setPwConfirm(value);
     } else {
       setEditInfo((prevInfo) => ({
@@ -175,15 +175,15 @@ const Index = () => {
     (e) => {
       e.preventDefault();
       if (!editInfo.nickname) {
-        alert("닉네임을 한 글자 이상 입력해야합니다");
+        alert('닉네임을 한 글자 이상 입력해야합니다');
         return;
       }
       if (!editInfo.beforePassword) {
-        alert("비밀번호를 입력해야합니다");
+        alert('비밀번호를 입력해야합니다');
         return;
       }
       if (editInfo.password !== pwConfirm) {
-        alert("비밀번호 일치하는지 확인해주세요");
+        alert('비밀번호 일치하는지 확인해주세요');
         return;
       }
       if (!editInfo.password) {
@@ -194,23 +194,23 @@ const Index = () => {
             password: editInfo.beforePassword,
           })
           .then((response) => {
-            alert("프로필 정보를 변경하였습니다.");
+            alert('프로필 정보를 변경하였습니다.');
             window.location.reload();
           })
           .catch((error) => {
             console.log(error.toJSON());
-            alert("프로필 정보 수정에 문제가 발생했습니다");
+            alert('프로필 정보 수정에 문제가 발생했습니다');
           });
       } else {
         axios
           .patch(`/users/${session.userId}`, editInfo)
           .then((response) => {
-            alert("프로필 정보를 변경하였습니다.");
+            alert('프로필 정보를 변경하였습니다.');
             window.location.reload();
           })
           .catch((error) => {
             console.log(error.toJSON());
-            alert("프로필 정보 수정에 문제가 발생했습니다");
+            alert('프로필 정보 수정에 문제가 발생했습니다');
           });
       }
     },
@@ -232,9 +232,9 @@ const Index = () => {
 
         <EditBoxWrap>
           <form onSubmit={onsubmit}>
-            <TextB style={{ marginBottom: "15px" }}>
+            <TextB style={{ marginBottom: '15px' }}>
               <h2>{email}</h2>
-              <h3 style={{ fontSize: "20px" }}>{nickname}</h3>
+              <h3 style={{ fontSize: '20px' }}>{nickname}</h3>
             </TextB>
             <TextB>닉네임</TextB>
             <TextInputBox
@@ -242,7 +242,7 @@ const Index = () => {
               name="nickname"
               value={editInfo.nickname}
               onChange={(e) => onChangehandler(e)}
-              style={{ margin: "5px 0 25px" }}
+              style={{ margin: '5px 0 25px' }}
             />
             <TextB>비밀번호 변경</TextB>
             <TextG>현재 비밀번호</TextG>
@@ -269,14 +269,14 @@ const Index = () => {
               onChange={(e) => onChangehandler(e)}
               placeholder="새로운 비밀번호를 한번 더 입력하세요."
             />
-            {editInfo.password !== pwConfirm ? (
-              <div style={{ textAlign: "right", color: "red" }}>
-                비밀번호가 일치하지 않습니다
-              </div>
+            {editInfo.password.length > 0 ? (
+              editInfo.password !== pwConfirm ? (
+                <div style={{ textAlign: 'right', color: 'red' }}>비밀번호가 일치하지 않습니다</div>
+              ) : (
+                <div style={{ textAlign: 'right', color: 'green' }}>비밀번호가 일치합니다</div>
+              )
             ) : (
-              <div style={{ textAlign: "right", color: "green" }}>
-                비밀번호가 일치합니다
-              </div>
+              <div> </div>
             )}
             <Button>프로필 설정 완료</Button>
           </form>

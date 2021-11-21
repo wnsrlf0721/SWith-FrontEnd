@@ -58,17 +58,18 @@ const StudyRoom = ({ match }) => {
   let input = '';
 
   useBeforeunload(async (event) => {
-    event.preventDefault();
+    // event.preventDefault();
     socket.disconnect();
     await postStatistics();
     window.localStorage.setItem('enteredStudyRoom', 'false');
-    return 'Are you sure to close this tab?';
+    // return 'Are you sure to close this tab?';
   });
 
   useEffect(() => {
     const userId = JSON.parse(userInfo)['userId'];
     setUserId(userId);
     initSocket();
+    window.localStorage.setItem('enteredStudyRoom', 'true');
 
     axios
       .get(`/studyrooms/${studyRoomId}`)
@@ -88,14 +89,17 @@ const StudyRoom = ({ match }) => {
         for (let i = 0; i < 5; i++) {
           if (input == null) window.open('', '_self').close();
           else if (sc == 1 && pwTest != pw) {
+            window.localStorage.setItem('enteredStudyRoom', 'false');
             input = prompt('비밀번호를 입력해주세요');
             pwTest = input;
           } else {
+            window.localStorage.setItem('enteredStudyRoom', 'true');
             return;
           }
           console.log(i);
           if (i > 3) {
             window.open('', '_self').close();
+            window.localStorage.setItem('enteredStudyRoom', 'false');
           }
         }
       })
@@ -413,22 +417,22 @@ const StudyRoom = ({ match }) => {
   };
 
   return (
-    <div className='Container'>
+    <div className="Container">
       <LeftBar studyRoomId={studyRoomId} masterId={masterId} userId={userId} />
 
-      <div className='RightWrap'>
-        <div className='RoomTopBarContainer'>
-          <div className='ImageContainer'>
+      <div className="RightWrap">
+        <div className="RoomTopBarContainer">
+          <div className="ImageContainer">
             <p>{studyRoomInfo.title}</p>
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <img src={user_icon} alt='userIcon' style={{ width: '17px', height: 'auto' }} />
+              <img src={user_icon} alt="userIcon" style={{ width: '17px', height: 'auto' }} />
               <p>{connnectedUsers.length + 1}명</p>
               <p style={{ marginLeft: '10px' }}>Study Time: {studyTimer}</p>
             </div>
           </div>
-          <div className='ImageContainer'>
-            <img src={mic ? mic_true : mic_false} onClick={audioMute} alt='mic' />
-            <img src={camera ? camera_true : camera_false} onClick={videoMute} alt='camera' />
+          <div className="ImageContainer">
+            <img src={mic ? mic_true : mic_false} onClick={audioMute} alt="mic" />
+            <img src={camera ? camera_true : camera_false} onClick={videoMute} alt="camera" />
             {/* <img src={speaker ? speaker_true : speaker_false} alt='speaker' /> */}
             <img src={sharing ? screen_true : screen_false} onClick={sharingScreen} />
             {/* <button onClick={postStatistics}></button> */}
@@ -439,17 +443,17 @@ const StudyRoom = ({ match }) => {
               marginRight: '20px',
             }}
           >
-            <img src={user_invite} alt='userInvite' />
+            {/* <img src={user_invite} alt='userInvite' /> */}
           </div>
         </div>
 
         <StudyRoomModal setInitSetting={initSettings} videoRef={userVideoRef}></StudyRoomModal>
 
-        <div className='displaysWrap'>
+        <div className="displaysWrap">
           <div style={{ margin: '10px' }}>
-            <div className='videosWrap'>
+            <div className="videosWrap">
               <div
-                className='videoGrid'
+                className="videoGrid"
                 style={{
                   fontWeight: 'bold',
                   textAlign: 'center',
@@ -467,7 +471,7 @@ const StudyRoom = ({ match }) => {
               {connnectedUsers.map((user, index) => {
                 return (
                   <div
-                    className='videoGrid'
+                    className="videoGrid"
                     style={{
                       fontWeight: 'bold',
                       textAlign: 'center',
@@ -490,7 +494,7 @@ const StudyRoom = ({ match }) => {
             </div>
           </div>
         </div>
-        <div className='ListWrap'>
+        <div className="ListWrap">
           {UserList(
             JSON.parse(userInfo)['userId'],
             userNickName,
