@@ -1,12 +1,12 @@
-import "./StudyRoom.css";
-import logo from "../../images/logoBack.png";
-import menu from "../../images/menu.png";
-import planner from "../../images/planner.png";
-import chat from "../../images/chat.png";
-import back from "../../images/back.png";
-import StudyEditModal from "./StudyEditModal";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import './StudyRoom.css';
+import logo from '../../images/logoBack.png';
+import menu from '../../images/setting.png';
+import planner from '../../images/planner.png';
+import chat from '../../images/chat.png';
+import back from '../../images/back.png';
+import StudyEditModal from './StudyEditModal';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const LeftBar = ({ studyRoomId, masterId, userId }) => {
   //console.log(studyRoomId);
@@ -16,7 +16,7 @@ const LeftBar = ({ studyRoomId, masterId, userId }) => {
     if (masterId === userId) {
       setModalVisible(true);
     } else {
-      alert("방장만 스터디룸 수정할 수 있습니다!");
+      alert('방장만 스터디룸 수정할 수 있습니다!');
       return;
     }
   };
@@ -29,14 +29,14 @@ const LeftBar = ({ studyRoomId, masterId, userId }) => {
       <div className="LeftTopIconWrap">
         <div className="LogoIcon">
           <img
-            style={{ width: "60px", backgroundColor: "", cursor: "default" }}
+            style={{ width: '60px', backgroundColor: '', cursor: 'default' }}
             src={logo}
             alt="logo"
           />
         </div>
         <div className="ImgIcon">
           <img
-            style={{ width: "auto", backgroundColor: "" }}
+            style={{ width: 'auto', backgroundColor: '' }}
             src={menu}
             onClick={openModal}
             alt="menu"
@@ -62,11 +62,11 @@ const LeftBar = ({ studyRoomId, masterId, userId }) => {
                     target= "_blank"
                     rel="noopener noreferrer"
                 > */}
-          <img
+          {/* <img
             style={{ width: "auto", backgroundColor: "" }}
             src={planner}
             alt="planner"
-          />
+          /> */}
           {/* </Link> */}
         </div>
       </div>
@@ -80,11 +80,11 @@ const LeftBar = ({ studyRoomId, masterId, userId }) => {
                 </div> */}
         <div className="ImgIcon">
           <img
-            style={{ width: "auto", backgroundColor: "" }}
+            style={{ width: 'auto', backgroundColor: '' }}
             src={back}
             alt="back"
             onClick={() => {
-              window.open("", "_self").close();
+              window.open('', '_self').close();
             }}
           />
         </div>

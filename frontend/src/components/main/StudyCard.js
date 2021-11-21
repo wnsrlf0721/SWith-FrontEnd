@@ -15,7 +15,6 @@ function StudyCard({ title, imgUrl, body, studyRoomID, nickName }) {
     if (window.localStorage.getItem('enteredStudyRoom') === 'true')
       alert('이미 스터디룸에 입장하였습니다.');
     else {
-      window.localStorage.setItem('enteredStudyRoom', 'true');
       window.open(
         `/StudyRoom/${studyRoomID}/${nickName}/${window.sessionStorage.userInfo}`,
         '_blank',
@@ -25,18 +24,18 @@ function StudyCard({ title, imgUrl, body, studyRoomID, nickName }) {
   };
   return (
     <>
-      <button className='card-container' onClick={enterStudyRoom}>
-        <div className='image-container'>
-          <img src={imgUrl} alt='기본스터디이미지' />
+      <button className="card-container" onClick={enterStudyRoom}>
+        <div className="image-container">
+          <img src={imgUrl} alt="기본스터디이미지" />
         </div>
-        <div className='card-content'>
-          <div className='card-title'>
+        <div className="card-content">
+          <div className="card-title">
             <h3>{title}</h3>
           </div>
-          <div className='card-body'>
-            <div className='hashtagWrap'>
+          <div className="card-body">
+            <div className="hashtagWrap">
               {body.map((x) => {
-                return <div className='t'>{'#' + x.hashtag}</div>;
+                return <div className="t">{'#' + x.hashtag}</div>;
               })}
             </div>
           </div>
