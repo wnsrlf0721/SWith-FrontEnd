@@ -106,7 +106,7 @@ export const UserList = (
             참여자 목록
           </div>
           <div className="text" style={{ fontSize: '12px' }}>
-            {connnectedUsers.length + 1}/4
+            {connnectedUsers.length + 1}/6
           </div>
         </div>
         <div className="rowContainer">
