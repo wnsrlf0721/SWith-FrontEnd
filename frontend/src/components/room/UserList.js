@@ -38,8 +38,8 @@ const isUser = (user) => {
                         alt="heartTrue"
                     />
                 </div> */}
-        <div className='ImgIcon' style={{ height: 'auto' }}>
-          <img style={{ width: '15px' }} src={planner} alt='planner' />
+        <div className="ImgIcon" style={{ height: 'auto' }}>
+          <img style={{ width: '15px' }} src={planner} alt="planner" />
         </div>
       </>
     );
@@ -99,34 +99,34 @@ export const UserList = (
   };
 
   return (
-    <div className='UserListtWrap'>
-      <div className='UserList'>
-        <div className='rowContainer'>
-          <div className='text' style={{ fontWeight: 'bold' }}>
+    <div className="UserListtWrap">
+      <div className="UserList">
+        <div className="rowContainer">
+          <div className="text" style={{ fontWeight: 'bold' }}>
             참여자 목록
           </div>
-          <div className='text' style={{ fontSize: '12px' }}>
-            {connnectedUsers.length + 1}/4
+          <div className="text" style={{ fontSize: '12px' }}>
+            {connnectedUsers.length + 1}/6
           </div>
         </div>
-        <div className='rowContainer'>
-          <div className='ImgIcon' style={{ height: 'auto' }}>
-            <img style={{ width: '15px', backgroundColor: '' }} src={searchGray} alt='searchGray' />
+        <div className="rowContainer">
+          <div className="ImgIcon" style={{ height: 'auto' }}>
+            {/* <img style={{ width: '15px', backgroundColor: '' }} src={searchGray} alt='searchGray' /> */}
           </div>
         </div>
       </div>
-      <div className='List' style={{ overflow: 'auto' }}>
+      <div className="List" style={{ overflow: 'auto' }}>
         {imUser.map((user, index) => {
           return (
-            <div className='UserList'>
-              <div className='rowContainer'>
-                <div className='profile'>
+            <div className="UserList">
+              <div className="rowContainer">
+                <div className="profile">
                   <Link
                     to={{
                       pathname: `/profile/${user.userId}/other`,
                     }}
-                    target='_blank'
-                    rel='noopener noreferrer'
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     <img
                       style={{
@@ -135,30 +135,30 @@ export const UserList = (
                         objectFit: 'cover',
                       }}
                       src={defaultProfile}
-                      alt='defaultProfile'
+                      alt="defaultProfile"
                     />
                   </Link>
                 </div>
-                <div className='text' style={{ maxWidth: '140px', overflow: 'hidden' }}>
+                <div className="text" style={{ maxWidth: '140px', overflow: 'hidden' }}>
                   {user.nickName}
                 </div>
               </div>
-              <div className='rowContainer'>
+              <div className="rowContainer">
                 {index != 0 ? (
                   <>
-                    <div className='ImgIcon' style={{ height: 'auto', cursor: 'default' }}>
+                    <div className="ImgIcon" style={{ height: 'auto', cursor: 'default' }}>
                       <img
                         style={{ width: '15px' }}
                         src={!userVideoMute.get(user.socketId) ? camera_false : camera_true}
-                        alt='camera_false'
+                        alt="camera_false"
                         onClick={() => videoMute(user.socketId)}
                       />
                     </div>
-                    <div className='ImgIcon' style={{ height: 'auto', cursor: 'default' }}>
+                    <div className="ImgIcon" style={{ height: 'auto', cursor: 'default' }}>
                       <img
                         style={{ width: '15px' }}
                         src={!userAudioMute.get(user.socketId) ? speaker_false : speaker_true}
-                        alt='mic_false'
+                        alt="mic_false"
                         onClick={() => audioMute(user.socketId)}
                       />
                     </div>

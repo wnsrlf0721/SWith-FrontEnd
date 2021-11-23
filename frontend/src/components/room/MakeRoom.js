@@ -277,6 +277,10 @@ const Index = () => {
       var moment = require('moment');
       require('moment-timezone');
       //moment.tz.setDefault("Asia/Seoul");
+      if (Number(room.maxUserCount) > 8) {
+        alert('최대인원은 8명 이하로 입력되어야 합니다');
+        return;
+      }
       room.endDate = moment(room.endDate).tz('Asia/Seoul').format('YYYY-MM-DD 00:00:00');
       console.log(room.endDate);
       if (room.password) {
@@ -301,10 +305,10 @@ const Index = () => {
     <div>
       <Topbar />
       <Container>
-        <div className='page'>
+        <div className="page">
           <Rowarea>
             <Label>스터디 이름</Label>
-            <Input name='title' onChange={(e) => onChangehandler(e)} value={roominfo.title} />
+            <Input name="title" onChange={(e) => onChangehandler(e)} value={roominfo.title} />
           </Rowarea>
           <Rowarea>
             <Label>카테고리</Label>
@@ -332,21 +336,21 @@ const Index = () => {
                 }))
               }
               locale={ko}
-              dateFormat='yyyy-MM-dd'
+              dateFormat="yyyy-MM-dd"
             />
           </Rowarea>
           <Rowarea>
             <Label>해시태그</Label>
-            <div className='container'>
+            <div className="container">
               {roominfo.hashtag.map((tag, index) => (
-                <div className='tag'>
+                <div className="tag">
                   {'#' + tag}
                   <button onClick={() => deleteTag(index)}>x</button>
                 </div>
               ))}
               <Input
-                name='hashtag'
-                placeholder='Enter a tag'
+                name="hashtag"
+                placeholder="Enter a tag"
                 onChange={(e) => onChangehandler(e)}
                 onKeyPress={(e) => onKeyDown(e)}
                 value={inputTag}
@@ -355,14 +359,14 @@ const Index = () => {
           </Rowarea>
           <Rowarea>
             <Label>공지사항</Label>
-            <Input name='notice' onChange={(e) => onChangehandler(e)} value={roominfo.notice} />
+            <Input name="notice" onChange={(e) => onChangehandler(e)} value={roominfo.notice} />
           </Rowarea>
           <Rowarea>
             <Label>최대인원</Label>
             <Input
-              name='maxUserCount'
+              name="maxUserCount"
               onChange={(e) => onChangehandler(e)}
-              placeholder='최대인원은 8명까지 가능'
+              placeholder="최대인원은 8명까지 가능"
               value={roominfo.maxUserCount}
             />
           </Rowarea>
@@ -378,8 +382,8 @@ const Index = () => {
             <Rowarea>
               <Label>비밀번호</Label>
               <Input
-                name='password'
-                type='password'
+                name="password"
+                type="password"
                 onChange={(e) => onChangehandler(e)}
                 value={roominfo.password}
               />
