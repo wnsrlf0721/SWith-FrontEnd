@@ -73,9 +73,12 @@ a{
     display: flex;
     flex-direction: row;
     overflow: auto;
+    height: 20px;
+    flex-wrap: wrap;
 }
 
 .t{
     font-family: "Roboto";
     margin-right: 5px;
+    
 }
