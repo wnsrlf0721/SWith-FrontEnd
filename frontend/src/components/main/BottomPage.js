@@ -252,10 +252,16 @@ const BottomPage = ({ search }) => {
             );
           })}
         </div>
-        <nav>
+        <nav style={{marginLeft:"20px"}}>
           {pageNumbers.map((number) => {
             return (
-              <button className="Pagebutton" onClick={() => paginate(number)}>
+              <button 
+              className={
+                currentPage === number
+                ? "PagebuttonActive"
+                : "Pagebutton" 
+              } 
+              onClick={() => paginate(number)}>
                 {number}
               </button>
             );
