@@ -3,6 +3,8 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import styled from "styled-components";
 import Topbar from "../topbar";
 import post from "./post";
+import './postList.css';
+import PostList from "./postList"
 
 const baseUrl = "/comm/";
 const Container = styled.div`
@@ -21,12 +23,13 @@ const Index = () => {
       <Topbar />
       <div style={{ marginTop: "64px", height: "100%" }}>
         <Container>
-          <div>글 제목</div>
+          <div>LeftBar 내용</div> 
           <BrowserRouter>
             <Switch>
               {/* <Route exact path={baseUrl} component={view} />
             <Route path="" component={viewOtherUser} />
             <Route path= component={edit} /> */}
+              <Route exact path={baseUrl} component={PostList} />
               <Route path={baseUrl + "post"} component={post} />
             </Switch>
           </BrowserRouter>

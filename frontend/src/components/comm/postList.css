@@ -1,0 +1,147 @@
+
+.PostListWrap {
+    width: 800px;
+    /* height: 916px; */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    /* margin: 64px 320px 0 0; */
+    padding: 30px 40px;
+    border: solid 1px #e4e6eb;
+    background-color: #ffffff;
+}
+.PostListTitle {
+    width: 250px;
+    /* height: 60px; */
+    flex-grow: 0;
+    font-family: Roboto;
+    font-size: 22px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #454648;
+}
+.HeaderWrap {
+    width: 100%;
+    /* height: 116px; */
+    flex-grow: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    /* padding: 10px; */
+}
+.SortWrap {
+    width: 100%;
+    height: 32px;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0;
+}
+.PostListHeader{
+    width: 100%;
+    height: 60px;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+.TextsWrap{
+    width: 100%;
+    height: 50px;
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    /* justify-content: flex-start; */
+    align-items: center;
+    /* padding: 31px; */
+    border: solid 2px #e4e6eb;
+}
+.TextBlackBox{
+    width:13%;
+    /* height: 50px; */
+    margin: 0 10px;
+    flex-grow: 0;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #000;
+}
+.TextLeftBox {
+    width: 48%;
+    /* height: 50px; */
+    margin: 0 10px 0 30px;
+    flex-grow: 0;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #454648;
+}
+.TextCenterBox {
+    width:13%;
+    /* height: 50px; */
+    margin: 0 10px;
+    flex-grow: 0;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #454648;
+}
+.buttonWrap {
+    width: 800px;
+    height: 90px;
+    flex-grow: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+.button {
+  width: 100px;
+  height: 30px;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 20px;
+  border-radius: 5px;
+  background-color: #ef8585;
+  cursor: pointer;
+ 
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.24px;
+  text-align: left;
+  color: #fafafa;
+}
