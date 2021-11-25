@@ -3,7 +3,7 @@ import axios from "../../api/defaultaxios";
 import "./postList.css";
 import writeIMG from "../../images/write.png";
 function Index() {
-/*    
+  /*    
   useEffect(() => {
     const session = JSON.parse(window.sessionStorage.userInfo);
     //console.log(session)
@@ -146,7 +146,7 @@ function Index() {
 
   const postsReturn = () => {
     return (
-      <>
+      <div style={{ width: "100%", minHeight: "520px" }}>
         {currentPosts.map((x) => {
           return (
             <div className="TextsWrap" style={{ borderTop: "hidden" }}>
@@ -158,7 +158,7 @@ function Index() {
             </div>
           );
         })}
-      </>
+      </div>
     );
   };
 
