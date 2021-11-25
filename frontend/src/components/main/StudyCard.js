@@ -30,7 +30,7 @@ function StudyCard({ title, imgUrl, body, studyRoomID, nickName }) {
         </div>
         <div className="card-content">
           <div className="card-title">
-            <h3>{title}</h3>
+            {title}
           </div>
           <div className="card-body">
             <div className="hashtagWrap">

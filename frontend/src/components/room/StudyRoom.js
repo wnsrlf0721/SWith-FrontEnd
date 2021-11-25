@@ -14,11 +14,8 @@ import camera_true from '../../images/camera_true.png';
 import camera_false from '../../images/camera_false.png';
 import mic_true from '../../images/mic_true.png';
 import mic_false from '../../images/mic_false.png';
-import speaker_true from '../../images/speaker_true.png';
-import speaker_false from '../../images/speaker_false.png';
-import user_invite from '../../images/user_invite.png';
-import screen_false from '../../images/screen_false.png';
-import screen_true from '../../images/screen_true.png';
+import screen_false from '../../images/screen_false.svg';
+import screen_true from '../../images/screen_true.svg';
 
 import LeftBar from './LeftBar';
 import { UserList } from './UserList';

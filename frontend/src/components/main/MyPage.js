@@ -143,6 +143,7 @@ const MyPage = () => {
               color: "#ef8585",
               margin: "3px",
               textDecorationLine: "none",
+              fontWeight:"bold",
             }}
           >
             로그인

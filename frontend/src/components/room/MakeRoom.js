@@ -92,8 +92,8 @@ const TabWrap = styled.div`
   display: table;
   margin: 20px auto;
   .active {
-    border: 1px solid #ef8585;
-    background-color: #ef8585;
+    border: 1px solid #f8ad1d;
+    background-color: #f8ad1d;
     font-weight: 700;
     color: #fff;
   }
@@ -142,8 +142,8 @@ const KeyButton = styled.button`
 const Cate = styled.div`
   margin-left: 30px;
   .activation {
-    border: 1px solid #ef8585;
-    background-color: #ef8585;
+    border: 1px solid #f8ad1d;
+    background-color: #f8ad1d;
     font-weight: 700;
     color: #fff;
   }
