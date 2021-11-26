@@ -4,8 +4,10 @@ import styled from "styled-components";
 import Topbar from "../topbar";
 import post from "./post";
 import CreatePost from "./CreatePost";
-import './postList.css';
-import PostList from "./postList"
+import "./postList.css";
+import PostList from "./postList";
+import search_icon from "../../images/search_gray.png";
+import writing_icon from "../../images/writing_icon.png";
 
 const baseUrl = "/comm/";
 const Container = styled.div`
@@ -17,17 +19,90 @@ const Container = styled.div`
   border: solid 1px #e4e6eb;
   grid-template-columns: 1fr 3fr;
 `;
-
+const List = styled.div`
+  width: 100%;
+`;
+const Box = styled.div`
+  margin: 30px 0;
+  border: 1px solid #e4e6eb;
+  border-left: hidden;
+  border-right: hidden;
+  padding: 10px 20px;
+`;
+const Link = styled.a`
+  font-size: 14px;
+  text-decoration: none;
+  color: #454648;
+`;
 const Index = () => {
   return (
     <>
       <Topbar />
       <div style={{ marginTop: "64px", height: "100%" }}>
         <Container>
-          <div>LeftBar 내용
-            <a href="/comm/CreatePost">링크</a>
-            <a href="/comm/post">링크</a>
-            </div> 
+          <div>
+            <List>
+              <Box>
+                <form onSubmit={(e) => onsearch(e)}>
+                  <button
+                    style={{
+                      backgroundColor: "white",
+                      border: "0px",
+                      padding: "0 6px 0 0 ",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <img
+                      style={{
+                        height: "18px",
+                        width: "18px",
+                        verticalAlign: "middle",
+                      }}
+                      src={search_icon}
+                      alt="search_icon"
+                    />
+                  </button>
+                  <input
+                    style={{ border: "0px" }}
+                    type="text"
+                    placeholder="게시글 검색"
+                  ></input>
+                </form>
+              </Box>
+              <Box>
+                <Link href="/comm/CreatePost">
+                  <img
+                    style={{
+                      height: "18px",
+                      width: "18px",
+                      verticalAlign: "middle",
+                      padding: "0 6px 0 0 ",
+                    }}
+                    src={writing_icon}
+                    alt="writing_icon"
+                  />
+                  게시글 작성하기
+                </Link>
+              </Box>
+              <Box>
+                게시판 목록
+                <ul style={{ listStyleType: "none" }}>
+                  <li>
+                    <Link href="/comm">스터디 모집</Link>
+                  </li>
+                  <li>
+                    <Link href="/comm">스터디 참여</Link>
+                  </li>
+                  <li>
+                    <Link href="/comm">자유게시판</Link>
+                  </li>
+                  <li>
+                    <Link href="/comm">정보 공유</Link>
+                  </li>
+                </ul>
+              </Box>
+            </List>
+          </div>
           <BrowserRouter>
             <Switch>
               {/* <Route exact path={baseUrl} component={view} />
@@ -35,7 +110,7 @@ const Index = () => {
             <Route path= component={edit} /> */}
               <Route exact path={baseUrl} component={PostList} />
               <Route path={baseUrl + "post"} component={post} />
-              <Route path={baseUrl + "CreatePost"} component={CreatePost}/>
+              <Route path={baseUrl + "CreatePost"} component={CreatePost} />
             </Switch>
           </BrowserRouter>
         </Container>

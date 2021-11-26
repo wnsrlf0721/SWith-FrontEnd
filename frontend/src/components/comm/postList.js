@@ -146,7 +146,7 @@ function Index() {
 
   const postsReturn = () => {
     return (
-      <>
+      <div style={{ width: "100%", minHeight: "520px" }}>
         {currentPosts.map((x) => {
           return (
             <div className="TextsWrap" style={{ borderTop: "hidden" }}>
@@ -160,7 +160,7 @@ function Index() {
             </div>
           );
         })}
-      </>
+      </div>
     );
   };
 

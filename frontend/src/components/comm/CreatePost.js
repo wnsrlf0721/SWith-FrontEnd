@@ -14,6 +14,7 @@ const CreateContainer = styled.div`
   gap: 20px;
   padding: 30px 80px;
   border: solid 1px #e4e6eb;
+  border-right: hidden;
   font-family: Roboto !important;
 `;
 

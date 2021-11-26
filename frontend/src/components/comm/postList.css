@@ -7,6 +7,7 @@
   /* margin: 64px 320px 0 0; */
   padding: 30px 80px;
   border: solid 1px #e4e6eb;
+  border-right: hidden;
   background-color: #ffffff;
 }
 .PostListTitle {

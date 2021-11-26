@@ -6,6 +6,7 @@ import ViewsIcon from "../../images/views_icon.png";
 const Container = styled.div`
   border: 1px solid #e4e6eb;
   padding: 30px 80px;
+  border-right: hidden;
 `;
 const Header = styled.div`
   margin-bottom: 20px;
