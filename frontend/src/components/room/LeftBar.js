@@ -1,6 +1,6 @@
 import './StudyRoom.css';
 import logo from '../../images/logoBack.png';
-import menu from '../../images/setting.png';
+import menu from '../../images/setting_icon.svg';
 import planner from '../../images/planner.png';
 import chat from '../../images/chat.png';
 import back from '../../images/back.png';
@@ -36,7 +36,7 @@ const LeftBar = ({ studyRoomId, masterId, userId }) => {
         </div>
         <div className="ImgIcon">
           <img
-            style={{ width: 'auto', backgroundColor: '' }}
+            style={{width: 'auto', backgroundColor: '' }}
             src={menu}
             onClick={openModal}
             alt="menu"

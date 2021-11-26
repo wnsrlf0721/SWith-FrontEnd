@@ -3,6 +3,8 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import styled from "styled-components";
 import Topbar from "../topbar";
 import post from "./post";
+import CreatePost from "./CreatePost";
+import "./postList.css";
 import PostList from "./postList";
 import search_icon from "../../images/search_gray.png";
 import writing_icon from "../../images/writing_icon.png";
@@ -23,7 +25,14 @@ const List = styled.div`
 const Box = styled.div`
   margin: 30px 0;
   border: 1px solid #e4e6eb;
+  border-left: hidden;
+  border-right: hidden;
   padding: 10px 20px;
+`;
+const Link = styled.a`
+  font-size: 14px;
+  text-decoration: none;
+  color: #454648;
 `;
 const Index = () => {
   return (
@@ -61,7 +70,7 @@ const Index = () => {
                 </form>
               </Box>
               <Box>
-                <a href="/comm/post" style={{ textDecoration: "none" }}>
+                <Link href="/comm/CreatePost">
                   <img
                     style={{
                       height: "18px",
@@ -73,15 +82,23 @@ const Index = () => {
                     alt="writing_icon"
                   />
                   게시글 작성하기
-                </a>
+                </Link>
               </Box>
               <Box>
                 게시판 목록
                 <ul style={{ listStyleType: "none" }}>
-                  <li>스터디 모집</li>
-                  <li>스터디 참여</li>
-                  <li>자유게시판</li>
-                  <li>정보 공유</li>
+                  <li>
+                    <Link href="/comm">스터디 모집</Link>
+                  </li>
+                  <li>
+                    <Link href="/comm">스터디 참여</Link>
+                  </li>
+                  <li>
+                    <Link href="/comm">자유게시판</Link>
+                  </li>
+                  <li>
+                    <Link href="/comm">정보 공유</Link>
+                  </li>
                 </ul>
               </Box>
             </List>
@@ -93,6 +110,7 @@ const Index = () => {
             <Route path= component={edit} /> */}
               <Route exact path={baseUrl} component={PostList} />
               <Route path={baseUrl + "post"} component={post} />
+              <Route path={baseUrl + "CreatePost"} component={CreatePost} />
             </Switch>
           </BrowserRouter>
         </Container>

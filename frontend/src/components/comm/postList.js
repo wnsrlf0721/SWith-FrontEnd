@@ -150,7 +150,9 @@ function Index() {
         {currentPosts.map((x) => {
           return (
             <div className="TextsWrap" style={{ borderTop: "hidden" }}>
-              <div className="TextLeftBox">{x.title}</div>
+              <a href="/comm/post" className="TextLeftBox">
+                {x.title}
+              </a>
               <div className="TextCenterBox">{x.writer}</div>
               <div className="TextCenterBox">{x.date}</div>
               <div className="TextCenterBox">{x.commentsNum}</div>
@@ -230,10 +232,10 @@ function Index() {
               );
             })}
           </nav>
-          <div className="button">
+          <a href="/comm/CreatePost" className="button">
             <img src={writeIMG} alt="writeIMG" />
             <div>글쓰기</div>
-          </div>
+          </a>
         </div>
       </div>
     </>
