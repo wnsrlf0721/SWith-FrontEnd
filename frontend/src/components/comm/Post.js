@@ -4,6 +4,7 @@ import UserimgUrl from "../../images/default_profile_Image.png";
 import CommentIcon from "../../images/comment_icon.png";
 import ViewsIcon from "../../images/views_icon.png";
 const Container = styled.div`
+  min-width: 725px;
   border: 1px solid #e4e6eb;
   padding: 30px 80px;
   border-right: hidden;

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import logo from "../images/logo.png";
 import DM_icon from "../images/DM_icon.png";
 import search_icon from "../images/search_gray.png";
+import friend_icon from "../images/heart_default.png";
 
 const Bar = styled.div`
   width: 100%;
@@ -17,7 +18,6 @@ const Bar = styled.div`
 const Container = styled.div`
   width: 100%;
   height: 64px;
-  margin: 0 0 0;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -30,26 +30,21 @@ const Left = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
-  padding: 0px;
-
-  width: 1100px;
+  gap: 175px;
 `;
 
 const Link = styled.ul`
-  width: 500px;
-  margin: 0 auto;
+  //margin: 0 auto;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  gap: 80px;
+
   a {
+    width: max-content;
     font-size: 17px;
     font-weight: 400;
     font-family: "Roboto";
     color: #828282;
-    line-height: 20px;
-    padding: 0 6px;
     text-decoration: none;
     display: block;
   }
@@ -76,10 +71,9 @@ const Input = styled.input`
 const Right = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  // justify-content: space-between;
   align-items: center;
-
-  height: 20px;
+  gap: 15px;
 
   /* Inside Auto Layout */
   flex: none;
@@ -176,7 +170,6 @@ const Topbar = () => {
             <a href="/">홈</a>
             <a href="/plan">학습관리</a>
             <a href="/comm">커뮤니티</a>
-            <a href="/friend">친구</a>
             {/* <a href="/UserProfile">프로필편집</a> */}
             {/* <a href="/profile">프로필</a> */}
           </Link>
@@ -205,9 +198,16 @@ const Topbar = () => {
           <a className="rLink" href="/MakeRoom">
             스터디 만들기
           </a>
+          <a href="/friend">
+            <img
+              style={{ height: "25px", width: "25px", padding: "5.5px" }}
+              src={friend_icon}
+              alt="friend_icon"
+            />
+          </a>
           <a href="/dm">
             <img
-              style={{ height: "18px", width: "18px", padding: "0 6px" }}
+              style={{ height: "20px", width: "20px", padding: "8px" }}
               src={DM_icon}
               alt="DM_icon"
             />
@@ -217,7 +217,7 @@ const Topbar = () => {
               로그인
             </a>
           ) : (
-            <div>
+            <div style={{ gap: "15px", display: "flex" }}>
               <a href="/profile" className="rLink">
                 프로필
               </a>
