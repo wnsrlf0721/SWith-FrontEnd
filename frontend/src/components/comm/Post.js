@@ -5,20 +5,33 @@ import CommentIcon from "../../images/comment_icon.png";
 import ViewsIcon from "../../images/views_icon.png";
 const Container = styled.div`
   border: 1px solid #e4e6eb;
-  padding: 30px 45px 30px 45px;
+  padding: 30px 80px;
 `;
 const Header = styled.div`
   margin-bottom: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid #e4e6eb;
 `;
-const Title = styled.div`
-  margin-bottom: 6px;
-  font-size: 13px;
-  h3 {
-    font-size: 22px;
+const TopTitle = styled.div`
+  margin: 10px 0 0;
+  a {
+    font-weight: bold;
+    text-decoration: none;
     color: #454648;
   }
+`;
+const Title = styled.div`
+  width: 100%;
+  height: 60px;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  font-family: Roboto;
+  font-size: 22px;
+  font-weight: bold;
+  color: #454648;
 `;
 const Info = styled.div`
   margin-top: 6px;
@@ -60,16 +73,15 @@ const Comment = styled.div`
     outline: 0;
   }
 `;
+
 const Post = () => {
   return (
     <Container>
       <Header>
-        <Title>
-          <a href="/comm/post">스터디 모집</a>
-          <div style={{ marginTop: "7px" }}>
-            <h3>함께 열심히 공부할 스터디원 모집합니다</h3>
-          </div>
-        </Title>
+        <TopTitle>
+          <a href="/comm">스터디 모집</a>
+        </TopTitle>
+        <Title>함께 열심히 공부할 스터디원 모집합니다</Title>
         <Info>
           <Divimg>
             <img
@@ -109,7 +121,7 @@ const Post = () => {
         <div>게시글 내용</div>
       </Body>
       <div>
-        <h3>댓글</h3>
+        <h4>댓글</h4>
         <Comment>
           <textarea
             placeholder="내용을 입력하세요"
