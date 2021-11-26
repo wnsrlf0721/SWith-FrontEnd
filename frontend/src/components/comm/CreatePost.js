@@ -7,6 +7,7 @@ import "react-quill/dist/quill.snow.css";
 import ReactHtmlParser from "html-react-parser";
 
 const CreateContainer = styled.div`
+  min-width: 725px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
