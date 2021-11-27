@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import BtnPrev from "../../images/Prev.svg";
-import BtnNext from "../../images/Next.svg";
-import studyImage from "../../images/studyImage.jpg";
-import axios from "../../api/defaultaxios";
-import Progress from "../plan/Progress";
-import moment from "moment";
-import "./StudyCard.css";
-import "./MyPage.css";
-import StudyCard from "./StudyCard";
-import styled from "styled-components";
+import React, { useEffect, useState } from 'react';
+import BtnPrev from '../../images/Prev.svg';
+import BtnNext from '../../images/Next.svg';
+import studyImage from '../../images/studyImage.jpg';
+import axios from '../../api/defaultaxios';
+import Progress from '../plan/Progress';
+import moment from 'moment';
+import './StudyCard.css';
+import './MyPage.css';
+import StudyCard from './StudyCard';
+import styled from 'styled-components';
 const Img = styled.img`
   height: auto;
   width: 30px;
@@ -20,7 +20,7 @@ const Img = styled.img`
 `;
 
 const MyPage = () => {
-  const [NickName, setNickName] = useState("");
+  const [NickName, setNickName] = useState('');
   const [posts, setPosts] = useState([]);
   const [todaystudy, setTodaystudy] = useState({
     hour: 0,
@@ -81,41 +81,29 @@ const MyPage = () => {
         <div className="StudyTimeBox">
           <div
             className="ColumnWrap"
-            style={{ margin: "30px 40px", height: "100%", width: "80%" }}
+            style={{ margin: '30px 40px', height: '100%', width: '80%' }}
           >
             <div className="ColumnWrap">
-              <div
-                className="TextBox"
-                style={{ fontWeight: "bold", fontSize: "15px" }}
-              >
+              <div className="TextBox" style={{ fontWeight: 'bold', fontSize: '15px' }}>
                 오늘 공부한 시간
               </div>
               <div className="TextBox">
-                {`${todaystudy.hour
+                {`${todaystudy.hour.toString().padStart(2, '0')}:${todaystudy.minute
                   .toString()
-                  .padStart(2, "0")}:${todaystudy.minute
-                  .toString()
-                  .padStart(2, "0")}:${todaystudy.second
-                  .toString()
-                  .padStart(2, "0")}`}
+                  .padStart(2, '0')}:${todaystudy.second.toString().padStart(2, '0')}`}
               </div>
             </div>
             <div className="Line"></div>
             <div className="ColumnWrap">
-              <div
-                className="TextBox"
-                style={{ fontWeight: "bold", fontSize: "15px" }}
-              >
+              <div className="TextBox" style={{ fontWeight: 'bold', fontSize: '15px' }}>
                 오늘의 할일 달성률
               </div>
-              <div style={{ marginTop: "15px", alignItems: "center" }}>
+              <div style={{ marginTop: '15px', alignItems: 'center' }}>
                 <Progress
                   done={
                     todaystudy.count === 0
                       ? 0
-                      : Math.round(
-                          Number(todaystudy.complete / todaystudy.count) * 100
-                        )
+                      : Math.round(Number(todaystudy.complete / todaystudy.count) * 100)
                   }
                   // ProgressBar
                 />
@@ -128,22 +116,19 @@ const MyPage = () => {
       return (
         <div
           className="StudyTimeBox"
-          style={{ justifyContent: "center", flexDirection: "row" }}
+          style={{ justifyContent: 'center', flexDirection: 'row' }}
         >
-          <div
-            className="studyText"
-            style={{ color: "#454648", margin: "3px" }}
-          >
+          <div className="studyText" style={{ color: '#454648', margin: '3px' }}>
             나의 학습 시간과 달성률을 보고 싶다면?
           </div>
           <a
             href="/login"
             className="login"
             style={{
-              color: "#ef8585",
-              margin: "3px",
-              textDecorationLine: "none",
-              fontWeight:"bold",
+              color: '#ef8585',
+              margin: '3px',
+              textDecorationLine: 'none',
+              fontWeight: 'bold',
             }}
           >
             로그인
@@ -156,14 +141,15 @@ const MyPage = () => {
   useEffect(() => {
     if (isLogined) {
       const userInfo = JSON.parse(window.sessionStorage.userInfo);
-      const date = moment().format("YYYY-MM-DD"); //현재 날짜
+      const date = moment().format('YYYY-MM-DD'); //현재 날짜
       const Today = moment(date);
       //닉네임 설정
+      console.log('useID:' + userInfo.userId);
       axios
         .get(`/users/${userInfo.userId}`)
         .then((response) => {
           const data = response.data;
-          if (data.status === "200" && data.message === "OK") {
+          if (data.status === '200' && data.message === 'OK') {
             setNickName(data.data.nickname);
           }
         })
@@ -178,7 +164,7 @@ const MyPage = () => {
           datas.map((data) => {
             const D_date = moment(data.date);
             //console.log(D_date);
-            const Diff = Math.abs(Today.diff(D_date, "days"));
+            const Diff = Math.abs(Today.diff(D_date, 'days'));
 
             const hour = Number(data.studyTime.slice(0, 2));
             const minute = Number(data.studyTime.slice(3, 5));
@@ -203,11 +189,9 @@ const MyPage = () => {
         .then((response) => {
           const data = response.data.data;
           data.studyplanner_Tasks.map((task) => {
-            const plan_date = moment(
-              moment(task.startDate).format("YYYY-MM-DD")
-            );
+            const plan_date = moment(moment(task.startDate).format('YYYY-MM-DD'));
             //console.log(Today, plan_date);
-            const Diff = Today.diff(plan_date, "days");
+            const Diff = Today.diff(plan_date, 'days');
             if (Diff === 0) {
               //console.log(task.complete);
               setTodaystudy((prev) => ({
@@ -225,12 +209,12 @@ const MyPage = () => {
         .get(`/studyrooms/history/${userInfo.userId}`)
         .then((response) => {
           const roomId = response.data.data.studyroomIds;
-          for (var i in roomId) {
-            console.log(roomId[i]);
-          }
+          // for (var i in roomId) {
+          //   console.log(roomId[i]);
+          // }
           let roomInfo = [];
           axios
-            .get("/studyrooms")
+            .get('/studyrooms')
             .then((response) => {
               const datas = response.data.data;
               //console.log(datas);
