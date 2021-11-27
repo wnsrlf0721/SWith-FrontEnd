@@ -149,25 +149,26 @@ const CreatePost = () => {
       cate: "etc",
     },
   ];
-
+  const [editor, setEditor] = useState("");
+  const [tit, setTit] = useState("");
+  const [contents, setContents] = useState("");
   const getTitle = (e) => {
     setTit(e.target.value);
   };
 
   const enterContent = (e) => {
-    if (window.confirm("게시글을 등록하시겠습니까?")) {
-      //axios
+    setContents;
+    if (tit.length < 1) {
+      alert("제목을 입력해주세요.");
     }
   };
-  const [editor, setEditor] = useState("");
-  const [tit, setTit] = useState("");
 
   // react-quill module
   const modules = useMemo(
     () => ({
       toolbar: {
         container: [
-          ["bold", "italic", "underline", "strike", "blockquote"],
+          ["bold", "italic", "underline", "strike"],
           [{ color: [] }],
           [
             { list: "ordered" },
@@ -223,10 +224,9 @@ const CreatePost = () => {
           </Button>
         </ButtonWrap>
       </ContentContainer>
-
-      {/* 테스트 test */}
+      테스트 test
       <h2>{tit}</h2>
-      <div>{editor}</div>
+      <div>{ReactHtmlParser(editor)}</div>
     </CreateContainer>
   );
 };
