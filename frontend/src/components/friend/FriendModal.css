@@ -1,0 +1,130 @@
+.ModalWrapper {
+  position: fixed;
+  top: 0;
+  /* right: 0;
+  bottom: 0; */
+  left: 0;
+  z-index: 10;
+  overflow: auto;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.modalInner {
+  position: absolute;
+  background-color: #fff;
+  border-radius: 10px;
+  width: 400px;
+  height: 500px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* transform: translateY(-50%); */
+  overflow: hidden;
+  /* box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
+  border: solid 1px #ccc; */
+}
+.friendModalWrap {
+  /* width: 250px;
+  height: 304px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  font-family: Roboto;
+  /* margin: 64px 947px 0 723px; */
+  /* padding: 0; */
+  /* box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
+  border: solid 1px #ccc; */
+}
+.friendHeader {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  /* font-size: 12.5px; */
+  color: #ccc;
+  z-index: 1;
+  font-weight: bold;
+}
+.friendTapActive {
+  width: 100%;
+  height: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  box-shadow: 3px 4px 10px 0 rgba(0, 0, 0, 0.25);
+  border: solid 1px #ccc;
+  border-right: hidden;
+  background-color: #ffffff;
+  color: black;
+}
+.friendTap {
+  width: 100%;
+  height: 30px;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  border: solid 1px #ccc;
+  border-right: hidden;
+  background-color: #ffffff;
+  color: #ccc;
+}
+.friendsWrap {
+  width: 100%;
+  display: flex;
+  overflow: overlay;
+  height: 448px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #fafafa;
+}
+.userWrap {
+  /* height: 30px; */
+  vertical-align: top;
+  flex-direction: row;
+  width: -webkit-fill-available;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border: solid 1px #ccc;
+  border-top: hidden;
+}
+.rowWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-start;
+}
+.pinkBtn {
+  margin: 4px;
+  border: 1px solid #ef7575;
+  background-color: #ef8585;
+  font-weight: 700;
+  color: #fff;
+  border-radius: 100px;
+  padding: 3px 18px;
+  font-size: 15px;
+  line-height: 34px;
+  outline: 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+.whiteBtn {
+  margin: 4px;
+  border: 1px solid #d0d0d0;
+  border-radius: 100px;
+  padding: 3px 18px;
+  background-color: #fff;
+  font-size: 15px;
+  line-height: 34px;
+  cursor: pointer;
+  color: #454648;
+}

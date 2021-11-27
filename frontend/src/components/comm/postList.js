@@ -1,129 +1,149 @@
-import React, { useState, useEffect } from "react";
-import axios from "../../api/defaultaxios";
-import "./postList.css";
-import writeIMG from "../../images/write.png";
+import React, { useState, useEffect } from 'react';
+import axios from '../../api/defaultaxios';
+import './postList.css';
+import writeIMG from '../../images/write.png';
 function Index() {
-  /*    
-  useEffect(() => {
-    const session = JSON.parse(window.sessionStorage.userInfo);
-    //console.log(session)
-    axios
-      .get(`/users/${session.userId}`)
-      .then((response) => {
-        const data = response.data;
-        //console.log(data.data.nickname);
-        if (data.status === "200" && data.message === "OK") {
-          setNickName(data.data.nickname);
-          // setUsers({
-          //     id:data.data.id,
-          //     nickname:data.data.nickname
-          //   })
-          //console.log(NickName,Users.id)
-        }
-      })
-      .catch((error) => {
-        console.log(error.toJSON());
-      });
-  }, []);
-*/
+  const [board, setBoard] = useState({
+    id: '1',
+    title: '자유게시판',
+    useId: '69',
+  });
   const [post, setPost] = useState([
     {
       id: 0,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "1",
+      title: '게시글 제목',
+      writer: '작성자',
+      date: '2021-11-23',
+      commentsNum: '0',
+      viewNum: '1',
     },
     {
       id: 1,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "2",
+      title: '게시글 제목',
+      writer: '작성자',
+      date: '2021-11-23',
+      commentsNum: '0',
+      viewNum: '2',
     },
     {
       id: 2,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "3",
+      title: '게시글 제목',
+      writer: '작성자',
+      date: '2021-11-23',
+      commentsNum: '0',
+      viewNum: '3',
     },
     {
       id: 0,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "4",
+      title: '게시글 제목',
+      writer: '작성자',
+      date: '2021-11-23',
+      commentsNum: '0',
+      viewNum: '4',
     },
     {
       id: 1,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "4",
+      title: '게시글 제목',
+      writer: '작성자',
+      date: '2021-11-23',
+      commentsNum: '0',
+      viewNum: '4',
     },
     {
       id: 2,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "4",
+      title: '게시글 제목',
+      writer: '작성자',
+      date: '2021-11-23',
+      commentsNum: '0',
+      viewNum: '4',
     },
     {
       id: 0,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "5",
+      title: '게시글 제목',
+      writer: '작성자',
+      date: '2021-11-23',
+      commentsNum: '0',
+      viewNum: '5',
     },
     {
       id: 1,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "5",
+      title: '게시글 제목',
+      writer: '작성자',
+      date: '2021-11-23',
+      commentsNum: '0',
+      viewNum: '5',
     },
     {
       id: 2,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "6",
+      title: '게시글 제목',
+      writer: '작성자',
+      date: '2021-11-23',
+      commentsNum: '0',
+      viewNum: '6',
     },
     {
       id: 0,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "6",
+      title: '게시글 제목',
+      writer: '작성자',
+      date: '2021-11-23',
+      commentsNum: '0',
+      viewNum: '6',
     },
     {
       id: 1,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "7",
+      title: '게시글 제목',
+      writer: '작성자',
+      date: '2021-11-23',
+      commentsNum: '0',
+      viewNum: '7',
     },
     {
       id: 2,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "7",
+      title: '게시글 제목',
+      writer: '작성자',
+      date: '2021-11-23',
+      commentsNum: '0',
+      viewNum: '7',
     },
   ]);
+  useEffect(() => {
+    //const session = JSON.parse(window.sessionStorage.userInfo);
+    //console.log(session)
+    // axios//게시글 목록 조회
+    //   .get(`/boards/${board.id}/posts`)
+    //   .then((response) => {
+    //     const data = response.data;
+    //     //console.log(data.data.nickname);
+    //     setPost(data.data)
+    //     console.log(data.data)
+    //   })
+    //   .catch((error) => {
+    //     console.log(error.toJSON());
+    //   });
+    // axios//게시판 만들기
+    //   .post('/boards', {
+    //     //email: joinInfo.email,
+    //     title: 'studyTogether',
+    //     useId: '69',
+    //   })
+    //   .then((response) => {
+    //     const data = response.data;
+    //     console.log(data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error.response.data);
+    //   });
+    // axios //게시판 조회
+    //   .get(`/boards`)
+    //   .then((response) => {
+    //     const data = response.data;
+    //     console.log(response);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error.toJSON());
+    //   });
+  }, []);
+
   const [Selected, setSelected] = useState(0);
 
   const handleSelect = (e) => {
@@ -146,10 +166,10 @@ function Index() {
 
   const postsReturn = () => {
     return (
-      <div style={{ width: "100%", minHeight: "520px" }}>
+      <div style={{ width: '100%', minHeight: '520px' }}>
         {currentPosts.map((x) => {
           return (
-            <div className="TextsWrap" style={{ borderTop: "hidden" }}>
+            <div className="TextsWrap" style={{ borderTop: 'hidden' }}>
               <a href="/comm/post" className="TextLeftBox">
                 {x.title}
               </a>
@@ -165,8 +185,8 @@ function Index() {
   };
 
   const sortList = [
-    { id: 0, lable: "최신순" },
-    { id: 1, lable: "조회순" },
+    { id: 0, lable: '최신순' },
+    { id: 1, lable: '조회순' },
   ];
   const DoSort = (sortNum) => {
     if (sortNum == 1) {
@@ -191,7 +211,7 @@ function Index() {
             <select
               onChange={handleSelect}
               value={Selected}
-              style={{ fontFamily: "Roboto" }}
+              style={{ fontFamily: 'Roboto' }}
             >
               {sortList.map((data) => (
                 <option value={data.id} key={data.id}>
@@ -202,12 +222,9 @@ function Index() {
           </div>
           <div
             className="TextsWrap"
-            style={{ border: "solid 2px #ccc", backgroundColor: "#f2f2f2" }}
+            style={{ border: 'solid 2px #ccc', backgroundColor: '#f2f2f2' }}
           >
-            <div
-              className="TextBlackBox"
-              style={{ width: "48%", marginLeft: "30px" }}
-            >
+            <div className="TextBlackBox" style={{ width: '48%', marginLeft: '30px' }}>
               게시글 제목
             </div>
             <div className="TextBlackBox">작성자 </div>
@@ -222,9 +239,7 @@ function Index() {
             {pageNumbers.map((number) => {
               return (
                 <button
-                  className={
-                    currentPage === number ? "PagebuttonActive" : "Pagebutton"
-                  }
+                  className={currentPage === number ? 'PagebuttonActive' : 'Pagebutton'}
                   onClick={() => paginate(number)}
                 >
                   {number}
