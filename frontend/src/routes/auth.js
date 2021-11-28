@@ -1,25 +1,25 @@
-import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import login from "../components/login/login";
-import join from "../components/login/join";
-import Topbar from "../components/topbar";
+import React from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Login from '../components/Login/Login';
+import Join from '../components/Login/Join';
+import Topbar from '../components/Main/Topbar';
 
-const baseUrl = "/login/";
+const baseUrl = '/login/';
 
-function index() {
+const Auth = () => {
   return (
     <>
       <Topbar />
       <div>
         <BrowserRouter>
           <Switch>
-            <Route exact path={baseUrl} component={login} />
-            <Route path={baseUrl + "join"} component={join} />
+            <Route exact path={baseUrl} component={Login} />
+            <Route path={baseUrl + 'join'} component={Join} />
           </Switch>
         </BrowserRouter>
       </div>
     </>
   );
-}
+};
 
-export default index;
+export default Auth;
