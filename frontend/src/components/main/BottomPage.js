@@ -1,71 +1,53 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import axios from "../../api/defaultaxios";
-import StudyCard from "./StudyCard";
-import studyImage from "../../images/studyImage.jpg";
-import "./bottomPage.css";
+import './css/BottomPage.css';
+import styled from 'styled-components';
 
-/*styled components*/
-const Bottompage = styled.div`
-  padding: 70px 20px 0;
-  width: 1200px;
-  height: 700px;
-  margin: 0 auto;
-`;
+import React, { useEffect, useState } from 'react';
+import { getStudyRooms, getUserInfo } from '../../api/APIs';
+import StudyCard from './StudyCard';
 
-const LinkContainer = styled.div`
-  width: calc(20% - 16px);
-  margin: 8px;
-  height: 230px;
-  background-color: #fff;
-  position: relative;
-  cursor: pointer;
-  overflow: hidden;
-  border: 0px;
-  text-align: left;
-`;
+import studyImage from '../../images/studyImage.jpg';
 
 //카테고리 버튼 array
 const category = [
   {
     id: 1,
-    name: "전체",
-    purpose: "all",
+    name: '전체',
+    purpose: 'all',
   },
   {
     id: 2,
-    name: "국가 고시",
-    purpose: "k-exam",
+    name: '국가 고시',
+    purpose: 'k-exam',
   },
   {
     id: 3,
-    name: "독서",
-    purpose: "reading",
+    name: '독서',
+    purpose: 'reading',
   },
   {
     id: 4,
-    name: "수능",
-    purpose: "sat",
+    name: '수능',
+    purpose: 'sat',
   },
   {
     id: 5,
-    name: "어학",
-    purpose: "eng",
+    name: '어학',
+    purpose: 'eng',
   },
   {
     id: 6,
-    name: "자격증",
-    purpose: "cert",
+    name: '자격증',
+    purpose: 'cert',
   },
   {
     id: 7,
-    name: "기타",
-    purpose: "order",
+    name: '기타',
+    purpose: 'order',
   },
 ];
 
 const BottomPage = ({ search }) => {
-  const [NickName, setNickName] = useState("");
+  const [NickName, setNickName] = useState('');
   const [toggleState, setToggleState] = useState(1);
   const [Users, setUsers] = useState([]);
   const [hashcheck, setHashcheck] = useState(false);
@@ -78,7 +60,7 @@ const BottomPage = ({ search }) => {
     let sub_array = [];
     setToggleState(index.id);
     setCurrentPage(1);
-    if (index.purpose === "all") {
+    if (index.purpose === 'all') {
       setPurpose_list(posts);
     } else {
       posts.map((data) => {
@@ -99,8 +81,7 @@ const BottomPage = ({ search }) => {
   //useEffect시 호출되는 default setting
   const getStudyTitleHashtag = () => {
     let roomInfo = [];
-    axios
-      .get("/studyrooms")
+    getStudyRooms()
       .then((response) => {
         const datas = response.data.data;
         //console.log(datas);
@@ -128,9 +109,8 @@ const BottomPage = ({ search }) => {
               for (var i in data.hashtags) {
                 //console.log(data.hashtags[i].hashtag);
                 if (
-                  data.hashtags[i].hashtag
-                    .toLowerCase()
-                    .indexOf(search.toLowerCase()) !== -1
+                  data.hashtags[i].hashtag.toLowerCase().indexOf(search.toLowerCase()) !==
+                  -1
                 ) {
                   srh_array = srh_array.concat({
                     id: data.id,
@@ -162,12 +142,11 @@ const BottomPage = ({ search }) => {
     if (isLogined) {
       const session = JSON.parse(window.sessionStorage.userInfo);
       //console.log(session)
-      axios
-        .get(`/users/${session.userId}`)
+      getUserInfo(session.userId)
         .then((response) => {
           const data = response.data;
           //console.log(data.data.nickname);
-          if (data.status === "200" && data.message === "OK") {
+          if (data.status === '200' && data.message === 'OK') {
             setNickName(data.data.nickname);
             // setUsers({
             //     id:data.data.id,
@@ -180,7 +159,7 @@ const BottomPage = ({ search }) => {
           console.log(error.toJSON());
         });
     } else {
-      setNickName("UNKNOWN");
+      setNickName('UNKNOWN');
     }
     getStudyTitleHashtag();
   }, []);
@@ -207,16 +186,14 @@ const BottomPage = ({ search }) => {
           <div className="StudiesHeaderTitle">
             <h3
               style={{
-                fontSize: "22px",
-                fontWeight: "700",
-                lineHeight: "30px",
+                fontSize: '22px',
+                fontWeight: '700',
+                lineHeight: '30px',
               }}
             >
-              {!search ? "스터디 목록" : `"${search}"의 검색 결과`}
+              {!search ? '스터디 목록' : `"${search}"의 검색 결과`}
             </h3>
-            <div className="StudiesHeaderNum">
-              총 {purpose_list.length} 개 스터디
-            </div>
+            <div className="StudiesHeaderNum">총 {purpose_list.length} 개 스터디</div>
           </div>
         </div>
 
@@ -225,9 +202,7 @@ const BottomPage = ({ search }) => {
             {category.map((data) => (
               <button
                 className={
-                  toggleState === data.id
-                    ? "StudiesButtonActive"
-                    : "StudiesButton"
+                  toggleState === data.id ? 'StudiesButtonActive' : 'StudiesButton'
                 }
                 onClick={() => toggleTab(data)}
               >
@@ -252,16 +227,13 @@ const BottomPage = ({ search }) => {
             );
           })}
         </div>
-        <nav style={{marginLeft:"20px"}}>
+        <nav style={{ marginLeft: '20px' }}>
           {pageNumbers.map((number) => {
             return (
-              <button 
-              className={
-                currentPage === number
-                ? "PagebuttonActive"
-                : "Pagebutton" 
-              } 
-              onClick={() => paginate(number)}>
+              <button
+                className={currentPage === number ? 'PagebuttonActive' : 'Pagebutton'}
+                onClick={() => paginate(number)}
+              >
                 {number}
               </button>
             );
@@ -273,3 +245,23 @@ const BottomPage = ({ search }) => {
 };
 
 export default BottomPage;
+
+/*styled components*/
+const Bottompage = styled.div`
+  padding: 70px 20px 0;
+  width: 1200px;
+  height: 700px;
+  margin: 0 auto;
+`;
+
+const LinkContainer = styled.div`
+  width: calc(20% - 16px);
+  margin: 8px;
+  height: 230px;
+  background-color: #fff;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  border: 0px;
+  text-align: left;
+`;
