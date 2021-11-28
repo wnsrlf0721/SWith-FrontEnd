@@ -1,15 +1,15 @@
-import React from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
-import styled from "styled-components";
-import Topbar from "../topbar";
-import post from "./post";
-import CreatePost from "./CreatePost";
-import "./postList.css";
-import PostList from "./postList";
-import search_icon from "../../images/search_gray.png";
-import writing_icon from "../../images/writing_icon.png";
+import React from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import styled from 'styled-components';
+import Topbar from '../topbar';
+import post from './Post';
+import CreatePost from './CreatePost';
+import './postList.css';
+import PostList from './postList';
+import search_icon from '../../images/search_gray.png';
+import writing_icon from '../../images/writing_icon.png';
 
-const baseUrl = "/comm/";
+const baseUrl = '/comm/';
 const Container = styled.div`
   margin-top: 70px;
   display: grid;
@@ -38,7 +38,7 @@ const Index = () => {
   return (
     <>
       <Topbar />
-      <div style={{ marginTop: "64px", height: "100%" }}>
+      <div style={{ marginTop: '64px', height: '100%' }}>
         <Container>
           <div>
             <List>
@@ -46,24 +46,24 @@ const Index = () => {
                 <form onSubmit={(e) => onsearch(e)}>
                   <button
                     style={{
-                      backgroundColor: "white",
-                      border: "0px",
-                      padding: "0 6px 0 0 ",
-                      cursor: "pointer",
+                      backgroundColor: 'white',
+                      border: '0px',
+                      padding: '0 6px 0 0 ',
+                      cursor: 'pointer',
                     }}
                   >
                     <img
                       style={{
-                        height: "18px",
-                        width: "18px",
-                        verticalAlign: "middle",
+                        height: '18px',
+                        width: '18px',
+                        verticalAlign: 'middle',
                       }}
                       src={search_icon}
                       alt="search_icon"
                     />
                   </button>
                   <input
-                    style={{ border: "0px" }}
+                    style={{ border: '0px' }}
                     type="text"
                     placeholder="게시글 검색"
                   ></input>
@@ -73,10 +73,10 @@ const Index = () => {
                 <Link href="/comm/CreatePost">
                   <img
                     style={{
-                      height: "18px",
-                      width: "18px",
-                      verticalAlign: "middle",
-                      padding: "0 6px 0 0 ",
+                      height: '18px',
+                      width: '18px',
+                      verticalAlign: 'middle',
+                      padding: '0 6px 0 0 ',
                     }}
                     src={writing_icon}
                     alt="writing_icon"
@@ -86,7 +86,7 @@ const Index = () => {
               </Box>
               <Box>
                 게시판 목록
-                <ul style={{ listStyleType: "none" }}>
+                <ul style={{ listStyleType: 'none' }}>
                   <li>
                     <Link href="/comm">스터디 모집</Link>
                   </li>
@@ -109,8 +109,8 @@ const Index = () => {
             <Route path="" component={viewOtherUser} />
             <Route path= component={edit} /> */}
               <Route exact path={baseUrl} component={PostList} />
-              <Route path={baseUrl + "post"} component={post} />
-              <Route path={baseUrl + "CreatePost"} component={CreatePost} />
+              <Route path={baseUrl + 'post'} component={post} />
+              <Route path={baseUrl + 'CreatePost'} component={CreatePost} />
             </Switch>
           </BrowserRouter>
         </Container>

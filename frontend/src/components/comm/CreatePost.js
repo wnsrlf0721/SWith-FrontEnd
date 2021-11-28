@@ -5,6 +5,7 @@ import post_icon from '../../images/post_icon.svg';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ReactHtmlParser from 'html-react-parser';
+import axios from '../../api/defaultaxios';
 
 const CreateContainer = styled.div`
   min-width: 725px;
@@ -95,11 +96,48 @@ const Button = styled.button`
 `;
 
 const CreatePost = () => {
+  const userInfo = window.sessionStorage.userInfo;
+
   useEffect(() => {
     const isLogined = window.sessionStorage.userInfo == null ? false : true;
     if (!isLogined) {
       alert('로그인이 필요합니다.');
       return (window.location.href = '/login');
+    } else {
+      const userId = JSON.parse(userInfo)['userId'];
+      console.log('여기여기');
+      console.log(userId);
+
+      axios
+        .get('/boards')
+        .then((response) => {
+          const data = response.data;
+          console.log(data);
+          if (data.status === '200' && data.message === 'OK') {
+          }
+        })
+        .catch((error) => {
+          console.log(error.toJSON());
+          alert('게시판 가져오기에 실패하였습니다.');
+        });
+
+      const PostBoards = (e) => {
+        axios
+          .post('/boards', {
+            title: 'test',
+            userId: userId,
+          })
+          .then((response) => {
+            const data = response.data;
+            console.log(data);
+            if (data.status === '200' && data.message === 'OK') {
+            }
+          })
+          .catch((error) => {
+            console.log(error.toJSON());
+            alert('게시판 게시에 실패하였습니다.');
+          });
+      };
     }
   }, []);
 
@@ -158,9 +196,10 @@ const CreatePost = () => {
   };
 
   const enterContent = (e) => {
-    setContents;
     if (tit.length < 1) {
       alert('제목을 입력해주세요.');
+    } else if (contents.length < 1) {
+      alert('내용을 입력해주세요.');
     }
   };
 

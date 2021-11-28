@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import axios from "../../api/defaultaxios";
-import "./postList.css";
-import writeIMG from "../../images/write.png";
+import React, { useState, useEffect } from 'react';
+import axios from '../../api/defaultaxios';
+import './postList.css';
+import writeIMG from '../../images/write.png';
 function Index() {
   /*    
   useEffect(() => {
@@ -29,100 +29,100 @@ function Index() {
   const [post, setPost] = useState([
     {
       id: 0,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "1",
+      title: '함께 열심히 공부할 스터디원 모집합니다',
+      writer: '열공러',
+      date: '2021-11-26',
+      commentsNum: '0',
+      viewNum: '1',
     },
     {
       id: 1,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "2",
+      title: '토익 스터디방 구합니다!',
+      writer: '아임파인땡큐',
+      date: '2021-11-25',
+      commentsNum: '0',
+      viewNum: '2',
     },
     {
       id: 2,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "3",
+      title: '모각코! 우리 모여서 각자 코딩해요~',
+      writer: '코테준비',
+      date: '2021-11-24',
+      commentsNum: '0',
+      viewNum: '3',
     },
     {
       id: 0,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "4",
+      title: '정처기 필기 일주일 마스터 팁 알려드림',
+      writer: 'weekend',
+      date: '2021-11-23',
+      commentsNum: '0',
+      viewNum: '4',
     },
     {
       id: 1,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "4",
+      title: '이 성적이면 어디 대학 갈 수 있을까요..?',
+      writer: '재수없기',
+      date: '2021-11-23',
+      commentsNum: '0',
+      viewNum: '8',
     },
     {
       id: 2,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "4",
+      title: '독서를 사랑하는 모임 독사모로 초대합니다',
+      writer: '살모사',
+      date: '2021-11-23',
+      commentsNum: '0',
+      viewNum: '4',
     },
     {
       id: 0,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "5",
+      title: '같이 그림그려요! *본문 필독',
+      writer: '드로잉',
+      date: '2021-11-23',
+      commentsNum: '0',
+      viewNum: '5',
     },
     {
       id: 1,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "5",
+      title: '임용 공부 플래너와 달성률 함께 공유해요',
+      writer: 'toteach',
+      date: '2021-11-22',
+      commentsNum: '0',
+      viewNum: '5',
     },
-    {
-      id: 2,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "6",
-    },
-    {
-      id: 0,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "6",
-    },
-    {
-      id: 1,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "7",
-    },
-    {
-      id: 2,
-      title: "게시글 제목",
-      writer: "작성자",
-      date: "2021-11-23",
-      commentsNum: "0",
-      viewNum: "7",
-    },
+    // {
+    //   id: 2,
+    //   title: '게시글 제목',
+    //   writer: '작성자',
+    //   date: '2021-11-23',
+    //   commentsNum: '0',
+    //   viewNum: '6',
+    // },
+    // {
+    //   id: 0,
+    //   title: '게시글 제목',
+    //   writer: '작성자',
+    //   date: '2021-11-23',
+    //   commentsNum: '0',
+    //   viewNum: '6',
+    // },
+    // {
+    //   id: 1,
+    //   title: '게시글 제목',
+    //   writer: '작성자',
+    //   date: '2021-11-23',
+    //   commentsNum: '0',
+    //   viewNum: '7',
+    // },
+    // {
+    //   id: 2,
+    //   title: '게시글 제목',
+    //   writer: '작성자',
+    //   date: '2021-11-23',
+    //   commentsNum: '0',
+    //   viewNum: '7',
+    // },
   ]);
   const [Selected, setSelected] = useState(0);
 
@@ -146,10 +146,10 @@ function Index() {
 
   const postsReturn = () => {
     return (
-      <div style={{ width: "100%", minHeight: "520px" }}>
+      <div style={{ width: '100%', minHeight: '520px' }}>
         {currentPosts.map((x) => {
           return (
-            <div className="TextsWrap" style={{ borderTop: "hidden" }}>
+            <div className="TextsWrap" style={{ borderTop: 'hidden' }}>
               <a href="/comm/post" className="TextLeftBox">
                 {x.title}
               </a>
@@ -165,8 +165,8 @@ function Index() {
   };
 
   const sortList = [
-    { id: 0, lable: "최신순" },
-    { id: 1, lable: "조회순" },
+    { id: 0, lable: '최신순' },
+    { id: 1, lable: '조회순' },
   ];
   const DoSort = (sortNum) => {
     if (sortNum == 1) {
@@ -191,7 +191,7 @@ function Index() {
             <select
               onChange={handleSelect}
               value={Selected}
-              style={{ fontFamily: "Roboto" }}
+              style={{ fontFamily: 'Roboto' }}
             >
               {sortList.map((data) => (
                 <option value={data.id} key={data.id}>
@@ -202,12 +202,9 @@ function Index() {
           </div>
           <div
             className="TextsWrap"
-            style={{ border: "solid 2px #ccc", backgroundColor: "#f2f2f2" }}
+            style={{ border: 'solid 2px #ccc', backgroundColor: '#f2f2f2' }}
           >
-            <div
-              className="TextBlackBox"
-              style={{ width: "48%", marginLeft: "30px" }}
-            >
+            <div className="TextBlackBox" style={{ width: '48%', marginLeft: '30px' }}>
               게시글 제목
             </div>
             <div className="TextBlackBox">작성자 </div>
@@ -222,9 +219,7 @@ function Index() {
             {pageNumbers.map((number) => {
               return (
                 <button
-                  className={
-                    currentPage === number ? "PagebuttonActive" : "Pagebutton"
-                  }
+                  className={currentPage === number ? 'PagebuttonActive' : 'Pagebutton'}
                   onClick={() => paginate(number)}
                 >
                   {number}
