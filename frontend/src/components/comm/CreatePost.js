@@ -1,12 +1,13 @@
-import React, { useState, useMemo, useEffect, useCallback } from "react";
-import styled from "styled-components";
-import stats_icon from "../../images/stats_icon.svg";
-import post_icon from "../../images/post_icon.svg";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import ReactHtmlParser from "html-react-parser";
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import styled from 'styled-components';
+import stats_icon from '../../images/stats_icon.svg';
+import post_icon from '../../images/post_icon.svg';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import ReactHtmlParser from 'html-react-parser';
 
 const CreateContainer = styled.div`
+  min-width: 725px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -97,61 +98,61 @@ const CreatePost = () => {
   useEffect(() => {
     const isLogined = window.sessionStorage.userInfo == null ? false : true;
     if (!isLogined) {
-      alert("로그인이 필요합니다.");
-      return (window.location.href = "/login");
+      alert('로그인이 필요합니다.');
+      return (window.location.href = '/login');
     }
   }, []);
 
   const category = [
     {
       id: 1,
-      name: "자유게시판",
-      cate: "free-board",
+      name: '자유게시판',
+      cate: 'free-board',
     },
     {
       id: 2,
-      name: "스터디 모집",
-      cate: "study-recruit",
+      name: '스터디 모집',
+      cate: 'study-recruit',
     },
     {
       id: 3,
-      name: "스터디 참여",
-      cate: "study-enter",
+      name: '스터디 참여',
+      cate: 'study-enter',
     },
     {
       id: 4,
-      name: "정보 공유 - 국가 고시",
-      cate: "k-exam",
+      name: '정보 공유 - 국가 고시',
+      cate: 'k-exam',
     },
     {
       id: 5,
-      name: "정보 공유 - 독서",
-      cate: "reading",
+      name: '정보 공유 - 독서',
+      cate: 'reading',
     },
     {
       id: 6,
-      name: "정보 공유 - 수능",
-      cate: "sat",
+      name: '정보 공유 - 수능',
+      cate: 'sat',
     },
     {
       id: 7,
-      name: "정보 공유 - 어학",
-      cate: "eng",
+      name: '정보 공유 - 어학',
+      cate: 'eng',
     },
     {
       id: 8,
-      name: "정보 공유 - 자격증",
-      cate: "cert",
+      name: '정보 공유 - 자격증',
+      cate: 'cert',
     },
     {
       id: 9,
-      name: "정보 공유 - 기타",
-      cate: "etc",
+      name: '정보 공유 - 기타',
+      cate: 'etc',
     },
   ];
-  const [editor, setEditor] = useState("");
-  const [tit, setTit] = useState("");
-  const [contents, setContents] = useState("");
+  const [editor, setEditor] = useState('');
+  const [tit, setTit] = useState('');
+  const [contents, setContents] = useState('');
   const getTitle = (e) => {
     setTit(e.target.value);
   };
@@ -159,7 +160,7 @@ const CreatePost = () => {
   const enterContent = (e) => {
     setContents;
     if (tit.length < 1) {
-      alert("제목을 입력해주세요.");
+      alert('제목을 입력해주세요.');
     }
   };
 
@@ -168,11 +169,11 @@ const CreatePost = () => {
     () => ({
       toolbar: {
         container: [
-          ["bold", "italic", "underline", "strike"],
+          ['bold', 'italic', 'underline', 'strike'],
           [{ color: [] }],
           [
-            { list: "ordered" },
-            { list: "bullet" },
+            { list: 'ordered' },
+            { list: 'bullet' },
             // { indent: "-1" },
             // { indent: "+1" },
             { align: [] },
@@ -181,7 +182,7 @@ const CreatePost = () => {
         ],
       },
     }),
-    []
+    [],
   );
 
   return (
@@ -193,11 +194,7 @@ const CreatePost = () => {
             <option>{data.name}</option>
           ))}
         </Category>
-        <Title
-          placeholder="제목을 입력해주세요."
-          onChange={getTitle}
-          value={tit}
-        >
+        <Title placeholder="제목을 입력해주세요." onChange={getTitle} value={tit}>
           {console.log(tit)}
         </Title>
         {/* <ContentEdit 
@@ -207,7 +204,7 @@ const CreatePost = () => {
                 >
                 </ContentEdit> */}
         <ReactQuill
-          style={{ minHeight: "350px", marginBottom: "30px" }}
+          style={{ minHeight: '350px', marginBottom: '30px' }}
           onChange={setEditor}
           modules={modules}
           theme="snow"
@@ -218,7 +215,7 @@ const CreatePost = () => {
             <img src={stats_icon} />
             나의 학습 관리 추가
           </Button>
-          <Button style={{ backgroundColor: "#ef8585" }} onClick={enterContent}>
+          <Button style={{ backgroundColor: '#ef8585' }} onClick={enterContent}>
             <img src={post_icon} />
             게시글 등록
           </Button>

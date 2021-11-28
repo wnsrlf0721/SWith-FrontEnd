@@ -1,9 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import UserimgUrl from "../../images/default_profile_Image.png";
-import CommentIcon from "../../images/comment_icon.png";
-import ViewsIcon from "../../images/views_icon.png";
+import React from 'react';
+import styled from 'styled-components';
+import UserimgUrl from '../../images/default_profile_Image.png';
+import CommentIcon from '../../images/comment_icon.png';
+import ViewsIcon from '../../images/views_icon.png';
 const Container = styled.div`
+  min-width: 725px;
   border: 1px solid #e4e6eb;
   padding: 30px 80px;
   border-right: hidden;
@@ -85,33 +86,18 @@ const Post = () => {
         <Title>함께 열심히 공부할 스터디원 모집합니다</Title>
         <Info>
           <Divimg>
-            <img
-              src={UserimgUrl}
-              alt="기본사용자이미지"
-              width="40"
-              height="40"
-            />
+            <img src={UserimgUrl} alt="기본사용자이미지" width="40" height="40" />
           </Divimg>
           <div>
             <div>사용자 이름</div>
             <div>
-              <span style={{ marginRight: "10px" }}>2021.10.31 12:11</span>
-              <span style={{ marginRight: "10px" }}>
-                <img
-                  src={CommentIcon}
-                  alt="댓글이미지"
-                  width="10"
-                  height="10"
-                />
+              <span style={{ marginRight: '10px' }}>2021.10.31 12:11</span>
+              <span style={{ marginRight: '10px' }}>
+                <img src={CommentIcon} alt="댓글이미지" width="10" height="10" />
                 15
               </span>
               <span>
-                <img
-                  src={ViewsIcon}
-                  alt="조회수이미지"
-                  width="14"
-                  height="10"
-                />
+                <img src={ViewsIcon} alt="조회수이미지" width="14" height="10" />
                 125
               </span>
             </div>
@@ -124,10 +110,7 @@ const Post = () => {
       <div>
         <h4>댓글</h4>
         <Comment>
-          <textarea
-            placeholder="내용을 입력하세요"
-            className="inputarea"
-          ></textarea>
+          <textarea placeholder="내용을 입력하세요" className="inputarea"></textarea>
         </Comment>
       </div>
     </Container>

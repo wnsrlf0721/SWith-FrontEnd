@@ -1,4 +1,4 @@
-.videoGrid{
+.videoGrid {
   /* display: flex;
   flex-direction: column;
   min-height: 800px;
@@ -15,7 +15,6 @@
   margin: 5px;
   text-align: center;
   flex-direction: column;
-
 }
 
 body {
@@ -28,7 +27,7 @@ video {
   display: flex;
   position: relative;
   width: 100%;
-  height: 95%; 
+  height: 95%;
   overflow: hidden;
   top: 0;
   bottom: 0;
@@ -72,7 +71,6 @@ video {
   height: 100%;
   min-height: inherit;
   flex-direction: row;
-
 }
 
 .LeftBarWrap {
@@ -86,7 +84,6 @@ video {
   vertical-align: top;
   justify-content: space-between;
   flex-direction: column;
-  
 }
 
 .RightWrap {
@@ -112,7 +109,7 @@ video {
 .LogoIcon {
   position: relative;
   width: 100%;
-  height: 60px; 
+  height: 60px;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -121,7 +118,7 @@ video {
 }
 .ImgIcon {
   position: relative;
-  height: 60px; 
+  height: 60px;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -138,7 +135,7 @@ video {
   padding: 0;
 }
 
-.RoomTopBarContainer{
+.RoomTopBarContainer {
   position: absolute;
   top: 0;
   left: 0;
@@ -149,18 +146,17 @@ video {
   justify-content: space-between;
   align-items: center;
   background-color: #312b30;
-  
 }
-.ImageContainer{
-    width: auto;
-    height: 28px;
-    flex-grow: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 25px;
-    padding: 0 20px;
+.ImageContainer {
+  width: auto;
+  height: 28px;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  padding: 0 20px;
 }
 
 .disdplayAndListWrap {
@@ -170,12 +166,10 @@ video {
   flex-direction: row;
   display: flex;
   vertical-align: top;
-
 }
 
-
 .ListWrap {
-  width:300px;
+  width: 300px;
   background-color: #ededed;
   vertical-align: top;
   flex-direction: column;
@@ -184,7 +178,7 @@ video {
   z-index: 3;
   right: 0 !important;
   bottom: 0;
-  top:50px;
+  top: 50px;
 }
 .UserListtWrap {
   flex-direction: column;
@@ -194,7 +188,6 @@ video {
   left: 0;
   right: 0;
   bottom: 64%;
-  
 }
 .UserList {
   height: 30px;
@@ -213,18 +206,18 @@ video {
   align-items: center;
   gap: 10px;
   justify-content: flex-start;
-
 }
 .text {
   font-family: Roboto;
   font-size: 15px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
   text-align: left;
   color: #12161d;
+}
+.textW {
+  font-family: Roboto;
+  font-size: 15px;
+  text-align: left;
+  color: #ffffff;
 }
 .profile {
   width: 30px;
