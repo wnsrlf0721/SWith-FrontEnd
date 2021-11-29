@@ -1,7 +1,6 @@
 import './css/PostList.css';
 import styled from 'styled-components';
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Topbar from '../Main/Topbar';
 import Post from './Post';
@@ -10,10 +9,44 @@ import CreatePost from './CreatePost';
 
 import search_icon from '../../images/search_gray.png';
 import writing_icon from '../../images/writing_icon.png';
+import post_list from '../../images/post_list.png';
+import { getBoards, getBoardPost } from '../../api/APIs';
 
 const baseUrl = '/comm/';
 
 const Index = () => {
+  const [boardList, setBoardList] = useState([]);
+  const [search, setSearch] = useState('');
+  useEffect(() => {
+    getBoards()
+      .then((response) => {
+        let array = [];
+        response.data.data.map((board) => {
+          array = array.concat(board);
+          // getBoardPost(board.id)
+          //   .then((response) => {
+          //     console.log(response.data);
+          //   })
+          //   .catch((error) => {
+          //     console.log(error);
+          //   });
+        });
+        //console.log(array);
+        setBoardList(array);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  const onsearch = (e) => {
+    e.preventDefault();
+    if (search.length > 1) {
+      window.location.href = `/comm?search=${search}`;
+    } else {
+      alert(`검색어는 2자 이상 필요합니다.`);
+    }
+  };
   return (
     <>
       <Topbar />
@@ -45,6 +78,8 @@ const Index = () => {
                     style={{ border: '0px' }}
                     type="text"
                     placeholder="게시글 검색"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
                   ></input>
                 </form>
               </Box>
@@ -66,28 +101,33 @@ const Index = () => {
               <Box>
                 게시판 목록
                 <ul style={{ listStyleType: 'none' }}>
-                  <li>
-                    <Link href="/comm">스터디 모집</Link>
-                  </li>
-                  <li>
-                    <Link href="/comm">스터디 참여</Link>
-                  </li>
-                  <li>
-                    <Link href="/comm">자유게시판</Link>
-                  </li>
-                  <li>
-                    <Link href="/comm">정보 공유</Link>
-                  </li>
+                  {boardList.map((board) => {
+                    return (
+                      <li>
+                        <Link href={`/comm/${board.id}/${board.title}`}>
+                          <img
+                            style={{
+                              height: '18px',
+                              width: '18px',
+                              verticalAlign: 'middle',
+                              padding: '0 6px 0 0 ',
+                            }}
+                            src={post_list}
+                            alt="post_list"
+                          />
+                          {board.title}
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </ul>
               </Box>
             </List>
           </div>
           <BrowserRouter>
             <Switch>
-              {/* <Route exact path={baseUrl} component={view} />
-            <Route path="" component={viewOtherUser} />
-            <Route path= component={edit} /> */}
               <Route exact path={baseUrl} component={PostList} />
+              <Route path="/comm/:boardId/:boardTitle/" component={PostList} />
               <Route path={baseUrl + 'post'} component={Post} />
               <Route path={baseUrl + 'CreatePost'} component={CreatePost} />
             </Switch>

@@ -1,14 +1,28 @@
 import './css/PostList.css';
 
 import React, { useState, useEffect } from 'react';
-import { getBoards, getPostList, postBoardPost } from '../../api/APIs';
+import { useLocation } from 'react-router-dom';
+import queryString from 'query-string';
+import { getBoards, getBoardPost, postBoardPost } from '../../api/APIs';
 
 import writeIMG from '../../images/write.png';
 
-const PostList = ({ boardType }) => {
+// const PostList = () => {
+
+//   //console.log(query.search);
+//   useEffect(() => {
+
+//   }, []);
+const PostList = ({ location, match }) => {
   const [post, setPost] = useState([]);
+  //const [boardType, setBoardType] = useState('');
+  const query = queryString.parse(location.search);
+  const boardId = match.params.boardId;
+  const boardTitle = match.params.boardTitle;
   useEffect(() => {
-    //53~56
+    // if (boardId == undefined) {
+    //   boardId = 'all';
+    // }
 
     // postBoardPost(53, 32, '테스트중2', '테스트중입니다.')
     //   .then((response) => {
@@ -20,9 +34,16 @@ const PostList = ({ boardType }) => {
     //     console.log(error.toJSON());
     //     //alert('input 입력이 잘못된것 같습니다.');
     //   });
-    //boardType에 하나는 타입을 넣고 하나는 검색어를 넣는다
-    const boardType = 'all';
-    if (boardType == 'all') {
+    // console.log(boardId);
+    // console.log(boardTitle);
+    if (query.search) {
+      console.log(`${query.search}를 검색하여 들어옴`);
+    } else {
+      console.log('기본 전체목록');
+    }
+
+    //setBoardType(boardId);
+    if (boardId == undefined) {
       getBoards()
         .then((response) => {
           const tempBoards = response.data.data;
@@ -34,7 +55,7 @@ const PostList = ({ boardType }) => {
           let tempPs = [];
           boardsId.map((x) => {
             //console.log(x);
-            getPostList(x)
+            getBoardPost(x)
               .then((response) => {
                 const tempPosts = response.data.data;
                 tempPs = tempPs.concat(tempPosts);
@@ -50,7 +71,7 @@ const PostList = ({ boardType }) => {
           console.log(error);
         });
     } else {
-      getPostList(boardType)
+      getBoardPost(boardId)
         .then((response) => {
           const tempPosts = response.data.data;
           setPost(tempPosts.sort((a, b) => getDateNum(a, b)));
@@ -83,7 +104,6 @@ const PostList = ({ boardType }) => {
   }
 
   const postsReturn = () => {
-    //console.log(post);
     return (
       <div style={{ width: '100%', minHeight: '520px' }}>
         {currentPosts.map((x) => {
@@ -93,7 +113,7 @@ const PostList = ({ boardType }) => {
                 {x.title}
               </a>
               <div className="TextCenterBox">{x.user.nickname}</div>
-              <div className="TextCenterBox">{x.createdDate.substring(0, 10)}</div>
+              <div className="TextCenterBox">{getKrDate(x.createdDate)}</div>
               <div className="TextCenterBox">{x.comments.length}</div>
               <div className="TextCenterBox">{x.viewCount}</div>
             </div>
@@ -110,8 +130,15 @@ const PostList = ({ boardType }) => {
   const getDateNum = (a, b) => {
     const dateA = new Date(a.createdDate);
     const dateB = new Date(b.createdDate);
-    //console.log(dateA);
+    //console.log(a.title, a.createdDate);
     return dateB - dateA;
+  };
+  const getKrDate = (date) => {
+    //x.createdDate.substring(0, 10)
+    let tempDate = new Date(date);
+    tempDate.setHours(tempDate.getHours() + 9);
+    //console.log(tempDate.toISOString());
+    return tempDate.toISOString().substring(0, 10);
   };
 
   const DoSort = (sortNum) => {
@@ -126,11 +153,25 @@ const PostList = ({ boardType }) => {
     }
   };
 
+  const getListTitle = () => {
+    if (query.search) {
+      return <div className="PostListTitle">{`'${query.search}'의 검색결과`}</div>;
+    } else if (boardId == undefined) {
+      return <div className="PostListTitle">전체글 보기</div>;
+    } else {
+      return <div className="PostListTitle">{boardTitle}</div>;
+    }
+  };
+
   return (
     <>
       <div className="PostListWrap">
         <div className="PostListHeader">
-          <div className="PostListTitle">전체글 보기</div>
+          {query.search ? (
+            <div className="PostListTitle">{`'${query.search}'의 검색결과`}</div>
+          ) : (
+            <div className="PostListTitle">전체글 보기</div>
+          )}
         </div>
         <div className="HeaderWrap">
           <div className="SortWrap">
@@ -183,5 +224,4 @@ const PostList = ({ boardType }) => {
     </>
   );
 };
-
 export default PostList;
