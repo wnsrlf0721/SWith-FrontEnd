@@ -1,10 +1,12 @@
 import './css/PostList.css';
 
 import React, { useState, useEffect } from 'react';
-
+import queryString from 'query-string';
 import writeIMG from '../../images/write.png';
 
-const PostList = () => {
+const PostList = ({ location }) => {
+  const query = queryString.parse(location.search);
+  console.log(query.search);
   const [board, setBoard] = useState({
     id: '1',
     title: '자유게시판',
@@ -108,43 +110,6 @@ const PostList = () => {
       viewNum: '7',
     },
   ]);
-  useEffect(() => {
-    //const session = JSON.parse(window.sessionStorage.userInfo);
-    //console.log(session)
-    // axios//게시글 목록 조회
-    //   .get(`/boards/${board.id}/posts`)
-    //   .then((response) => {
-    //     const data = response.data;
-    //     //console.log(data.data.nickname);
-    //     setPost(data.data)
-    //     console.log(data.data)
-    //   })
-    //   .catch((error) => {
-    //     console.log(error.toJSON());
-    //   });
-    // axios//게시판 만들기
-    //   .post('/boards', {
-    //     //email: joinInfo.email,
-    //     title: 'studyTogether',
-    //     useId: '69',
-    //   })
-    //   .then((response) => {
-    //     const data = response.data;
-    //     console.log(data);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error.response.data);
-    //   });
-    // axios //게시판 조회
-    //   .get(`/boards`)
-    //   .then((response) => {
-    //     const data = response.data;
-    //     console.log(response);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error.toJSON());
-    //   });
-  }, []);
 
   const [Selected, setSelected] = useState(0);
 
@@ -206,7 +171,11 @@ const PostList = () => {
     <>
       <div className="PostListWrap">
         <div className="PostListHeader">
-          <div className="PostListTitle">전체글 보기</div>
+          {!query.search ? (
+            <div className="PostListTitle">전체글 보기</div>
+          ) : (
+            <div className="PostListTitle">{`'${query.search}'의 검색결과`}</div>
+          )}
         </div>
         <div className="HeaderWrap">
           <div className="SortWrap">

@@ -18,7 +18,7 @@ function App() {
       <RecoilRoot>
         <BrowserRouter>
           <Switch>
-            <Route path={'/'} component={Main} exact={true} />
+            <Route path="/" component={Main} exact={true} />
             <Route path="/login/" component={Auth} />
             <Route path="/profile/" component={Profile} />
             <Route path="/plan/" component={StudyPlan} />
