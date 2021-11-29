@@ -6,7 +6,14 @@ import writeIMG from '../../images/write.png';
 
 const PostList = ({ location }) => {
   const query = queryString.parse(location.search);
-  console.log(query.search);
+  //console.log(query.search);
+  useEffect(() => {
+    if (query.search) {
+      console.log(`${query.search}를 검색하여 들어옴`);
+    } else {
+      console.log('기본 전체목록');
+    }
+  }, []);
   const [board, setBoard] = useState({
     id: '1',
     title: '자유게시판',
@@ -171,10 +178,10 @@ const PostList = ({ location }) => {
     <>
       <div className="PostListWrap">
         <div className="PostListHeader">
-          {!query.search ? (
-            <div className="PostListTitle">전체글 보기</div>
-          ) : (
+          {query.search ? (
             <div className="PostListTitle">{`'${query.search}'의 검색결과`}</div>
+          ) : (
+            <div className="PostListTitle">전체글 보기</div>
           )}
         </div>
         <div className="HeaderWrap">

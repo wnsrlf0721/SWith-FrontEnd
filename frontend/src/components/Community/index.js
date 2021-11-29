@@ -9,6 +9,7 @@ import CreatePost from './CreatePost';
 
 import search_icon from '../../images/search_gray.png';
 import writing_icon from '../../images/writing_icon.png';
+import post_list from '../../images/post_list.png';
 import { getBoard, getBoardPost } from '../../api/APIs';
 
 const baseUrl = '/comm/';
@@ -16,7 +17,6 @@ const baseUrl = '/comm/';
 const Index = () => {
   const [boardList, setBoardList] = useState([]);
   const [search, setSearch] = useState('');
-  const [currentBoard, setCurrentBoard] = useState();
   useEffect(() => {
     getBoard()
       .then((response) => {
@@ -104,7 +104,19 @@ const Index = () => {
                   {boardList.map((board) => {
                     return (
                       <li>
-                        <Link href={baseUrl + `${board.id}`}>{board.title}</Link>
+                        <Link href={`/comm`}>
+                          <img
+                            style={{
+                              height: '18px',
+                              width: '18px',
+                              verticalAlign: 'middle',
+                              padding: '0 6px 0 0 ',
+                            }}
+                            src={post_list}
+                            alt="post_list"
+                          />
+                          {board.title}
+                        </Link>
                       </li>
                     );
                   })}
@@ -114,11 +126,7 @@ const Index = () => {
           </div>
           <BrowserRouter>
             <Switch>
-              {/* <Route exact path={baseUrl} component={view} />
-            <Route path="" component={viewOtherUser} />
-            <Route path= component={edit} /> */}
               <Route exact path={baseUrl} component={PostList} />
-              <Route path={baseUrl + ':id'} component={PostList} />
               <Route path={baseUrl + 'post'} component={Post} />
               <Route path={baseUrl + 'CreatePost'} component={CreatePost} />
             </Switch>
