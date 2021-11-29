@@ -20,7 +20,7 @@ const PostList = ({ boardType }) => {
     //     console.log(error.toJSON());
     //     //alert('input 입력이 잘못된것 같습니다.');
     //   });
-
+    //boardType에 하나는 타입을 넣고 하나는 검색어를 넣는다
     const boardType = 'all';
     if (boardType == 'all') {
       getBoards()
@@ -38,8 +38,8 @@ const PostList = ({ boardType }) => {
               .then((response) => {
                 const tempPosts = response.data.data;
                 tempPs = tempPs.concat(tempPosts);
-                setPost(tempPs);
-                console.log(tempPs);
+                setPost(tempPs.sort((a, b) => getDateNum(a, b)));
+                //console.log(tempPs);
               })
               .catch((error) => {
                 console.log(error.response);
@@ -53,7 +53,7 @@ const PostList = ({ boardType }) => {
       getPostList(boardType)
         .then((response) => {
           const tempPosts = response.data.data;
-          setPost(tempPosts);
+          setPost(tempPosts.sort((a, b) => getDateNum(a, b)));
           //console.log(tempPosts);
         })
         .catch((error) => {
@@ -93,9 +93,7 @@ const PostList = ({ boardType }) => {
                 {x.title}
               </a>
               <div className="TextCenterBox">{x.user.nickname}</div>
-              <div className="TextCenterBox">{x.date}</div>
-              {/* <div className="TextCenterBox">없음</div>
-              <div className="TextCenterBox">없음</div> */}
+              <div className="TextCenterBox">{x.createdDate.substring(0, 10)}</div>
               <div className="TextCenterBox">{x.comments.length}</div>
               <div className="TextCenterBox">{x.viewCount}</div>
             </div>
@@ -109,6 +107,13 @@ const PostList = ({ boardType }) => {
     { id: 0, lable: '최신순' },
     { id: 1, lable: '조회순' },
   ];
+  const getDateNum = (a, b) => {
+    const dateA = new Date(a.createdDate);
+    const dateB = new Date(b.createdDate);
+    //console.log(dateA);
+    return dateB - dateA;
+  };
+
   const DoSort = (sortNum) => {
     if (sortNum == 1) {
       //조회순
@@ -117,7 +122,7 @@ const PostList = ({ boardType }) => {
     } else if (sortNum == 0) {
       //최신순
       let tempPost = post;
-      setPost(tempPost.sort((a, b) => a.viewCount - b.viewCount));
+      setPost(tempPost.sort((a, b) => getDateNum(a, b)));
     }
   };
 
@@ -131,6 +136,7 @@ const PostList = ({ boardType }) => {
           <div className="SortWrap">
             <select
               onChange={handleSelect}
+              defaultValue={0}
               value={Selected}
               style={{ fontFamily: 'Roboto' }}
             >
@@ -179,100 +185,3 @@ const PostList = ({ boardType }) => {
 };
 
 export default PostList;
-
-// {
-//   id: 0,
-//   title: '게시글 제목',
-//   writer: '작성자',
-//   date: '2021-11-23',
-//   commentsNum: '0',
-//   viewCount: '1',
-// },
-// {
-//   id: 1,
-//   title: '게시글 제목',
-//   writer: '작성자',
-//   date: '2021-11-23',
-//   commentsNum: '0',
-//   viewCount: '2',
-// },
-// {
-//   id: 2,
-//   title: '게시글 제목',
-//   writer: '작성자',
-//   date: '2021-11-23',
-//   commentsNum: '0',
-//   viewCount: '3',
-// },
-// {
-//   id: 0,
-//   title: '게시글 제목',
-//   writer: '작성자',
-//   date: '2021-11-23',
-//   commentsNum: '0',
-//   viewCount: '4',
-// },
-// {
-//   id: 1,
-//   title: '게시글 제목',
-//   writer: '작성자',
-//   date: '2021-11-23',
-//   commentsNum: '0',
-//   viewCount: '4',
-// },
-// {
-//   id: 2,
-//   title: '게시글 제목',
-//   writer: '작성자',
-//   date: '2021-11-23',
-//   commentsNum: '0',
-//   viewCount: '4',
-// },
-// {
-//   id: 0,
-//   title: '게시글 제목',
-//   writer: '작성자',
-//   date: '2021-11-23',
-//   commentsNum: '0',
-//   viewCount: '5',
-// },
-// {
-//   id: 1,
-//   title: '게시글 제목',
-//   writer: '작성자',
-//   date: '2021-11-23',
-//   commentsNum: '0',
-//   viewCount: '5',
-// },
-// {
-//   id: 2,
-//   title: '게시글 제목',
-//   writer: '작성자',
-//   date: '2021-11-23',
-//   commentsNum: '0',
-//   viewCount: '6',
-// },
-// {
-//   id: 0,
-//   title: '게시글 제목',
-//   writer: '작성자',
-//   date: '2021-11-23',
-//   commentsNum: '0',
-//   viewCount: '6',
-// },
-// {
-//   id: 1,
-//   title: '게시글 제목',
-//   writer: '작성자',
-//   date: '2021-11-23',
-//   commentsNum: '0',
-//   viewCount: '7',
-// },
-// {
-//   id: 2,
-//   title: '게시글 제목',
-//   writer: '작성자',
-//   date: '2021-11-23',
-//   commentsNum: '0',
-//   viewCount: '7',
-// },
