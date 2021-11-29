@@ -1,149 +1,65 @@
 import './css/PostList.css';
 
 import React, { useState, useEffect } from 'react';
+import { getBoards, getPostList, postBoardPost } from '../../api/APIs';
 
 import writeIMG from '../../images/write.png';
 
-const PostList = () => {
-  const [board, setBoard] = useState({
-    id: '1',
-    title: '자유게시판',
-    useId: '69',
-  });
-  const [post, setPost] = useState([
-    {
-      id: 0,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '1',
-    },
-    {
-      id: 1,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '2',
-    },
-    {
-      id: 2,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '3',
-    },
-    {
-      id: 0,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '4',
-    },
-    {
-      id: 1,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '4',
-    },
-    {
-      id: 2,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '4',
-    },
-    {
-      id: 0,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '5',
-    },
-    {
-      id: 1,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '5',
-    },
-    {
-      id: 2,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '6',
-    },
-    {
-      id: 0,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '6',
-    },
-    {
-      id: 1,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '7',
-    },
-    {
-      id: 2,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '7',
-    },
-  ]);
+const PostList = ({ boardType }) => {
+  const [post, setPost] = useState([]);
   useEffect(() => {
-    //const session = JSON.parse(window.sessionStorage.userInfo);
-    //console.log(session)
-    // axios//게시글 목록 조회
-    //   .get(`/boards/${board.id}/posts`)
+    //53~56
+
+    // postBoardPost(53, 32, '테스트중2', '테스트중입니다.')
     //   .then((response) => {
-    //     const data = response.data;
-    //     //console.log(data.data.nickname);
-    //     setPost(data.data)
-    //     console.log(data.data)
-    //   })
-    //   .catch((error) => {
-    //     console.log(error.toJSON());
-    //   });
-    // axios//게시판 만들기
-    //   .post('/boards', {
-    //     //email: joinInfo.email,
-    //     title: 'studyTogether',
-    //     useId: '69',
-    //   })
-    //   .then((response) => {
-    //     const data = response.data;
-    //     console.log(data);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error.response.data);
-    //   });
-    // axios //게시판 조회
-    //   .get(`/boards`)
-    //   .then((response) => {
-    //     const data = response.data;
     //     console.log(response);
+    //     //alert('스터디룸 생성 성공!');
+    //     //return (window.location.href = '/');
     //   })
     //   .catch((error) => {
     //     console.log(error.toJSON());
+    //     //alert('input 입력이 잘못된것 같습니다.');
     //   });
+
+    const boardType = 'all';
+    if (boardType == 'all') {
+      getBoards()
+        .then((response) => {
+          const tempBoards = response.data.data;
+          let boardsId = [];
+          tempBoards.map((x) => {
+            boardsId = boardsId.concat(x.id);
+          });
+          //console.log(boardsId);
+          let tempPs = [];
+          boardsId.map((x) => {
+            //console.log(x);
+            getPostList(x)
+              .then((response) => {
+                const tempPosts = response.data.data;
+                tempPs = tempPs.concat(tempPosts);
+                setPost(tempPs);
+                console.log(tempPs);
+              })
+              .catch((error) => {
+                console.log(error.response);
+              });
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      getPostList(boardType)
+        .then((response) => {
+          const tempPosts = response.data.data;
+          setPost(tempPosts);
+          //console.log(tempPosts);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+    }
   }, []);
 
   const [Selected, setSelected] = useState(0);
@@ -167,6 +83,7 @@ const PostList = () => {
   }
 
   const postsReturn = () => {
+    //console.log(post);
     return (
       <div style={{ width: '100%', minHeight: '520px' }}>
         {currentPosts.map((x) => {
@@ -175,10 +92,12 @@ const PostList = () => {
               <a href="/comm/post" className="TextLeftBox">
                 {x.title}
               </a>
-              <div className="TextCenterBox">{x.writer}</div>
+              <div className="TextCenterBox">{x.user.nickname}</div>
               <div className="TextCenterBox">{x.date}</div>
-              <div className="TextCenterBox">{x.commentsNum}</div>
-              <div className="TextCenterBox">{x.viewNum}</div>
+              {/* <div className="TextCenterBox">없음</div>
+              <div className="TextCenterBox">없음</div> */}
+              <div className="TextCenterBox">{x.comments.length}</div>
+              <div className="TextCenterBox">{x.viewCount}</div>
             </div>
           );
         })}
@@ -194,11 +113,11 @@ const PostList = () => {
     if (sortNum == 1) {
       //조회순
       let tempPost = post;
-      setPost(tempPost.sort((a, b) => b.viewNum - a.viewNum));
+      setPost(tempPost.sort((a, b) => b.viewCount - a.viewCount));
     } else if (sortNum == 0) {
       //최신순
       let tempPost = post;
-      setPost(tempPost.sort((a, b) => a.viewNum - b.viewNum));
+      setPost(tempPost.sort((a, b) => a.viewCount - b.viewCount));
     }
   };
 
@@ -260,3 +179,100 @@ const PostList = () => {
 };
 
 export default PostList;
+
+// {
+//   id: 0,
+//   title: '게시글 제목',
+//   writer: '작성자',
+//   date: '2021-11-23',
+//   commentsNum: '0',
+//   viewCount: '1',
+// },
+// {
+//   id: 1,
+//   title: '게시글 제목',
+//   writer: '작성자',
+//   date: '2021-11-23',
+//   commentsNum: '0',
+//   viewCount: '2',
+// },
+// {
+//   id: 2,
+//   title: '게시글 제목',
+//   writer: '작성자',
+//   date: '2021-11-23',
+//   commentsNum: '0',
+//   viewCount: '3',
+// },
+// {
+//   id: 0,
+//   title: '게시글 제목',
+//   writer: '작성자',
+//   date: '2021-11-23',
+//   commentsNum: '0',
+//   viewCount: '4',
+// },
+// {
+//   id: 1,
+//   title: '게시글 제목',
+//   writer: '작성자',
+//   date: '2021-11-23',
+//   commentsNum: '0',
+//   viewCount: '4',
+// },
+// {
+//   id: 2,
+//   title: '게시글 제목',
+//   writer: '작성자',
+//   date: '2021-11-23',
+//   commentsNum: '0',
+//   viewCount: '4',
+// },
+// {
+//   id: 0,
+//   title: '게시글 제목',
+//   writer: '작성자',
+//   date: '2021-11-23',
+//   commentsNum: '0',
+//   viewCount: '5',
+// },
+// {
+//   id: 1,
+//   title: '게시글 제목',
+//   writer: '작성자',
+//   date: '2021-11-23',
+//   commentsNum: '0',
+//   viewCount: '5',
+// },
+// {
+//   id: 2,
+//   title: '게시글 제목',
+//   writer: '작성자',
+//   date: '2021-11-23',
+//   commentsNum: '0',
+//   viewCount: '6',
+// },
+// {
+//   id: 0,
+//   title: '게시글 제목',
+//   writer: '작성자',
+//   date: '2021-11-23',
+//   commentsNum: '0',
+//   viewCount: '6',
+// },
+// {
+//   id: 1,
+//   title: '게시글 제목',
+//   writer: '작성자',
+//   date: '2021-11-23',
+//   commentsNum: '0',
+//   viewCount: '7',
+// },
+// {
+//   id: 2,
+//   title: '게시글 제목',
+//   writer: '작성자',
+//   date: '2021-11-23',
+//   commentsNum: '0',
+//   viewCount: '7',
+// },

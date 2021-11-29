@@ -62,6 +62,21 @@ export const postPlannerTask = async (userId, taskTitle, startDate, endDate) => 
   });
 };
 
+export const postBoard = async (userId, boardTitle) => {
+  return await axios.post(`/boards`, {
+    userId: userId,
+    title: boardTitle,
+  });
+};
+
+export const postBoardPost = async (board_id, userId, postTitle, postContent) => {
+  return await axios.post(`/boards/${board_id}/posts`, {
+    userId: userId,
+    title: postTitle,
+    content: postContent,
+  });
+};
+
 export const getUserInfo = async (userId) => {
   return await axios.get(`/users/${userId}`);
 };
@@ -84,6 +99,18 @@ export const getUserStatistics = async (userId) => {
 
 export const getUserPlanner = async (userId) => {
   return await axios.get(`/planners/${userId}`);
+};
+
+export const getBoards = async () => {
+  return await axios.get(`/boards`);
+};
+
+export const getPostList = async (board_id) => {
+  return await axios.get(`/boards/${board_id}/posts`);
+};
+
+export const getPostInfo = async (board_id, post_id) => {
+  return await axios.get(`/boards/${board_id}/posts/${post_id}`);
 };
 
 export const patchUserInfo = async (userId, nickname, password, beforePassword) => {
