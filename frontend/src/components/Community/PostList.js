@@ -144,7 +144,7 @@ const PostList = ({ location }) => {
         {currentPosts.map((x) => {
           return (
             <div className="TextsWrap" style={{ borderTop: 'hidden' }}>
-              <a href="/comm/post" className="TextLeftBox">
+              <a href={`/comm/post/53/61`} className="TextLeftBox">
                 {x.title}
               </a>
               <div className="TextCenterBox">{x.writer}</div>

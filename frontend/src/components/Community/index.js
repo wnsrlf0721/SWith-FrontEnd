@@ -52,7 +52,7 @@ const Index = () => {
       <Topbar />
       <div style={{ marginTop: '64px', height: '100%' }}>
         <Container>
-          <div>
+          <div style={{ border: 'solid 1px #e4e6eb' }}>
             <List>
               <Box>
                 <form onSubmit={(e) => onsearch(e)}>
@@ -127,7 +127,7 @@ const Index = () => {
           <BrowserRouter>
             <Switch>
               <Route exact path={baseUrl} component={PostList} />
-              <Route path={baseUrl + 'post'} component={Post} />
+              <Route path={baseUrl + 'post/:boardId/:postId'} component={Post} />
               <Route path={baseUrl + 'CreatePost'} component={CreatePost} />
             </Switch>
           </BrowserRouter>
@@ -145,7 +145,6 @@ const Container = styled.div`
   width: 70%;
   height: 100%;
   margin: 0 auto;
-  border: solid 1px #e4e6eb;
   grid-template-columns: 1fr 3fr;
 `;
 const List = styled.div`
