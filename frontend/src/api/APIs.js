@@ -62,6 +62,21 @@ export const postPlannerTask = async (userId, taskTitle, startDate, endDate) => 
   });
 };
 
+export const postBoard = async (title, userId) => {
+  return await axios.post('/boards', {
+    title: title,
+    userId: userId,
+  });
+};
+
+export const postBoardPost = async (board_id, userId, postTitle, postContent) => {
+  return await axios.post(`/boards/${board_id}/posts`, {
+    userId: userId,
+    title: postTitle,
+    content: postContent,
+  });
+};
+
 export const getUserInfo = async (userId) => {
   return await axios.get(`/users/${userId}`);
 };
@@ -84,6 +99,18 @@ export const getUserStatistics = async (userId) => {
 
 export const getUserPlanner = async (userId) => {
   return await axios.get(`/planners/${userId}`);
+};
+
+export const getBoards = async () => {
+  return await axios.get('/boards');
+};
+
+export const getBoardPost = async (boardId) => {
+  return await axios.get(`/boards/${boardId}/posts`);
+};
+
+export const getPostInfo = async (board_id, post_id) => {
+  return await axios.get(`/boards/${board_id}/posts/${post_id}`);
 };
 
 export const patchUserInfo = async (userId, nickname, password, beforePassword) => {
@@ -114,41 +141,6 @@ export const putPlannerTask = async (
   });
 };
 
-export const deletePlannerTask = async (userId, taskId) => {
-  return await axios.delete(`/planners/${userId}/${taskId}`, {});
-};
-
-export const postBoard = async (title, userId) => {
-  return await axios.post('/boards', {
-    title: title,
-    userId: userId,
-  });
-};
-
-export const getBoard = async () => {
-  return await axios.get('/boards');
-};
-
-export const deleteBoard = async (boardId) => {
-  return await axios.delete(`/boards/${boardId}`);
-};
-
-export const postBoardPost = async (boardId, title, userId, content) => {
-  return await axios.post(`/boards/${boardId}/posts`, {
-    title: title,
-    userId: userId,
-    content: content,
-  });
-};
-
-export const getBoardPost = async (boardId) => {
-  return await axios.get(`/boards/${boardId}/posts`);
-};
-
-export const deleteBoardPostId = async (boardId, postId) => {
-  return await axios.delete(`/boards/${boardId}/posts/${postId}`);
-};
-
 export const putBoardPostId = async (boardId, postId, title, content) => {
   return await axios.put(`/boards/${boardId}/posts/${postId}`, {
     title: title,
@@ -156,6 +148,14 @@ export const putBoardPostId = async (boardId, postId, title, content) => {
   });
 };
 
-export const getBoardPostId = async (boardId, postId) => {
-  return await axios.get(`/boards/${boardId}/posts/${postId}`);
+export const deletePlannerTask = async (userId, taskId) => {
+  return await axios.delete(`/planners/${userId}/${taskId}`, {});
+};
+
+export const deleteBoard = async (boardId) => {
+  return await axios.delete(`/boards/${boardId}`);
+};
+
+export const deleteBoardPostId = async (boardId, postId) => {
+  return await axios.delete(`/boards/${boardId}/posts/${postId}`);
 };
