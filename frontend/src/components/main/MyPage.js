@@ -1,23 +1,22 @@
+// import './StudyCard.css';
+import './css/MyPage.css';
+import styled from 'styled-components';
+
 import React, { useEffect, useState } from 'react';
+import {
+  getUserInfo,
+  getUserStatistics,
+  getUserPlanner,
+  getUserStudyRoomsHistory,
+  getStudyRooms,
+} from '../../api/APIs';
+import moment from 'moment';
+import Progress from '../StudyPlan/Progress';
+import StudyCard from './StudyCard';
+
 import BtnPrev from '../../images/Prev.svg';
 import BtnNext from '../../images/Next.svg';
 import studyImage from '../../images/studyImage.jpg';
-import axios from '../../api/defaultaxios';
-import Progress from '../plan/Progress';
-import moment from 'moment';
-import './StudyCard.css';
-import './MyPage.css';
-import StudyCard from './StudyCard';
-import styled from 'styled-components';
-const Img = styled.img`
-  height: auto;
-  width: 30px;
-  &:hover {
-    cursor: pointer;
-    background-color: #ef8585;
-    border: solid 1px #ef8585;
-  }
-`;
 
 const MyPage = () => {
   const [NickName, setNickName] = useState('');
@@ -29,6 +28,133 @@ const MyPage = () => {
     complete: 0,
     count: 0,
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 3;
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  const isLogined = window.sessionStorage.userInfo == null ? false : true;
+
+  useEffect(() => {
+    if (isLogined) {
+      const userInfo = JSON.parse(window.sessionStorage.userInfo);
+      const date = moment().format('YYYY-MM-DD'); //현재 날짜
+      const Today = moment(date);
+      //닉네임 설정
+      console.log('useID:' + userInfo.userId);
+      getUserInfo(userInfo.userId)
+        .then((response) => {
+          const data = response.data;
+          if (data.status === '200' && data.message === 'OK') {
+            setNickName(data.data.nickname);
+          }
+        })
+        .catch((error) => {
+          console.log(error.toJSON());
+        });
+      //오늘의 공부시간
+      getUserStatistics(userInfo.userId)
+        .then((response) => {
+          const datas = response.data.data;
+          datas.map((data) => {
+            const D_date = moment(data.date);
+            //console.log(D_date);
+            const Diff = Math.abs(Today.diff(D_date, 'days'));
+
+            const hour = Number(data.studyTime.slice(0, 2));
+            const minute = Number(data.studyTime.slice(3, 5));
+            const second = Number(data.studyTime.slice(6, 8));
+
+            if (Diff === 0) {
+              setTodaystudy((prev) => ({
+                ...prev,
+                hour: prev.hour + hour,
+                minute: prev.minute + minute,
+                second: prev.second + second,
+              }));
+            }
+          });
+        })
+        .catch((error) => {
+          console.log(error.toJSON());
+        });
+      //오늘의 달성률
+      getUserPlanner(userInfo.userId)
+        .then((response) => {
+          const data = response.data.data;
+          data.studyplanner_Tasks.map((task) => {
+            const plan_date = moment(moment(task.startDate).format('YYYY-MM-DD'));
+            //console.log(Today, plan_date);
+            const Diff = Today.diff(plan_date, 'days');
+            if (Diff === 0) {
+              //console.log(task.complete);
+              setTodaystudy((prev) => ({
+                ...prev,
+                complete: prev.complete + task.complete,
+                count: prev.count + 1,
+              }));
+            }
+          });
+        })
+        .catch((error) => {
+          console.log(error.toJSON());
+        });
+      getUserStudyRoomsHistory(userInfo.userId)
+        .then((response) => {
+          const roomId = response.data.data.studyroomIds;
+          // for (var i in roomId) {
+          //   console.log(roomId[i]);
+          // }
+          let roomInfo = [];
+          getStudyRooms()
+            .get('/studyrooms')
+            .then((response) => {
+              const datas = response.data.data;
+              //console.log(datas);
+              datas.map((data) => {
+                for (var i in roomId) {
+                  if (data.id === roomId[i]) {
+                    roomInfo = roomInfo.concat({
+                      id: data.id,
+                      title: data.title,
+                      hashtags: data.hashtags,
+                      purpose: data.purpose,
+                    });
+                  } else {
+                    continue;
+                  }
+                }
+              });
+              setPosts(roomInfo);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        })
+        .catch((error) => {
+          // console.log(error.toJSON());
+          console.log(error);
+        });
+    }
+  }, []);
+
+  const pageRight = () => {
+    let pageNum = Math.ceil(posts.length / postsPerPage);
+    if (currentPage === pageNum) {
+      setCurrentPage(1);
+    } else {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const pageLeft = () => {
+    let pageNum = Math.ceil(posts.length / postsPerPage);
+    if (currentPage === 1) {
+      setCurrentPage(pageNum);
+    } else {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   const studyBox = () => {
     return (
@@ -137,136 +263,6 @@ const MyPage = () => {
       );
     }
   };
-  const isLogined = window.sessionStorage.userInfo == null ? false : true;
-  useEffect(() => {
-    if (isLogined) {
-      const userInfo = JSON.parse(window.sessionStorage.userInfo);
-      const date = moment().format('YYYY-MM-DD'); //현재 날짜
-      const Today = moment(date);
-      //닉네임 설정
-      console.log('useID:' + userInfo.userId);
-      axios
-        .get(`/users/${userInfo.userId}`)
-        .then((response) => {
-          const data = response.data;
-          if (data.status === '200' && data.message === 'OK') {
-            setNickName(data.data.nickname);
-          }
-        })
-        .catch((error) => {
-          console.log(error.toJSON());
-        });
-      //오늘의 공부시간
-      axios
-        .get(`/statistics/${userInfo.userId}`)
-        .then((response) => {
-          const datas = response.data.data;
-          datas.map((data) => {
-            const D_date = moment(data.date);
-            //console.log(D_date);
-            const Diff = Math.abs(Today.diff(D_date, 'days'));
-
-            const hour = Number(data.studyTime.slice(0, 2));
-            const minute = Number(data.studyTime.slice(3, 5));
-            const second = Number(data.studyTime.slice(6, 8));
-
-            if (Diff === 0) {
-              setTodaystudy((prev) => ({
-                ...prev,
-                hour: prev.hour + hour,
-                minute: prev.minute + minute,
-                second: prev.second + second,
-              }));
-            }
-          });
-        })
-        .catch((error) => {
-          console.log(error.toJSON());
-        });
-      //오늘의 달성률
-      axios
-        .get(`/planners/${userInfo.userId}`)
-        .then((response) => {
-          const data = response.data.data;
-          data.studyplanner_Tasks.map((task) => {
-            const plan_date = moment(moment(task.startDate).format('YYYY-MM-DD'));
-            //console.log(Today, plan_date);
-            const Diff = Today.diff(plan_date, 'days');
-            if (Diff === 0) {
-              //console.log(task.complete);
-              setTodaystudy((prev) => ({
-                ...prev,
-                complete: prev.complete + task.complete,
-                count: prev.count + 1,
-              }));
-            }
-          });
-        })
-        .catch((error) => {
-          console.log(error.toJSON());
-        });
-      axios
-        .get(`/studyrooms/history/${userInfo.userId}`)
-        .then((response) => {
-          const roomId = response.data.data.studyroomIds;
-          // for (var i in roomId) {
-          //   console.log(roomId[i]);
-          // }
-          let roomInfo = [];
-          axios
-            .get('/studyrooms')
-            .then((response) => {
-              const datas = response.data.data;
-              //console.log(datas);
-              datas.map((data) => {
-                for (var i in roomId) {
-                  if (data.id === roomId[i]) {
-                    roomInfo = roomInfo.concat({
-                      id: data.id,
-                      title: data.title,
-                      hashtags: data.hashtags,
-                      purpose: data.purpose,
-                    });
-                  } else {
-                    continue;
-                  }
-                }
-              });
-              setPosts(roomInfo);
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        })
-        .catch((error) => {
-          console.log(error.toJSON());
-        });
-    }
-  }, []);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 3;
-
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-
-  const pageRight = () => {
-    let pageNum = Math.ceil(posts.length / postsPerPage);
-    if (currentPage === pageNum) {
-      setCurrentPage(1);
-    } else {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-  const pageLeft = () => {
-    let pageNum = Math.ceil(posts.length / postsPerPage);
-    if (currentPage === 1) {
-      setCurrentPage(pageNum);
-    } else {
-      setCurrentPage(currentPage - 1);
-    }
-  };
 
   return (
     <div className="MainContainer">
@@ -293,3 +289,13 @@ const MyPage = () => {
   );
 };
 export default MyPage;
+
+const Img = styled.img`
+  height: auto;
+  width: 30px;
+  &:hover {
+    cursor: pointer;
+    background-color: #ef8585;
+    border: solid 1px #ef8585;
+  }
+`;

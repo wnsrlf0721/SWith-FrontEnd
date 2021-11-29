@@ -1,6 +1,115 @@
-import React, { useState, useCallback } from "react";
-import styled from "styled-components";
-import axios from "../../api/defaultaxios";
+import styled from 'styled-components';
+
+import React, { useState, useCallback } from 'react';
+import { postLogIn } from '../../api/APIs';
+
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [emailCheck, setEmailCheck] = useState(false);
+  let reg_email = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+  const [password, setPassword] = useState('');
+
+  const onChangehandler = (e) => {
+    const { name, value } = e.target;
+    if (name === 'email') {
+      setEmail(value);
+      if (reg_email.test(value)) {
+        setEmailCheck(true);
+      } else {
+        setEmailCheck(false);
+      }
+    } else {
+      setPassword(value);
+    }
+  };
+
+  const onsubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (!email || !emailCheck) {
+        return setEmailCheck(false);
+      }
+      postLogIn(email, password)
+        .then((response) => {
+          const result = response.data;
+          console.log(result);
+          if (result.status === '200' && result.message === 'OK') {
+            const data = result.data;
+            alert('로그인 성공!');
+            let user = {
+              name: email,
+              jwt: data.jwt,
+              userId: data.userId,
+            };
+            sessionStorage.setItem('userInfo', JSON.stringify(user));
+            return (window.location.href = '/');
+          }
+        })
+        .catch(function (error) {
+          console.log(error.toJSON());
+          alert('이메일과 비밀번호를 확인해주세요');
+        });
+    },
+    [email, password],
+  );
+
+  return (
+    <Container>
+      <LoginPage>
+        <h4>안녕하세요! 오늘도 화이팅!</h4>
+        <LoginWrapper>
+          <form onSubmit={onsubmit}>
+            <Text>
+              <Label>이메일</Label>
+              <Input
+                placeholder="이메일"
+                type="email"
+                name="email"
+                value={email}
+                onChange={(e) => onChangehandler(e)}
+              />
+              {!emailCheck && (
+                <div style={{ color: 'red', fontSize: '12px' }}>
+                  올바른 이메일 형식이 아닙니다
+                </div>
+              )}
+              <div>
+                <label>
+                  <input type="checkbox" />
+                  <span
+                    style={{
+                      color: '#ef8585',
+                      fontFamily: 'Roboto',
+                      fontSize: '15px',
+                    }}
+                  >
+                    아이디 저장
+                  </span>
+                </label>
+              </div>
+            </Text>
+            <Text>
+              <Label>비밀번호</Label>
+              <Input
+                placeholder="비밀번호"
+                name="password"
+                type="password"
+                value={password}
+                onChange={(e) => onChangehandler(e)}
+              />
+              <a>비밀번호를 잊어버리셨나요?</a>
+            </Text>
+            <Button>로그인</Button>
+          </form>
+        </LoginWrapper>
+        <Join>
+          <p>아직 회원이 아니신가요?</p>
+          <a href="/login/join">회원가입</a>
+        </Join>
+      </LoginPage>
+    </Container>
+  );
+};
 
 const Container = styled.div`
   display: flex;
@@ -35,7 +144,7 @@ const LoginPage = styled.div`
     text-align: left;
   }
 `;
-const Login = styled.div`
+const LoginWrapper = styled.div`
   margin: 18px 0 0 0;
   padding: 0;
   text-align: left;
@@ -113,119 +222,4 @@ const Join = styled.div`
   }
 `;
 
-const Loginjs = () => {
-  //email value
-  const [email, setEmail] = useState("");
-  const [emailCheck, setEmailCheck] = useState(false);
-  var reg_email =
-    /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
-  //pw value
-  const [password, setPassword] = useState("");
-
-  //email, pw 관련 onChange
-
-  const onChangehandler = (e) => {
-    const { name, value } = e.target;
-    if (name === "email") {
-      setEmail(value);
-      if (reg_email.test(value)) {
-        setEmailCheck(true);
-      } else {
-        setEmailCheck(false);
-      }
-    } else {
-      setPassword(value);
-    }
-  };
-  const onsubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (!email || !emailCheck) {
-        return setEmailCheck(false);
-      }
-      axios
-        .post("/login", {
-          email: email,
-          password: password,
-        })
-        .then((response) => {
-          const result = response.data;
-          console.log(result);
-          if (result.status === "200" && result.message === "OK") {
-            const data = result.data;
-            alert("로그인 성공!");
-            let user = {
-              name: email,
-              jwt: data.jwt,
-              userId: data.userId,
-            };
-            sessionStorage.setItem("userInfo", JSON.stringify(user));
-            return (window.location.href = "/");
-          }
-        })
-        .catch(function (error) {
-          console.log(error.toJSON());
-          alert("이메일과 비밀번호를 확인해주세요");
-        });
-    },
-    [email, password]
-  );
-  return (
-    <Container>
-      <LoginPage>
-        <h4>안녕하세요! 오늘도 화이팅!</h4>
-        <Login>
-          <form onSubmit={onsubmit}>
-            <Text>
-              <Label>이메일</Label>
-              <Input
-                placeholder="이메일"
-                type="email"
-                name="email"
-                value={email}
-                onChange={(e) => onChangehandler(e)}
-              />
-              {!emailCheck && (
-                <div style={{ color: "red", fontSize: "12px" }}>
-                  올바른 이메일 형식이 아닙니다
-                </div>
-              )}
-              <div>
-                <label>
-                  <input type="checkbox" />
-                  <span
-                    style={{
-                      color: "#ef8585",
-                      fontFamily: "Roboto",
-                      fontSize: "15px",
-                    }}
-                  >
-                    아이디 저장
-                  </span>
-                </label>
-              </div>
-            </Text>
-            <Text>
-              <Label>비밀번호</Label>
-              <Input
-                placeholder="비밀번호"
-                name="password"
-                type="password"
-                value={password}
-                onChange={(e) => onChangehandler(e)}
-              />
-              <a>비밀번호를 잊어버리셨나요?</a>
-            </Text>
-            <Button>로그인</Button>
-          </form>
-        </Login>
-        <Join>
-          <p>아직 회원이 아니신가요?</p>
-          <a href="/login/join">회원가입</a>
-        </Join>
-      </LoginPage>
-    </Container>
-  );
-};
-
-export default Loginjs;
+export default Login;

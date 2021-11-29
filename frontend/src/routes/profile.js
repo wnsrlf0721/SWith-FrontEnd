@@ -1,19 +1,19 @@
-import React, { useEffect } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
-import Topbar from "../components/topbar";
-import view from "../components/profile/view";
-import viewOtherUser from "../components/profile/viewOtherUser";
-import edit from "../components/profile/edit";
-import plan from "../components/plan/index";
+import React, { useEffect } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import Topbar from '../components/Main/Topbar';
+import View from '../components/Profile/View';
+import ViewOtherUser from '../components/Profile/ViewOtherUser';
+import Edit from '../components/Profile/Edit';
+import Plan from '../components/StudyPlan/index';
 
-const baseUrl = "/profile/";
+const baseUrl = '/profile/';
 
-const Index = () => {
+const Profile = () => {
   useEffect(() => {
     const isLogined = window.sessionStorage.userInfo == null ? false : true;
     if (!isLogined) {
-      alert("로그인이 필요합니다.");
-      return (window.location.href = "/login");
+      alert('로그인이 필요합니다.');
+      return (window.location.href = '/login');
     }
   }, []);
   return (
@@ -22,10 +22,10 @@ const Index = () => {
       <div>
         <BrowserRouter>
           <Switch>
-            <Route exact path={baseUrl} component={view} />
-            <Route path="/profile/:userId/other" component={viewOtherUser} />
-            <Route path={baseUrl + "edit"} component={edit} />
-            <Route path="/plan" component={plan} />
+            <Route exact path={baseUrl} component={View} />
+            <Route path="/profile/:userId/other" component={ViewOtherUser} />
+            <Route path={baseUrl + 'edit'} component={Edit} />
+            <Route path="/plan" component={Plan} />
           </Switch>
         </BrowserRouter>
       </div>
@@ -33,4 +33,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Profile;

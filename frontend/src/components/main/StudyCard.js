@@ -1,9 +1,7 @@
+import './css/StudyCard.css';
 import React from 'react';
-import './StudyCard.css';
-import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 
-function StudyCard({ title, imgUrl, body, studyRoomID, nickName }) {
+const StudyCard = ({ title, imgUrl, body, studyRoomID, nickName }) => {
   const isLogined = window.sessionStorage.userInfo == null ? false : true;
 
   const enterStudyRoom = () => {
@@ -18,7 +16,7 @@ function StudyCard({ title, imgUrl, body, studyRoomID, nickName }) {
       window.open(
         `/StudyRoom/${studyRoomID}/${nickName}/${window.sessionStorage.userInfo}`,
         '_blank',
-        'noopener noreferrer'
+        'noopener noreferrer',
       );
     }
   };
@@ -29,9 +27,7 @@ function StudyCard({ title, imgUrl, body, studyRoomID, nickName }) {
           <img src={imgUrl} alt="기본스터디이미지" />
         </div>
         <div className="card-content">
-          <div className="card-title">
-            {title}
-          </div>
+          <div className="card-title">{title}</div>
           <div className="card-body">
             <div className="hashtagWrap">
               {body.map((x) => {
@@ -43,5 +39,5 @@ function StudyCard({ title, imgUrl, body, studyRoomID, nickName }) {
       </button>
     </>
   );
-}
+};
 export default StudyCard;
