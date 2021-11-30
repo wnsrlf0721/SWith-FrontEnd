@@ -73,6 +73,14 @@ io.on('connection', (socket) => {
     });
   });
 
+  socket.on('kickOut', (data) => {
+    console.log(data);
+    const room = socketToRoom[data.socketId];
+    users[room].map((user) => {
+      if (data.socketId === user.socketId) socket.to(user.socketId).emit('kickOut');
+    });
+  });
+
   socket.on('disconnect', () => {
     console.log(`[${socketToRoom[socket.id]}]: ${socket.id} exit`);
     const roomID = socketToRoom[socket.id];
