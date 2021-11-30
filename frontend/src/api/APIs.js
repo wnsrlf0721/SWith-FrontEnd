@@ -160,13 +160,6 @@ export const deleteBoardPostId = async (boardId, postId) => {
   return await axios.delete(`/boards/${boardId}/posts/${postId}`);
 };
 
-export const putBoardPostId = async (boardId, postId, title, content) => {
-  return await axios.put(`/boards/${boardId}/posts/${postId}`, {
-    title: title,
-    content: content,
-  });
-};
-
 export const getBoardPostId = async (boardId, postId) => {
   return await axios.get(`/boards/${boardId}/posts/${postId}`);
 };
