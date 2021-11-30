@@ -1,8 +1,76 @@
-import axios from '../../api/defaultaxios';
+import styled from 'styled-components';
+
+import { getUserInfo } from '../../api/APIs';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import UserImage from '../../images/default_profile_Image.png';
+
+import userImage from '../../images/default_profile_Image.png';
+
+const View = () => {
+  const UserimgUrl = userImage;
+  const [email, setEmail] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [following, setFollowing] = useState(0);
+  const [boards, setBoards] = useState(0);
+
+  useEffect(() => {
+    const session = JSON.parse(window.sessionStorage.userInfo);
+    getUserInfo(session.userId)
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+        if (data.status === '200' && data.message === 'OK') {
+          const api_data = data.data;
+          let user = {
+            email: api_data.email,
+            nickname: api_data.nickname,
+            // following: api_data.following.length,
+            // boards: api_data.boards.length,
+          };
+          setEmail(user.email);
+          setNickname(user.nickname);
+          // setFollowing(user.following);
+          // setBoards(user.boards);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  return (
+    <Container>
+      <Wrap>
+        <PictureWrap>
+          <ProfileImg>
+            <img src={UserimgUrl} alt="기본사용자이미지" />
+          </ProfileImg>
+        </PictureWrap>
+
+        <InfoWrap>
+          <TextB style={{ marginBottom: '15px' }}>
+            <h2>{email}</h2>
+            <h3 style={{ fontSize: '20px' }}>{nickname}</h3>
+          </TextB>
+
+          <div>
+            <p>팔로우: {following}</p>
+            <p style={{ display: 'flex' }}>게시글: {boards}</p>
+          </div>
+        </InfoWrap>
+
+        <ButtonWrap>
+          <Link to="/profile/edit">
+            <Button style={{ backgroundColor: '#f8ad1d' }}>프로필 편집</Button>
+          </Link>
+          <Link to="/plan">
+            <Button style={{ color: '#595959' }}>학습관리</Button>
+          </Link>
+        </ButtonWrap>
+      </Wrap>
+    </Container>
+  );
+};
 
 const Container = styled.div`
   display: flex;
@@ -78,70 +146,4 @@ const ButtonWrap = styled.div`
   margin: 50px 20px;
 `;
 
-const Index = () => {
-  const UserimgUrl = UserImage;
-  const [email, setEmail] = useState('');
-  const [nickname, setNickname] = useState('');
-  const [following, setFollowing] = useState(0);
-  const [boards, setBoards] = useState(0);
-
-  useEffect(() => {
-    const session = JSON.parse(window.sessionStorage.userInfo);
-    axios
-      .get(`/users/${session.userId}`)
-      .then((response) => {
-        const data = response.data;
-        console.log(data);
-        if (data.status === '200' && data.message === 'OK') {
-          const api_data = data.data;
-          let user = {
-            email: api_data.email,
-            nickname: api_data.nickname,
-            // following: api_data.following.length,
-            // boards: api_data.boards.length,
-          };
-          setEmail(user.email);
-          setNickname(user.nickname);
-          // setFollowing(user.following);
-          // setBoards(user.boards);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
-  return (
-    <Container>
-      <Wrap>
-        <PictureWrap>
-          <ProfileImg>
-            <img src={UserimgUrl} alt='기본사용자이미지' />
-          </ProfileImg>
-        </PictureWrap>
-
-        <InfoWrap>
-          <TextB style={{ marginBottom: '15px' }}>
-            <h2>{email}</h2>
-            <h3 style={{ fontSize: '20px' }}>{nickname}</h3>
-          </TextB>
-
-          <div>
-            <p>팔로우: {following}</p>
-            <p style={{ display: 'flex' }}>게시글: {boards}</p>
-          </div>
-        </InfoWrap>
-
-        <ButtonWrap>
-          <Link to='/profile/edit'>
-            <Button style={{ backgroundColor: '#f8ad1d' }}>프로필 편집</Button>
-          </Link>
-          <Link to='/plan'>
-            <Button style={{ color: '#595959' }}>학습관리</Button>
-          </Link>
-        </ButtonWrap>
-      </Wrap>
-    </Container>
-  );
-};
-export default Index;
+export default View;
