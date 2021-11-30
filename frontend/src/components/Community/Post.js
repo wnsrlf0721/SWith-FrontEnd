@@ -5,7 +5,13 @@ import moment from 'moment';
 import CommentIcon from '../../images/comment_icon.png';
 import ViewsIcon from '../../images/views_icon.png';
 import DefaultProfile from '../../images/default_profile.png';
-import { getBoardPostId, postComment } from '../../api/APIs';
+import {
+  deleteBoardPostId,
+  deleteComment,
+  getBoardPostId,
+  postComment,
+  putComment,
+} from '../../api/APIs';
 
 const Post = ({ match }) => {
   const boardId = match.params.boardId;
@@ -13,6 +19,7 @@ const Post = ({ match }) => {
   //console.log(boardId, postId);
   const [postInfo, setPostInfo] = useState({
     title: '',
+    id: '',
     board: [],
     createdDate: '',
     comments: [],
@@ -21,7 +28,13 @@ const Post = ({ match }) => {
     contents: '',
   });
   const [comment, setComment] = useState('');
+  const [loginId, setLoginId] = useState('');
+  const [editNum, setEditNum] = useState('');
+  const [editComment, setEditComment] = useState('');
   useEffect(() => {
+    if (window.sessionStorage.userInfo) {
+      setLoginId(JSON.parse(window.sessionStorage.userInfo).userId);
+    }
     getBoardPostId(boardId, postId)
       .then((response) => {
         const info = response.data.data;
@@ -32,22 +45,72 @@ const Post = ({ match }) => {
         console.log(error);
       });
   }, []);
+
   const onclick = (e) => {
     const isLogined = window.sessionStorage.userInfo == null ? false : true;
     if (!isLogined) {
       alert('로그인이 필요합니다.');
       return (window.location.href = '/login');
     } else {
-      const userId = JSON.parse(window.sessionStorage.userInfo).userId;
-      postComment(boardId, postId, userId, comment)
-        .then((response) => {
-          const data = response.data.data;
-          console.log(data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      window.location.reload();
+      const name = e.target.name;
+      if (name === 'newComment') {
+        const userId = JSON.parse(window.sessionStorage.userInfo).userId;
+        postComment(boardId, postId, userId, comment)
+          .then((response) => {
+            const data = response.data.data;
+            console.log(data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        window.location.reload();
+      } else if (name === 'editComment') {
+        putComment(boardId, postId, editNum, editComment)
+          .then((response) => {
+            const data = response.data.data;
+            console.log(data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        window.location.reload();
+      }
+    }
+  };
+  const onEdit = (id, comment) => {
+    if (editNum === id) {
+      setEditNum('');
+      setEditComment('');
+    } else {
+      setEditNum(id);
+      setEditComment(comment);
+    }
+  };
+
+  const onDelete = (type, id) => {
+    if (window.confirm(`해당 ${type}을 삭제하시겠습니까?`)) {
+      if (type === '댓글') {
+        deleteComment(boardId, postId, id)
+          .then((response) => {
+            console.log(response.data);
+            window.location.reload();
+          })
+          .catch((error) => {
+            alert('삭제하는데 오류가 생겼습니다');
+            console.log(error);
+          });
+      } else if (type === '게시글') {
+        deleteBoardPostId(boardId, id)
+          .then((response) => {
+            console.log(response.data);
+            alert('게시글 삭제를 완료하였습니다!');
+            window.location.href = '/comm';
+          })
+          .catch((error) => {
+            alert('삭제하는데 오류가 생겼습니다');
+            console.log(error);
+          });
+      }
     }
   };
   return (
@@ -83,6 +146,22 @@ const Post = ({ match }) => {
                 />
                 {postInfo.viewCount}
               </span>
+              {loginId === postInfo.id ? (
+                <span style={{ marginLeft: '10px' }}>
+                  <span style={{ marginLeft: '5px' }}>
+                    <ChangeComment onClick={(e) => onEdit(postInfo.id)}>
+                      수정
+                    </ChangeComment>
+                  </span>
+                  <span style={{ marginLeft: '5px' }}>
+                    <ChangeComment onClick={(e) => onDelete('게시글', postInfo.id)}>
+                      삭제
+                    </ChangeComment>
+                  </span>
+                </span>
+              ) : (
+                <span></span>
+              )}
             </div>
           </div>
         </Info>
@@ -110,13 +189,55 @@ const Post = ({ match }) => {
                       <span>
                         {moment(comment.createdDate).format('YYYY.MM.DD. HH:mm')}
                       </span>
-                      <span style={{ marginLeft: '10px' }}>
-                        <span style={{ marginLeft: '5px' }}>수정</span>
-                        <span style={{ marginLeft: '5px' }}>삭제</span>
-                      </span>
+                      {loginId === comment.user.id ? (
+                        <span style={{ marginLeft: '10px' }}>
+                          <span style={{ marginLeft: '5px' }}>
+                            <ChangeComment
+                              onClick={(e) => onEdit(comment.id, comment.comment)}
+                            >
+                              수정
+                            </ChangeComment>
+                          </span>
+                          <span style={{ marginLeft: '5px' }}>
+                            <ChangeComment onClick={(e) => onDelete('댓글', comment.id)}>
+                              삭제
+                            </ChangeComment>
+                          </span>
+                        </span>
+                      ) : (
+                        <span></span>
+                      )}
                     </div>
                   </div>
                 </CommentArea>
+                {editNum === comment.id ? (
+                  <CommentArea>
+                    <Comment>
+                      댓글 수정
+                      <textarea
+                        placeholder="내용을 입력하세요"
+                        className="inputarea"
+                        value={editComment}
+                        onChange={(e) => setEditComment(e.target.value)}
+                      />
+                      <button
+                        style={{
+                          backgroundColor: '#ef8585',
+                          color: 'white',
+                          border: 'none',
+                          cursor: 'pointer',
+                          margin: '0 0 0 10px',
+                        }}
+                        name="editComment"
+                        onClick={(e) => onclick(e)}
+                      >
+                        등록
+                      </button>
+                    </Comment>
+                  </CommentArea>
+                ) : (
+                  <div></div>
+                )}
               </li>
             );
           })}
@@ -128,7 +249,19 @@ const Post = ({ match }) => {
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           />
-          <button onClick={(e) => onclick(e)}>등록</button>
+          <button
+            style={{
+              backgroundColor: '#ef8585',
+              color: 'white',
+              border: 'none',
+              cursor: 'pointer',
+              margin: '0 0 0 10px',
+            }}
+            name="newComment"
+            onClick={(e) => onclick(e)}
+          >
+            등록
+          </button>
         </Comment>
       </div>
     </Container>
@@ -191,13 +324,13 @@ const Comment = styled.div`
   border-radius: 6px;
   box-sizing: border-box;
   background: white;
+  min-height: 50px;
   .inputarea {
-    overflow: hidden;
+    overflow: visible;
     overflow-wrap: break-word;
-    height: 17px;
-    display: block;
-    width: 100%;
-    min-height: 17px;
+    display: inline-block;
+    width: 85%;
+    min-height: 30px;
     padding-right: 1px;
     border: 0;
     font-size: 13px;
@@ -222,4 +355,11 @@ const Content = styled.div`
   font-size: 15px;
   word-break: break-all;
   word-wrap: break-word;
+`;
+
+const ChangeComment = styled.button`
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: skyblue;
 `;
