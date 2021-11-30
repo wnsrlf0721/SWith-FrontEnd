@@ -2,8 +2,10 @@ import styled from 'styled-components';
 
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import CommentIcon from '../../images/comment_icon.png';
-import ViewsIcon from '../../images/views_icon.png';
+import ReactHtmlParser from 'html-react-parser';
+
+import CommentIcon from '../../images/comments_icon.svg';
+import ViewsIcon from '../../images/eye_icon.svg';
 import DefaultProfile from '../../images/default_profile.png';
 import {
   deleteBoardPostId,
@@ -126,7 +128,7 @@ const Post = ({ match }) => {
           </Divimg>
           <div>
             <div style={{ fontWeight: 'bold' }}>{postInfo.user.nickname}</div>
-            <div>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
               <span style={{ marginRight: '10px', fontSize: '14px' }}>
                 {moment(postInfo.createdDate).format('YYYY.MM.DD. HH:mm')}
               </span>
@@ -142,7 +144,12 @@ const Post = ({ match }) => {
                 <img
                   src={ViewsIcon}
                   alt="조회수이미지"
-                  style={{ height: '10px', width: '14px', padding: '0 6px 0 0 ' }}
+                  style={{
+                    height: '16px',
+                    width: '16px',
+                    paddingRight: '6px ',
+                    marginTop: '3px',
+                  }}
                 />
                 {postInfo.viewCount}
               </span>
@@ -167,7 +174,7 @@ const Post = ({ match }) => {
         </Info>
       </Header>
       <Body>
-        <Content>{postInfo.contents}</Content>
+        <Content>{ReactHtmlParser(postInfo.contents)}</Content>
       </Body>
       <div>
         <h4>댓글</h4>

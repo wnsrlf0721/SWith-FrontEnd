@@ -1,13 +1,200 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import styled from 'styled-components';
-import stats_icon from '../../images/stats_icon.svg';
-import post_icon from '../../images/post_icon.svg';
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import styled from 'styled-components';
+
+import ReactQuill from 'react-quill';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { getBoards, postBoardPost } from '../../api/APIs';
 import ReactHtmlParser from 'html-react-parser';
 
+import stats_icon from '../../images/stats_icon.svg';
+import post_icon from '../../images/post_icon.svg';
+
+const CreatePost = () => {
+  const category = [
+    {
+      id: 1,
+      name: '자유게시판',
+      cate: 'free-board',
+    },
+    {
+      id: 2,
+      name: '스터디 모집',
+      cate: 'study-recruit',
+    },
+    {
+      id: 3,
+      name: '스터디 참여',
+      cate: 'study-enter',
+    },
+    {
+      id: 4,
+      name: '정보 공유 - 국가 고시',
+      cate: 'k-exam',
+    },
+    {
+      id: 5,
+      name: '정보 공유 - 독서',
+      cate: 'reading',
+    },
+    {
+      id: 6,
+      name: '정보 공유 - 수능',
+      cate: 'sat',
+    },
+    {
+      id: 7,
+      name: '정보 공유 - 어학',
+      cate: 'eng',
+    },
+    {
+      id: 8,
+      name: '정보 공유 - 자격증',
+      cate: 'cert',
+    },
+    {
+      id: 9,
+      name: '정보 공유 - 기타',
+      cate: 'etc',
+    },
+  ];
+  const [editorContent, setEditorContent] = useState('');
+  const [title, setTitle] = useState('');
+  const [boardsInfo, setBoardsInfo] = useState([]);
+  const [selectState, setSelectState] = useState();
+  const submitContents = ReactHtmlParser(editorContent);
+
+  useEffect(() => {
+    const isLogined = window.sessionStorage.userInfo == null ? false : true;
+    if (!isLogined) {
+      alert('로그인이 필요합니다.');
+      return (window.location.href = '/login');
+    }
+    let boardsData = [];
+    getBoards()
+      .then((response) => {
+        const data = response.data;
+        const datas = data.data;
+        console.log(datas);
+
+        datas.map((data) => {
+          boardsData = boardsData.concat({
+            id: data.id,
+            title: data.title,
+          });
+        });
+        console.log(boardsData);
+        setBoardsInfo(boardsData);
+      })
+
+      .catch((error) => {
+        console.log(error);
+        alert('게시판 조회에 실패했습니다.');
+      });
+  }, []);
+  const getTitle = (e) => {
+    setTitle(e.target.value);
+  };
+  const handleSelect = (e) => {
+    setSelectState(e.target.value);
+    console.log(selectState);
+  };
+
+  const onsubmit = (e) => {
+    const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    e.preventDefault();
+
+    if (title.length < 1) {
+      alert('제목을 입력해주세요.');
+      return;
+    }
+    if (submitContents < 1) {
+      alert('내용을 입력해주세요.');
+      return;
+    }
+
+    console.log(selectState, userInfo.userId, title, editorContent);
+    if (selectState === undefined) {
+      alert('게시판을 선택해주세요.');
+      return;
+    }
+
+    postBoardPost(selectState, userInfo.userId, title, editorContent)
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+        if (data.status === '200' && data.message === 'OK') {
+          alert('게시글이 등록되었습니다.');
+          window.location.href = '/comm';
+        }
+      })
+      .catch((error) => {
+        console.log(error.toJSON());
+        alert('게시글 등록에 실패했습니다.');
+      });
+  };
+
+  // react-quill module
+  const modules = useMemo(
+    () => ({
+      toolbar: {
+        container: [
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ color: [] }],
+          [
+            { list: 'ordered' },
+            { list: 'bullet' },
+            // { indent: "-1" },
+            // { indent: "+1" },
+            { align: [] },
+          ],
+          [],
+        ],
+      },
+    }),
+    [],
+  );
+
+  return (
+    <CreateContainer>
+      <Header>게시글 작성하기</Header>
+      <ContentContainer>
+        <Category onChange={(e) => handleSelect(e)}>
+          <option>-------</option>
+          {boardsInfo.map((data) => (
+            <option value={data.id}>{data.title}</option>
+          ))}
+        </Category>
+        <Title
+          placeholder="제목을 입력해주세요."
+          onChange={getTitle}
+          value={title}
+        ></Title>
+        {/* <ContentEdit 
+                    placeholder="내용을 입력하세요"
+                    onChange={getValue}
+                    name='content'
+                >
+                </ContentEdit> */}
+        <ReactQuill
+          style={{ minHeight: '350px', marginBottom: '30px' }}
+          onChange={setEditorContent}
+          modules={modules}
+          theme="snow"
+          placeholder="내용을 입력해주세요."
+        />
+        <ButtonWrap>
+          <Button style={{ backgroundColor: '#ef8585' }} onClick={(e) => onsubmit(e)}>
+            <img src={post_icon} />
+            게시글 등록
+          </Button>
+        </ButtonWrap>
+      </ContentContainer>
+    </CreateContainer>
+  );
+};
+
 const CreateContainer = styled.div`
-  min-width: 725px;
+  min-width: 600px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -71,7 +258,7 @@ const ButtonWrap = styled.div`
   flex-grow: 0;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   padding: 10px 0;
   margin-top: 10px;
@@ -94,137 +281,4 @@ const Button = styled.button`
   font-weight: bold;
 `;
 
-const CreatePost = () => {
-  useEffect(() => {
-    const isLogined = window.sessionStorage.userInfo == null ? false : true;
-    if (!isLogined) {
-      alert('로그인이 필요합니다.');
-      return (window.location.href = '/login');
-    }
-  }, []);
-
-  const category = [
-    {
-      id: 1,
-      name: '자유게시판',
-      cate: 'free-board',
-    },
-    {
-      id: 2,
-      name: '스터디 모집',
-      cate: 'study-recruit',
-    },
-    {
-      id: 3,
-      name: '스터디 참여',
-      cate: 'study-enter',
-    },
-    {
-      id: 4,
-      name: '정보 공유 - 국가 고시',
-      cate: 'k-exam',
-    },
-    {
-      id: 5,
-      name: '정보 공유 - 독서',
-      cate: 'reading',
-    },
-    {
-      id: 6,
-      name: '정보 공유 - 수능',
-      cate: 'sat',
-    },
-    {
-      id: 7,
-      name: '정보 공유 - 어학',
-      cate: 'eng',
-    },
-    {
-      id: 8,
-      name: '정보 공유 - 자격증',
-      cate: 'cert',
-    },
-    {
-      id: 9,
-      name: '정보 공유 - 기타',
-      cate: 'etc',
-    },
-  ];
-
-  const getTitle = (e) => {
-    setTit(e.target.value);
-  };
-
-  const enterContent = (e) => {
-    if (window.confirm('게시글을 등록하시겠습니까?')) {
-      //axios
-    }
-  };
-  const [editor, setEditor] = useState('');
-  const [tit, setTit] = useState('');
-
-  // react-quill module
-  const modules = useMemo(
-    () => ({
-      toolbar: {
-        container: [
-          ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-          [{ color: [] }],
-          [
-            { list: 'ordered' },
-            { list: 'bullet' },
-            // { indent: "-1" },
-            // { indent: "+1" },
-            { align: [] },
-          ],
-          [],
-        ],
-      },
-    }),
-    [],
-  );
-
-  return (
-    <CreateContainer>
-      <Header>게시글 작성하기</Header>
-      <ContentContainer>
-        <Category>
-          {category.map((data) => (
-            <option>{data.name}</option>
-          ))}
-        </Category>
-        <Title placeholder="제목을 입력해주세요." onChange={getTitle} value={tit}>
-          {console.log(tit)}
-        </Title>
-        {/* <ContentEdit 
-                    placeholder="내용을 입력하세요"
-                    onChange={getValue}
-                    name='content'
-                >
-                </ContentEdit> */}
-        <ReactQuill
-          style={{ minHeight: '350px', marginBottom: '30px' }}
-          onChange={setEditor}
-          modules={modules}
-          theme="snow"
-          placeholder="내용을 입력해주세요."
-        />
-        <ButtonWrap>
-          <Button>
-            <img src={stats_icon} />
-            나의 학습 관리 추가
-          </Button>
-          <Button style={{ backgroundColor: '#ef8585' }} onClick={enterContent}>
-            <img src={post_icon} />
-            게시글 등록
-          </Button>
-        </ButtonWrap>
-      </ContentContainer>
-
-      {/* 테스트 test */}
-      <h2>{tit}</h2>
-      <div>{editor}</div>
-    </CreateContainer>
-  );
-};
 export default CreatePost;
