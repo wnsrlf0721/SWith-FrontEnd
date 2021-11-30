@@ -1,5 +1,6 @@
-import React from 'react';
 import styled from 'styled-components';
+
+import React from 'react';
 import queryString from 'query-string';
 import Topbar from '../components/Main/Topbar';
 import Mypage from '../components/Main/MyPage';

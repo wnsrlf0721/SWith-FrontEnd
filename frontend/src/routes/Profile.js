@@ -1,6 +1,7 @@
+import Topbar from '../components/Main/Topbar';
+
 import React, { useEffect } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import Topbar from '../components/Main/Topbar';
 import View from '../components/Profile/View';
 import ViewOtherUser from '../components/Profile/ViewOtherUser';
 import Edit from '../components/Profile/Edit';

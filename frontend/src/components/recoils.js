@@ -50,39 +50,18 @@ const studyRoomAtoms = {
     key: 'userVideoMute',
     default: new Map(),
   }),
+
+  enlargeVideo: atom({
+    key: 'enlargeVideo',
+    default: false,
+  }),
+
+  enlargedUserSocketId: atom({
+    key: 'enlargedUserSocketId',
+    default: '',
+  }),
 };
 
-const studyRoomSelectors = {
-  // getTimerFormat: selector({
-  //   key: 'getTimerFormat',
-  //   get: ({  }) => {
-  //     const seconds = get(this.studyRoomAtoms.userTimer);
-  //     var hour =
-  //       parseInt(seconds / 3600) < 10 ? '0' + parseInt(seconds / 3600) : parseInt(seconds / 3600);
-  //     var min =
-  //       parseInt((seconds % 3600) / 60) < 10
-  //         ? '0' + parseInt((seconds % 3600) / 60)
-  //         : parseInt((seconds % 3600) / 60);
-  //     var sec = seconds % 60 < 10 ? '0' + (seconds % 60) : seconds % 60;
-  //     return hour + ':' + min + ':' + sec;
-  //   },
-  // }),
-};
-
-// const studyRoomAPIs = {
-//   getTimerFormat: selector({
-//     key: 'getTimerFormat',
-//     get: (seconds) => {
-//       var hour =
-//         parseInt(seconds / 3600) < 10 ? '0' + parseInt(seconds / 3600) : parseInt(seconds / 3600);
-//       var min =
-//         parseInt((seconds % 3600) / 60) < 10
-//           ? '0' + parseInt((seconds % 3600) / 60)
-//           : parseInt((seconds % 3600) / 60);
-//       var sec = seconds % 60 < 10 ? '0' + (seconds % 60) : seconds % 60;
-//       return hour + ':' + min + ':' + sec;
-//     },
-//   }),
-// };
+const studyRoomSelectors = {};
 
 export { studyRoomAtoms, studyRoomSelectors };
