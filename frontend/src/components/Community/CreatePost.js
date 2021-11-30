@@ -60,7 +60,7 @@ const CreatePost = () => {
   const [editorContent, setEditorContent] = useState('');
   const [title, setTitle] = useState('');
   const [boardsInfo, setBoardsInfo] = useState([]);
-  const [selectState, setSelectState] = useState(boardsInfo[0]);
+  const [selectState, setSelectState] = useState();
   const submitContents = ReactHtmlParser(editorContent);
 
   useEffect(() => {
@@ -85,14 +85,13 @@ const CreatePost = () => {
         }
         console.log(boardsData);
         setBoardsInfo(boardsData);
-        console.log(boardsInfo);
       })
 
       .catch((error) => {
         console.log(error);
         alert('게시판 조회에 실패했습니다.');
       });
-    // getPosts(55)
+    // getPosts(53)
     //   .then((response) => {
     //     const data = response.data;
     //     console.log(data);
@@ -102,7 +101,6 @@ const CreatePost = () => {
     //     alert('게시글 불러오기 실패');
     //   });
   }, []);
-
   const getTitle = (e) => {
     setTitle(e.target.value);
   };
@@ -166,11 +164,12 @@ const CreatePost = () => {
     <CreateContainer>
       <Header>게시글 작성하기</Header>
       <ContentContainer>
-        <Category onChange={handleSelect}>
+        <Category onChange={(e) => handleSelect(e)}>
           {boardsInfo.map((data) => (
             <option value={data.id}>{data.title}</option>
           ))}
         </Category>
+        <p>{selectState}</p>
         <Title
           placeholder="제목을 입력해주세요."
           onChange={getTitle}
