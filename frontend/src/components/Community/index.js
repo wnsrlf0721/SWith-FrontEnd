@@ -10,7 +10,7 @@ import CreatePost from './CreatePost';
 import search_icon from '../../images/search_gray.png';
 import writing_icon from '../../images/writing_icon.png';
 import post_list from '../../images/post_list.png';
-import { getBoard, getBoardPost } from '../../api/APIs';
+import { getBoards, getBoardPost } from '../../api/APIs';
 
 const baseUrl = '/comm/';
 
@@ -18,20 +18,20 @@ const Index = () => {
   const [boardList, setBoardList] = useState([]);
   const [search, setSearch] = useState('');
   useEffect(() => {
-    getBoard()
+    getBoards()
       .then((response) => {
         let array = [];
         response.data.data.map((board) => {
           array = array.concat(board);
-          getBoardPost(board.id)
-            .then((response) => {
-              console.log(response.data);
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+          // getBoardPost(board.id)
+          //   .then((response) => {
+          //     console.log(response.data);
+          //   })
+          //   .catch((error) => {
+          //     console.log(error);
+          //   });
         });
-        console.log(array);
+        //console.log(array);
         setBoardList(array);
       })
       .catch((error) => {
@@ -104,7 +104,7 @@ const Index = () => {
                   {boardList.map((board) => {
                     return (
                       <li>
-                        <Link href={`/comm`}>
+                        <Link href={`/comm/${board.id}/${board.title}`}>
                           <img
                             style={{
                               height: '18px',
@@ -128,6 +128,7 @@ const Index = () => {
             <Switch>
               <Route exact path={baseUrl} component={PostList} />
               <Route path={baseUrl + 'post/:boardId/:postId'} component={Post} />
+              <Route path="/comm/:boardId/:boardTitle/" component={PostList} />
               <Route path={baseUrl + 'CreatePost'} component={CreatePost} />
             </Switch>
           </BrowserRouter>

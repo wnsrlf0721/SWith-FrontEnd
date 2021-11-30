@@ -1,122 +1,87 @@
 import './css/PostList.css';
 
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
+import { getBoards, getBoardPost, postBoardPost } from '../../api/APIs';
+
 import writeIMG from '../../images/write.png';
 
-const PostList = ({ location }) => {
+// const PostList = () => {
+
+//   //console.log(query.search);
+//   useEffect(() => {
+
+//   }, []);
+const PostList = ({ location, match }) => {
+  const [post, setPost] = useState([]);
+  //const [boardType, setBoardType] = useState('');
   const query = queryString.parse(location.search);
-  //console.log(query.search);
+  const boardId = match.params.boardId;
+  const boardTitle = match.params.boardTitle;
   useEffect(() => {
+    // if (boardId == undefined) {
+    //   boardId = 'all';
+    // }
+
+    // postBoardPost(53, 32, '테스트중2', '테스트중입니다.')
+    //   .then((response) => {
+    //     console.log(response);
+    //     //alert('스터디룸 생성 성공!');
+    //     //return (window.location.href = '/');
+    //   })
+    //   .catch((error) => {
+    //     console.log(error.toJSON());
+    //     //alert('input 입력이 잘못된것 같습니다.');
+    //   });
+    // console.log(boardId);
+    // console.log(boardTitle);
     if (query.search) {
       console.log(`${query.search}를 검색하여 들어옴`);
     } else {
       console.log('기본 전체목록');
     }
+
+    //setBoardType(boardId);
+    if (boardId == undefined) {
+      getBoards()
+        .then((response) => {
+          const tempBoards = response.data.data;
+          let boardsId = [];
+          tempBoards.map((x) => {
+            boardsId = boardsId.concat(x.id);
+          });
+          //console.log(boardsId);
+          let tempPs = [];
+          boardsId.map((x) => {
+            //console.log(x);
+            getBoardPost(x)
+              .then((response) => {
+                const tempPosts = response.data.data;
+                tempPs = tempPs.concat(tempPosts);
+                setPost(tempPs.sort((a, b) => getDateNum(a, b)));
+                //console.log(tempPs);
+              })
+              .catch((error) => {
+                console.log(error.response);
+              });
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      getBoardPost(boardId)
+        .then((response) => {
+          const tempPosts = response.data.data;
+          setPost(tempPosts.sort((a, b) => getDateNum(a, b)));
+          //console.log(tempPosts);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+    }
   }, []);
-  const [board, setBoard] = useState({
-    id: '1',
-    title: '자유게시판',
-    useId: '69',
-  });
-  const [post, setPost] = useState([
-    {
-      id: 0,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '1',
-    },
-    {
-      id: 1,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '2',
-    },
-    {
-      id: 2,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '3',
-    },
-    {
-      id: 0,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '4',
-    },
-    {
-      id: 1,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '4',
-    },
-    {
-      id: 2,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '4',
-    },
-    {
-      id: 0,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '5',
-    },
-    {
-      id: 1,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '5',
-    },
-    {
-      id: 2,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '6',
-    },
-    {
-      id: 0,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '6',
-    },
-    {
-      id: 1,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '7',
-    },
-    {
-      id: 2,
-      title: '게시글 제목',
-      writer: '작성자',
-      date: '2021-11-23',
-      commentsNum: '0',
-      viewNum: '7',
-    },
-  ]);
 
   const [Selected, setSelected] = useState(0);
 
@@ -147,10 +112,10 @@ const PostList = ({ location }) => {
               <a href={`/comm/post/53/61`} className="TextLeftBox">
                 {x.title}
               </a>
-              <div className="TextCenterBox">{x.writer}</div>
-              <div className="TextCenterBox">{x.date}</div>
-              <div className="TextCenterBox">{x.commentsNum}</div>
-              <div className="TextCenterBox">{x.viewNum}</div>
+              <div className="TextCenterBox">{x.user.nickname}</div>
+              <div className="TextCenterBox">{getKrDate(x.createdDate)}</div>
+              <div className="TextCenterBox">{x.comments.length}</div>
+              <div className="TextCenterBox">{x.viewCount}</div>
             </div>
           );
         })}
@@ -162,15 +127,39 @@ const PostList = ({ location }) => {
     { id: 0, lable: '최신순' },
     { id: 1, lable: '조회순' },
   ];
+  const getDateNum = (a, b) => {
+    const dateA = new Date(a.createdDate);
+    const dateB = new Date(b.createdDate);
+    //console.log(a.title, a.createdDate);
+    return dateB - dateA;
+  };
+  const getKrDate = (date) => {
+    //x.createdDate.substring(0, 10)
+    let tempDate = new Date(date);
+    tempDate.setHours(tempDate.getHours() + 9);
+    //console.log(tempDate.toISOString());
+    return tempDate.toISOString().substring(0, 10);
+  };
+
   const DoSort = (sortNum) => {
     if (sortNum == 1) {
       //조회순
       let tempPost = post;
-      setPost(tempPost.sort((a, b) => b.viewNum - a.viewNum));
+      setPost(tempPost.sort((a, b) => b.viewCount - a.viewCount));
     } else if (sortNum == 0) {
       //최신순
       let tempPost = post;
-      setPost(tempPost.sort((a, b) => a.viewNum - b.viewNum));
+      setPost(tempPost.sort((a, b) => getDateNum(a, b)));
+    }
+  };
+
+  const getListTitle = () => {
+    if (query.search) {
+      return <div className="PostListTitle">{`'${query.search}'의 검색결과`}</div>;
+    } else if (boardId == undefined) {
+      return <div className="PostListTitle">전체글 보기</div>;
+    } else {
+      return <div className="PostListTitle">{boardTitle}</div>;
     }
   };
 
@@ -188,6 +177,7 @@ const PostList = ({ location }) => {
           <div className="SortWrap">
             <select
               onChange={handleSelect}
+              defaultValue={0}
               value={Selected}
               style={{ fontFamily: 'Roboto' }}
             >
@@ -234,5 +224,4 @@ const PostList = ({ location }) => {
     </>
   );
 };
-
 export default PostList;
