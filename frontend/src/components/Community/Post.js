@@ -153,17 +153,21 @@ const Post = ({ match }) => {
                 />
                 {postInfo.viewCount}
               </span>
-              {loginId === postInfo.id ? (
+              {loginId === postInfo.user.id ? (
                 <span style={{ marginLeft: '10px' }}>
                   <span style={{ marginLeft: '5px' }}>
-                    <ChangeComment onClick={(e) => onEdit(postInfo.id)}>
+                    <ChangeButton
+                      onClick={(e) =>
+                        (window.location.href = `/comm/EditPost/${boardId}/${postId}`)
+                      }
+                    >
                       수정
-                    </ChangeComment>
+                    </ChangeButton>
                   </span>
                   <span style={{ marginLeft: '5px' }}>
-                    <ChangeComment onClick={(e) => onDelete('게시글', postInfo.id)}>
+                    <ChangeButton onClick={(e) => onDelete('게시글', postInfo.id)}>
                       삭제
-                    </ChangeComment>
+                    </ChangeButton>
                   </span>
                 </span>
               ) : (
@@ -199,16 +203,16 @@ const Post = ({ match }) => {
                       {loginId === comment.user.id ? (
                         <span style={{ marginLeft: '10px' }}>
                           <span style={{ marginLeft: '5px' }}>
-                            <ChangeComment
+                            <ChangeButton
                               onClick={(e) => onEdit(comment.id, comment.comment)}
                             >
                               수정
-                            </ChangeComment>
+                            </ChangeButton>
                           </span>
                           <span style={{ marginLeft: '5px' }}>
-                            <ChangeComment onClick={(e) => onDelete('댓글', comment.id)}>
+                            <ChangeButton onClick={(e) => onDelete('댓글', comment.id)}>
                               삭제
-                            </ChangeComment>
+                            </ChangeButton>
                           </span>
                         </span>
                       ) : (
@@ -364,7 +368,7 @@ const Content = styled.div`
   word-wrap: break-word;
 `;
 
-const ChangeComment = styled.button`
+const ChangeButton = styled.button`
   border: none;
   background: transparent;
   cursor: pointer;

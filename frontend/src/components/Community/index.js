@@ -6,6 +6,7 @@ import Topbar from '../Main/Topbar';
 import Post from './Post';
 import PostList from './PostList';
 import CreatePost from './CreatePost';
+import EditPost from './EditPost';
 
 import search_icon from '../../images/search_gray.png';
 import writing_icon from '../../images/writing_icon.png';
@@ -128,7 +129,8 @@ const Index = () => {
             <Switch>
               <Route exact path={baseUrl} component={PostList} />
               <Route path={baseUrl + 'post/:boardId/:postId'} component={Post} />
-              <Route path="/comm/:boardId/:boardTitle/" component={PostList} />
+              <Route path={baseUrl + 'EditPost/:boardId/:postId'} component={EditPost} />
+              <Route path={baseUrl + ':boardId/:boardTitle/'} component={PostList} />
               <Route path={baseUrl + 'CreatePost'} component={CreatePost} />
             </Switch>
           </BrowserRouter>

@@ -3,59 +3,33 @@ import styled from 'styled-components';
 
 import ReactQuill from 'react-quill';
 import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { getBoards, postBoardPost } from '../../api/APIs';
+import { getBoardPostId, getBoards, postBoardPost, putBoardPostId } from '../../api/APIs';
 import ReactHtmlParser from 'html-react-parser';
 
 import stats_icon from '../../images/stats_icon.svg';
 import post_icon from '../../images/post_icon.svg';
 
-const CreatePost = () => {
+const CreatePost = ({ match }) => {
+  const boardId = match.params.boardId;
+  const postId = match.params.postId;
   const [editorContent, setEditorContent] = useState('');
   const [title, setTitle] = useState('');
-  const [boardsInfo, setBoardsInfo] = useState([]);
-  const [selectState, setSelectState] = useState();
   const submitContents = ReactHtmlParser(editorContent);
-  //console.log(editorContent);
   useEffect(() => {
-    const isLogined = window.sessionStorage.userInfo == null ? false : true;
-    if (!isLogined) {
-      alert('로그인이 필요합니다.');
-      return (window.location.href = '/login');
-    }
-    let boardsData = [];
-    getBoards()
+    getBoardPostId(boardId, postId)
       .then((response) => {
-        const data = response.data;
-        const datas = data.data;
-        //console.log(datas);
-
-        datas.map((data) => {
-          boardsData = boardsData.concat({
-            id: data.id,
-            title: data.title,
-          });
-        });
-        //console.log(boardsData);
-        setBoardsInfo(boardsData);
+        const data = response.data.data;
+        setTitle(data.title);
+        setEditorContent(data.contents);
       })
-
       .catch((error) => {
         console.log(error);
-        alert('게시판 조회에 실패했습니다.');
+        alert('게시글 내용 조회에 실패했습니다.');
       });
   }, []);
-  const getTitle = (e) => {
-    setTitle(e.target.value);
-  };
-  const handleSelect = (e) => {
-    setSelectState(e.target.value);
-    //console.log(selectState);
-  };
 
   const onsubmit = (e) => {
-    const userInfo = JSON.parse(window.sessionStorage.userInfo);
     e.preventDefault();
-
     if (title.length < 1) {
       alert('제목을 입력해주세요.');
       return;
@@ -65,24 +39,18 @@ const CreatePost = () => {
       return;
     }
 
-    //console.log(selectState, userInfo.userId, title, editorContent);
-    if (selectState === undefined) {
-      alert('게시판을 선택해주세요.');
-      return;
-    }
-
-    postBoardPost(selectState, userInfo.userId, title, editorContent)
+    putBoardPostId(boardId, postId, title, editorContent)
       .then((response) => {
         const data = response.data;
-        //console.log(data);
+        console.log(data);
         if (data.status === '200' && data.message === 'OK') {
-          alert('게시글이 등록되었습니다.');
+          alert('게시글이 수정되었습니다.');
           window.location.href = '/comm';
         }
       })
       .catch((error) => {
         console.log(error.toJSON());
-        alert('게시글 등록에 실패했습니다.');
+        alert('게시글 수정이 실패되었습니다.');
       });
   };
 
@@ -109,36 +77,27 @@ const CreatePost = () => {
 
   return (
     <CreateContainer>
-      <Header>게시글 작성하기</Header>
+      <Header>게시글 수정하기</Header>
       <ContentContainer>
-        <Category onChange={(e) => handleSelect(e)}>
-          <option>-------</option>
-          {boardsInfo.map((data) => (
-            <option value={data.id}>{data.title}</option>
-          ))}
-        </Category>
         <Title
           placeholder="제목을 입력해주세요."
-          onChange={getTitle}
+          onChange={(e) => setTitle(e.target.value)}
           value={title}
         ></Title>
-        {/* <ContentEdit 
-                    placeholder="내용을 입력하세요"
-                    onChange={getValue}
-                    name='content'
-                >
-                </ContentEdit> */}
         <ReactQuill
           style={{ minHeight: '350px', marginBottom: '30px' }}
-          onChange={setEditorContent}
+          value={editorContent}
+          onChange={(content, delta, source, editor) =>
+            setEditorContent(editor.getHTML())
+          }
           modules={modules}
           theme="snow"
           placeholder="내용을 입력해주세요."
         />
         <ButtonWrap>
           <Button style={{ backgroundColor: '#ef8585' }} onClick={(e) => onsubmit(e)}>
-            <img src={post_icon} alt="게시글 등록" />
-            게시글 등록
+            <img src={post_icon} alt="게시글 수정" />
+            게시글 수정
           </Button>
         </ButtonWrap>
       </ContentContainer>

@@ -56,7 +56,7 @@ const PostList = ({ location, match }) => {
                 .then((response) => {
                   const tempPosts = response.data.data;
                   tempPosts.map((tempPost) => {
-                    console.log(tempPost, query.search);
+                    //console.log(tempPost, query.search);
                     if (
                       tempPost.title.toLowerCase().indexOf(query.search.toLowerCase()) !==
                       -1
@@ -186,6 +186,8 @@ const PostList = ({ location, match }) => {
         <div className="PostListHeader">
           {query.search ? (
             <div className="PostListTitle">{`'${query.search}'의 검색결과`}</div>
+          ) : boardTitle ? (
+            <div className="PostListTitle">{boardTitle}</div>
           ) : (
             <div className="PostListTitle">전체글 보기</div>
           )}
