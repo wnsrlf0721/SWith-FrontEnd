@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import ReactHtmlParser from 'html-react-parser';
 
@@ -124,7 +125,15 @@ const Post = ({ match }) => {
         <Title>{postInfo.title}</Title>
         <Info>
           <Divimg>
-            <img src={DefaultProfile} alt="기본사용자이미지" width="40" height="40" />
+            <Link
+              to={{
+                pathname: `/profile/${postInfo.user.id}/other`,
+              }}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={DefaultProfile} alt="기본사용자이미지" width="40" height="40" />
+            </Link>
           </Divimg>
           <div>
             <div style={{ fontWeight: 'bold' }}>{postInfo.user.nickname}</div>
@@ -187,12 +196,20 @@ const Post = ({ match }) => {
             return (
               <li>
                 <CommentArea>
-                  <img
-                    src={DefaultProfile}
-                    alt="기본사용자이미지"
-                    width="35"
-                    height="35"
-                  />
+                  <Link
+                    to={{
+                      pathname: `/profile/${comment.user.id}/other`,
+                    }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={DefaultProfile}
+                      alt="기본사용자이미지"
+                      width="35"
+                      height="35"
+                    />
+                  </Link>
                   <div style={{ padding: '0 0 0 10px' }}>
                     <div style={{ fontWeight: 'bold' }}>{comment.user.nickname}</div>
                     <Content>{comment.comment}</Content>
