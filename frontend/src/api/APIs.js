@@ -180,3 +180,11 @@ export const putComment = async (boardId, postId, commentId, comment) => {
     comment: comment,
   });
 };
+
+export const getFollower = async (userId) => {
+  return await axios.get(`/followers/${userId}`);
+};
+
+export const getFollowing = async (userId) => {
+  return await axios.get(`/followings/${userId}`);
+};
