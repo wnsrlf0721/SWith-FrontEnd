@@ -23,6 +23,7 @@ export const StudyRoomSocket = ({ secTimer, userVideoRef, userInfo, userNickName
   const [enlargedUserSocketId, setEnlargedUserSocketId] = useRecoilState(
     studyRoomAtoms.enlargedUserSocketId,
   );
+  const [kicked, setKicked] = useRecoilState(studyRoomAtoms.kicked);
   const [exitUserSocketId, setExitUserSocketId] = useState('');
 
   useEffect(() => {
@@ -146,8 +147,8 @@ export const StudyRoomSocket = ({ secTimer, userVideoRef, userInfo, userNickName
     });
 
     socket.on('kickOut', () => {
-      alert('방장에게 강퇴당했습니다.');
-      window.open('', '_self').close();
+      setKicked(true);
+      socket.disconnect();
     });
   };
 

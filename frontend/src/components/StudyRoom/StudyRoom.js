@@ -1,5 +1,5 @@
 import './css/StudyRoom.css';
-
+import axios from '../../api/initialAxios';
 import { useRef, useState, useEffect } from 'react';
 import { useBeforeunload } from 'react-beforeunload';
 import { useSetRecoilState, useRecoilState } from 'recoil';
@@ -10,6 +10,8 @@ import StudyRoomModal from './StudyRoomEnterModal';
 import LeftBar from './StudyRoomLeftBar';
 import UserList from './UserList';
 import EnlargeVideoModal from './EnlargeVideoModal';
+import { StudyRoomSocket } from '../../socket/studyRoomSocket';
+import UserKickedModal from './UserKickedModal';
 
 import {
   getStudyRoomInfo,
@@ -18,7 +20,6 @@ import {
 } from '../../api/APIs';
 import socket from '../../socket/socket';
 import { studyRoomAtoms } from '../recoils';
-import { StudyRoomSocket } from '../../socket/studyRoomSocket';
 
 import user_icon from '../../images/user_icon.png';
 import camera_true from '../../images/camera_true.png';
@@ -66,13 +67,12 @@ const StudyRoom = ({ match }) => {
   const [studyRoomInfo, setStudyRoomInfo] = useState([]);
   const [masterId, setMasterId] = useState('');
   const [userId, setUserId] = useState('');
-  const [exited, setExited] = useState(false);
+  const [kicked, setKicked] = useRecoilState(studyRoomAtoms.kicked);
 
   useBeforeunload(async (event) => {
     event.preventDefault();
     socket.disconnect();
-    if (!exited) await postStatistics();
-    setExited(true);
+    await postStatistics();
     window.localStorage.setItem('enteredStudyRoom', 'false');
     return 'Are you sure to close this tab?';
   });
@@ -173,7 +173,12 @@ const StudyRoom = ({ match }) => {
     const userId = JSON.parse(userInfo)['userId'];
     const now = new Date();
     const today = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
-
+    // await axios
+    //   .post('/statistics', {
+    //     userId: userId,
+    //     studyTime: studyTimer,
+    //     date: today,
+    //   })
     postUserstatistics(userId, studyTimer, today)
       .then((response) => {
         console.log(response);
@@ -290,7 +295,7 @@ const StudyRoom = ({ match }) => {
   };
 
   return (
-    <div className="Container" style={!exited ? {} : { display: 'none' }}>
+    <div className="Container">
       {enlargeVideo ? (
         <EnlargeVideoModal
           enlargedUserSocketId={enlargedUserSocketId}
@@ -300,6 +305,7 @@ const StudyRoom = ({ match }) => {
       ) : (
         <></>
       )}
+      {kicked ? <UserKickedModal></UserKickedModal> : <></>}
       <LeftBar studyRoomId={studyRoomId} masterId={masterId} userId={userId} />
 
       <div className="RightWrap">

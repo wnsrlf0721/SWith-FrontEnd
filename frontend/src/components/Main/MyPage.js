@@ -58,7 +58,7 @@ const MyPage = () => {
           const datas = response.data.data;
           datas.map((data) => {
             const D_date = moment(data.date);
-            //console.log(D_date);
+            // console.log(D_date);
             const Diff = Math.abs(Today.diff(D_date, 'days'));
 
             const hour = Number(data.studyTime.slice(0, 2));
@@ -102,15 +102,10 @@ const MyPage = () => {
       getUserStudyRoomsHistory(userInfo.userId)
         .then((response) => {
           const roomId = response.data.data.studyroomIds;
-          // for (var i in roomId) {
-          //   console.log(roomId[i]);
-          // }
           let roomInfo = [];
           getStudyRooms()
-            .get('/studyrooms')
             .then((response) => {
               const datas = response.data.data;
-              //console.log(datas);
               datas.map((data) => {
                 for (var i in roomId) {
                   if (data.id === roomId[i]) {
