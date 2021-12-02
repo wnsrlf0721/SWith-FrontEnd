@@ -166,13 +166,7 @@ const PostList = ({ location, match }) => {
   return (
     <>
       <div className="PostListWrap">
-        <div className="PostListHeader">
-          {query.search ? (
-            <div className="PostListTitle">{`'${query.search}'의 검색결과`}</div>
-          ) : (
-            <div className="PostListTitle">전체글 보기</div>
-          )}
-        </div>
+        <div className="PostListHeader">{getListTitle()}</div>
         <div className="HeaderWrap">
           <div className="SortWrap">
             <select
