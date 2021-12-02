@@ -212,7 +212,9 @@ const Post = ({ match }) => {
                   </Link>
                   <div style={{ padding: '0 0 0 10px' }}>
                     <div style={{ fontWeight: 'bold' }}>{comment.user.nickname}</div>
-                    <Content>{comment.comment}</Content>
+                    <Content>
+                      {ReactHtmlParser(comment.comment.replace(/\n/g, '<br/>'))}
+                    </Content>
                     <div style={{ fontSize: '13px' }}>
                       <span>
                         {moment(comment.createdDate).format('YYYY.MM.DD. HH:mm')}
