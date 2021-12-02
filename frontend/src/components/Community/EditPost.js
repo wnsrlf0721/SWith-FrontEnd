@@ -45,7 +45,7 @@ const CreatePost = ({ match }) => {
         console.log(data);
         if (data.status === '200' && data.message === 'OK') {
           alert('게시글이 수정되었습니다.');
-          window.location.href = '/comm';
+          window.location.href = `/comm/post/${boardId}/${postId}`;
         }
       })
       .catch((error) => {
