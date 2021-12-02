@@ -4,8 +4,10 @@ import styled from 'styled-components';
 import './css/FriendModal.css';
 
 import defaultProfile from '../../images/default_profile_Image.png';
+import { getFollower, getFollowing } from '../../api/APIs';
 //{ className, visible, maskClosable, onClose }
 const FriendModal = ({ closeModal }) => {
+  const [swapleft, setSwapleft] = useState(true);
   const [friends, setFriends] = useState([
     {
       id: '1',
@@ -66,7 +68,21 @@ const FriendModal = ({ closeModal }) => {
   };
 
   // useEffect(() => {
-
+  //   const userId = JSON.parse(window.sessionStorage.userInfo).userId;
+  //   getFollower(userId)
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  //   getFollowing(userId)
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
   // }, []);
   return (
     <>
@@ -77,8 +93,18 @@ const FriendModal = ({ closeModal }) => {
               닫기
             </div> */}
             <div className="friendHeader">
-              <div className="friendTapActive">친구</div>
-              <div className="friendTap">친구 요청</div>
+              <button
+                className={swapleft === true ? 'friendTapActive' : 'friendTap'}
+                onClick={() => setSwapleft(true)}
+              >
+                친구
+              </button>
+              <button
+                className={swapleft === false ? 'friendTapActive' : 'friendTap'}
+                onClick={() => setSwapleft(false)}
+              >
+                친구 요청
+              </button>
             </div>
             <div className="friendsWrap">
               {/* <div className="userWrap">
@@ -117,13 +143,30 @@ const FriendModal = ({ closeModal }) => {
                     </div>
                     <div className="rowWrap">
                       <div className="StudiesTabListWrap">
-                        <button
-                          className={user.follow === true ? 'pinkBtn' : 'whiteBtn'}
-                          onClick={() => changeFollowState(user.id)}
-                        >
-                          {/* {number} */}
-                          팔로잉
-                        </button>
+                        {swapleft ? (
+                          <button
+                            className={user.follow === true ? 'pinkBtn' : 'whiteBtn'}
+                            onClick={() => changeFollowState(user.id)}
+                          >
+                            {/* {number} */}
+                            팔로잉 삭제
+                          </button>
+                        ) : (
+                          <div>
+                            <button
+                              className={user.follow === true ? 'pinkBtn' : 'whiteBtn'}
+                              onClick={() => changeFollowState(user.id)}
+                            >
+                              수락
+                            </button>
+                            <button
+                              className={user.follow === true ? 'pinkBtn' : 'whiteBtn'}
+                              onClick={() => changeFollowState(user.id)}
+                            >
+                              거절
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

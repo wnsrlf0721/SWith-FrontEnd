@@ -1,6 +1,14 @@
 import { useRef, useState, useEffect } from 'react';
 
-const UserVideo = ({ nickName, stream, videoMuted, audioMuted, muted, studyTime }) => {
+const UserVideo = ({
+  nickName,
+  stream,
+  videoMuted,
+  audioMuted,
+  studyTime,
+  userVideoEnlarge,
+  userSocketId,
+}) => {
   const videoRef = useRef(null);
   const [isMuted, setIsMuted] = useState(false);
 
@@ -20,12 +28,16 @@ const UserVideo = ({ nickName, stream, videoMuted, audioMuted, muted, studyTime 
 
   useEffect(() => {
     if (videoRef.current) videoRef.current.srcObject = stream;
-    if (muted) setIsMuted(muted);
-  }, [stream, muted]);
+  }, [stream]);
 
   return (
     <>
-      <video ref={videoRef} muted={isMuted} autoPlay></video>
+      <video
+        ref={videoRef}
+        muted={isMuted}
+        onClick={() => userVideoEnlarge(userSocketId)}
+        autoPlay
+      ></video>
       {nickName} {studyTime}
     </>
   );

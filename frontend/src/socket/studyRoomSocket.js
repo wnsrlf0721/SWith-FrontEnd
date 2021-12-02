@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilState, selector, useRecoilValue } from 'recoil';
 import { studyRoomAtoms } from '../components/recoils';
 import configs from '../utils/configs.json';
@@ -9,9 +9,6 @@ const pc_config = {
 };
 
 export const StudyRoomSocket = ({ secTimer, userVideoRef, userInfo, userNickName }) => {
-  // const userNickName = useRecoilValue(studyRoomAtoms.userNickName);
-  // const userInfo = useRecoilValue(studyRoomAtoms.userInfo);
-
   const [PCs, setPCs] = useRecoilState(studyRoomAtoms.PCs);
   const [connectedUsers, setConnectedUsers] = useRecoilState(
     studyRoomAtoms.connectedUsers,
@@ -22,11 +19,24 @@ export const StudyRoomSocket = ({ secTimer, userVideoRef, userInfo, userNickName
   const [userAudioMute, setUserAudioMute] = useRecoilState(studyRoomAtoms.userAudioMute);
   const [userVideoMute, setUserVideoMute] = useRecoilState(studyRoomAtoms.userVideoMute);
   const [RTCSenders, setRTCSenders] = useRecoilState(studyRoomAtoms.RTCSenders);
+  const [enlargeVideo, setEnlargeVideo] = useRecoilState(studyRoomAtoms.enlargeVideo);
+  const [enlargedUserSocketId, setEnlargedUserSocketId] = useRecoilState(
+    studyRoomAtoms.enlargedUserSocketId,
+  );
+  const [kicked, setKicked] = useRecoilState(studyRoomAtoms.kicked);
+  const [exitUserSocketId, setExitUserSocketId] = useState('');
 
   useEffect(() => {
-    console.log('asdasd');
     initSocket();
   }, []);
+
+  useEffect(() => {
+    console.log(enlargedUserSocketId);
+    if (enlargedUserSocketId === exitUserSocketId) {
+      setEnlargeVideo(false);
+      setEnlargedUserSocketId('');
+    }
+  }, [exitUserSocketId]);
 
   const initSocket = () => {
     socket.on('all_users', (allUsers) => {
@@ -125,14 +135,20 @@ export const StudyRoomSocket = ({ secTimer, userVideoRef, userInfo, userNickName
     });
 
     socket.on('user_exit', (data) => {
-      console.log('PCs.get(data.socketId)');
+      console.log(data.socketId);
       PCs.get(data.socketId).close();
       PCs.delete(data.socketId);
       RTCSenders.delete(data.socketId);
       connectedUserTimer.delete(data.socketId);
+      setExitUserSocketId(data.socketId);
       setConnectedUsers((oldUsers) =>
         oldUsers.filter((user) => user.socketId !== data.socketId),
       );
+    });
+
+    socket.on('kickOut', () => {
+      setKicked(true);
+      socket.disconnect();
     });
   };
 
