@@ -170,6 +170,16 @@ const PostList = ({ location, match }) => {
     }
   };
 
+  const getListTitle = () => {
+    if (query.search) {
+      return <div className="PostListTitle">{`'${query.search}'의 검색결과`}</div>;
+    } else if (boardId == undefined) {
+      return <div className="PostListTitle">전체글 보기</div>;
+    } else {
+      return <div className="PostListTitle">{boardTitle}</div>;
+    }
+  };
+
   return (
     <>
       <div className="PostListWrap">
