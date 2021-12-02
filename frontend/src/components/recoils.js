@@ -60,6 +60,11 @@ const studyRoomAtoms = {
     key: 'enlargedUserSocketId',
     default: '',
   }),
+
+  kicked: atom({
+    key: 'kicked',
+    default: false,
+  }),
 };
 
 const studyRoomSelectors = {};

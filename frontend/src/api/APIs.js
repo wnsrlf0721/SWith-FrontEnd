@@ -46,7 +46,7 @@ export const postUserStudyRoomHistory = async (userId, studyRoomId) => {
 };
 
 export const postUserstatistics = async (userId, studyTime, today) => {
-  return await axios.post('/statistics', {
+  return await axios.post(`/statistics`, {
     userId: userId,
     studyTime: studyTime,
     date: today,

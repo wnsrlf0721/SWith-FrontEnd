@@ -12,6 +12,7 @@ import camera_true from '../../images/camera_default.png';
 import camera_false from '../../images/camera_false.png';
 import speaker_true from '../../images/speaker_default.png';
 import speaker_false from '../../images/speaker_false.png';
+import kickout_default from '../../images/kickout_default.png';
 
 const user = [
   {
@@ -113,10 +114,18 @@ const UserList = (
                 </div>
               </div>
               <div className="rowContainer">
-                {index != 0 ? (
+                {index !== 0 ? (
                   <>
-                    <div>
-                      <button onClick={() => kickOutUser(user.socketId)}>강퇴</button>
+                    <div
+                      className="ImgIcon"
+                      style={{ height: 'auto', cursor: 'default' }}
+                    >
+                      <img
+                        style={{ width: '15px' }}
+                        src={kickout_default}
+                        alt="kickout_default"
+                        onClick={() => kickOutUser(user.socketId)}
+                      />
                     </div>
                     <div
                       className="ImgIcon"
