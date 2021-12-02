@@ -1,13 +1,17 @@
 import './css/StudyRoom.css';
+import axios from '../../api/initialAxios';
 import { useRef, useState, useEffect } from 'react';
 import { useBeforeunload } from 'react-beforeunload';
-import { useSetRecoilState, useRecoilState, selector, useRecoilValue } from 'recoil';
+import { useSetRecoilState, useRecoilState } from 'recoil';
 
-import Video from './UserVideo';
+import UserVideo from './UserVideo';
 import Chat from './Chat';
 import StudyRoomModal from './StudyRoomEnterModal';
 import LeftBar from './StudyRoomLeftBar';
 import UserList from './UserList';
+import EnlargeVideoModal from './EnlargeVideoModal';
+import { StudyRoomSocket } from '../../socket/studyRoomSocket';
+import UserKickedModal from './UserKickedModal';
 
 import {
   getStudyRoomInfo,
@@ -15,8 +19,7 @@ import {
   postUserstatistics,
 } from '../../api/APIs';
 import socket from '../../socket/socket';
-import { studyRoomAtoms, studyRoomSelectors } from '../recoils';
-import { StudyRoomSocket } from '../../socket/studyRoomSocket';
+import { studyRoomAtoms } from '../recoils';
 
 import user_icon from '../../images/user_icon.png';
 import camera_true from '../../images/camera_true.png';
@@ -37,8 +40,7 @@ const StudyRoom = ({ match }) => {
   const [studyTimer, setStudyTimer] = useState('00:00:00');
   const [timerID, setTimerID] = useState(null);
 
-  // const getTimerFormat = useRecoilValue(studyRoomSelectors.getTimerFormat);
-
+  const setUserNickName = useSetRecoilState(studyRoomAtoms.userNickName);
   const [connectedUsers, setConnectedUsers] = useRecoilState(
     studyRoomAtoms.connectedUsers,
   );
@@ -49,7 +51,10 @@ const StudyRoom = ({ match }) => {
   const [userVideoMute, setUserVideoMute] = useRecoilState(studyRoomAtoms.userAudioMute);
   const [RTCSenders] = useRecoilState(studyRoomAtoms.RTCSenders);
 
-  const setUserNickName = useSetRecoilState(studyRoomAtoms.userNickName);
+  const [enlargeVideo, setEnlargeVideo] = useRecoilState(studyRoomAtoms.enlargeVideo);
+  const [enlargedUserSocketId, setEnlargedUserSocketId] = useRecoilState(
+    studyRoomAtoms.enlargedUserSocketId,
+  );
 
   const userVideoRef = useRef(null);
   const [userMedia, setUserMedia] = useState(null);
@@ -62,10 +67,11 @@ const StudyRoom = ({ match }) => {
   const [studyRoomInfo, setStudyRoomInfo] = useState([]);
   const [masterId, setMasterId] = useState('');
   const [userId, setUserId] = useState('');
+  const [kicked, setKicked] = useRecoilState(studyRoomAtoms.kicked);
 
   useBeforeunload(async (event) => {
     event.preventDefault();
-    // socket.disconnect();
+    socket.disconnect();
     await postStatistics();
     window.localStorage.setItem('enteredStudyRoom', 'false');
     return 'Are you sure to close this tab?';
@@ -137,7 +143,6 @@ const StudyRoom = ({ match }) => {
 
     let timerID = setInterval(() => {
       secTimer.current += 1;
-      // let studyTimer = getTime(secTimer.current);
       let studyTimer = getTime(secTimer.current);
       connectedUserTimer.forEach((value, key) => {
         connectedUserTimer.set(key, value + 1);
@@ -168,7 +173,12 @@ const StudyRoom = ({ match }) => {
     const userId = JSON.parse(userInfo)['userId'];
     const now = new Date();
     const today = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
-
+    // await axios
+    //   .post('/statistics', {
+    //     userId: userId,
+    //     studyTime: studyTimer,
+    //     date: today,
+    //   })
     postUserstatistics(userId, studyTimer, today)
       .then((response) => {
         console.log(response);
@@ -278,8 +288,24 @@ const StudyRoom = ({ match }) => {
     return Number;
   };
 
+  const userVideoEnlarge = (userSocketId) => {
+    if (enlargeVideo) setEnlargedUserSocketId('');
+    else setEnlargedUserSocketId(userSocketId);
+    setEnlargeVideo(!enlargeVideo);
+  };
+
   return (
     <div className="Container">
+      {enlargeVideo ? (
+        <EnlargeVideoModal
+          enlargedUserSocketId={enlargedUserSocketId}
+          userVideoEnlarge={userVideoEnlarge}
+          getTime={getTime}
+        ></EnlargeVideoModal>
+      ) : (
+        <></>
+      )}
+      {kicked ? <UserKickedModal></UserKickedModal> : <></>}
       <LeftBar studyRoomId={studyRoomId} masterId={masterId} userId={userId} />
 
       <div className="RightWrap">
@@ -370,13 +396,15 @@ const StudyRoom = ({ match }) => {
                       width: 'calc(100%/' + SplitScreen(connectedUsers.length + 1) + ')',
                     }}
                   >
-                    <Video
+                    <UserVideo
                       key={index}
                       nickName={user.nickName}
                       videoMuted={userVideoMute.get(user.socketId)}
                       audioMuted={userAudioMute.get(user.socketId)}
                       studyTime={getTime(connectedUserTimer.get(user.socketId))}
                       stream={user.stream}
+                      userVideoEnlarge={userVideoEnlarge}
+                      userSocketId={user.socketId}
                     />
                   </div>
                 );

@@ -6016,9 +6016,9 @@ html-minifier-terser@^5.0.1:
     relateurl "^0.2.7"
     terser "^4.6.3"
 
-html-react-parser@^1.4.0:
+html-react-parser@^1.4.1:
   version "1.4.1"
-  resolved "https://registry.npmjs.org/html-react-parser/-/html-react-parser-1.4.1.tgz"
+  resolved "https://registry.yarnpkg.com/html-react-parser/-/html-react-parser-1.4.1.tgz#596cccf5ebe137481af803a55a5b9e4fb0c187b9"
   integrity sha512-wxB9BHUGsMNQ+54R0NF5XYLNZDJEHdQqlb1NxjwEe8BSbsDJPCi09VXWlaAS//rR9h7F3vUGtrmCeFQX2QbOMQ==
   dependencies:
     domhandler "4.2.2"

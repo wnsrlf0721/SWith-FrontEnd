@@ -36,11 +36,6 @@ const PostList = ({ location, match }) => {
     //   });
     // console.log(boardId);
     // console.log(boardTitle);
-    if (query.search) {
-      console.log(`${query.search}를 검색하여 들어옴`);
-    } else {
-      console.log('기본 전체목록');
-    }
 
     //setBoardType(boardId);
     if (boardId == undefined) {
@@ -55,16 +50,38 @@ const PostList = ({ location, match }) => {
           let tempPs = [];
           boardsId.map((x) => {
             //console.log(x);
-            getBoardPost(x)
-              .then((response) => {
-                const tempPosts = response.data.data;
-                tempPs = tempPs.concat(tempPosts);
-                setPost(tempPs.sort((a, b) => getDateNum(a, b)));
-                //console.log(tempPs);
-              })
-              .catch((error) => {
-                console.log(error.response);
-              });
+            //게시글 검색
+            if (query.search) {
+              getBoardPost(x)
+                .then((response) => {
+                  const tempPosts = response.data.data;
+                  tempPosts.map((tempPost) => {
+                    //console.log(tempPost, query.search);
+                    if (
+                      tempPost.title.toLowerCase().indexOf(query.search.toLowerCase()) !==
+                      -1
+                    ) {
+                      tempPs = tempPs.concat(tempPost);
+                    }
+                  });
+                  setPost(tempPs.sort((a, b) => getDateNum(a, b)));
+                })
+                .catch((error) => {
+                  console.log(error.response);
+                });
+            } else {
+              getBoardPost(x)
+                .then((response) => {
+                  const tempPosts = response.data.data;
+                  //console.log(tempPosts);
+                  tempPs = tempPs.concat(tempPosts);
+                  setPost(tempPs.sort((a, b) => getDateNum(a, b)));
+                  //console.log(tempPs);
+                })
+                .catch((error) => {
+                  console.log(error.response);
+                });
+            }
           });
         })
         .catch((error) => {
@@ -109,7 +126,7 @@ const PostList = ({ location, match }) => {
         {currentPosts.map((x) => {
           return (
             <div className="TextsWrap" style={{ borderTop: 'hidden' }}>
-              <a href="/comm/post" className="TextLeftBox">
+              <a href={`/comm/post/${x.board.id}/${x.id}`} className="TextLeftBox">
                 {x.title}
               </a>
               <div className="TextCenterBox">{x.user.nickname}</div>
@@ -153,20 +170,18 @@ const PostList = ({ location, match }) => {
     }
   };
 
-  const getListTitle = () => {
-    if (query.search) {
-      return <div className="PostListTitle">{`'${query.search}'의 검색결과`}</div>;
-    } else if (boardId == undefined) {
-      return <div className="PostListTitle">전체글 보기</div>;
-    } else {
-      return <div className="PostListTitle">{boardTitle}</div>;
-    }
-  };
-
   return (
     <>
       <div className="PostListWrap">
-        <div className="PostListHeader">{getListTitle()}</div>
+        <div className="PostListHeader">
+          {query.search ? (
+            <div className="PostListTitle">{`'${query.search}'의 검색결과`}</div>
+          ) : boardTitle ? (
+            <div className="PostListTitle">{boardTitle}</div>
+          ) : (
+            <div className="PostListTitle">전체글 보기</div>
+          )}
+        </div>
         <div className="HeaderWrap">
           <div className="SortWrap">
             <select

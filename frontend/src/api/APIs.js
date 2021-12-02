@@ -46,7 +46,7 @@ export const postUserStudyRoomHistory = async (userId, studyRoomId) => {
 };
 
 export const postUserstatistics = async (userId, studyTime, today) => {
-  return await axios.post('/statistics', {
+  return await axios.post(`/statistics`, {
     userId: userId,
     studyTime: studyTime,
     date: today,
@@ -158,4 +158,33 @@ export const deleteBoard = async (boardId) => {
 
 export const deleteBoardPostId = async (boardId, postId) => {
   return await axios.delete(`/boards/${boardId}/posts/${postId}`);
+};
+
+export const getBoardPostId = async (boardId, postId) => {
+  return await axios.get(`/boards/${boardId}/posts/${postId}`);
+};
+
+export const postComment = async (boardId, postId, userId, comment) => {
+  return await axios.post(`/boards/${boardId}/posts/${postId}/comment`, {
+    userId: userId,
+    comment: comment,
+  });
+};
+
+export const deleteComment = async (boardId, postId, commentId) => {
+  return await axios.delete(`/boards/${boardId}/posts/${postId}/comment/${commentId}`);
+};
+
+export const putComment = async (boardId, postId, commentId, comment) => {
+  return await axios.put(`/boards/${boardId}/posts/${postId}/comment/${commentId}`, {
+    comment: comment,
+  });
+};
+
+export const getFollower = async (userId) => {
+  return await axios.get(`/followers/${userId}`);
+};
+
+export const getFollowing = async (userId) => {
+  return await axios.get(`/followings/${userId}`);
 };

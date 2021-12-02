@@ -75,19 +75,19 @@ const StudyRoomEnterModal = ({ setInitSetting, videoRef }) => {
       <ModalOverlay />
       <ModalWrapper tabIndex="-1">
         <ModalInner tabIndex="0" className="modal-inner">
-          <button
+          <Button
             disabled={availableUserVideo && loading ? false : true}
             onClick={videoMute}
           >
-            video mute
-          </button>
+            {videoMuted ? '비디오 끄기' : '비디오 켜기'}
+          </Button>
           {modalMedia}
-          <button
+          <Button
             disabled={availableUserVideo && loading ? false : true}
             onClick={enterStudyRoomWithVideo}
           >
-            enter studyroom
-          </button>
+            입장하기
+          </Button>
         </ModalInner>
       </ModalWrapper>
     </>
@@ -132,6 +132,20 @@ const ModalInner = styled.div`
   transform: translateY(-50%);
   margin: 0 auto;
   padding: 40px 20px;
+`;
+
+const Button = styled.button`
+  align-items: center;
+  width: 25%;
+  height: 35px;
+  background-color: #ef8585;
+  font-size: 0.95rem;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  border: 0;
+  outline: 0;
+  text-decoration: none;
 `;
 
 export default StudyRoomEnterModal;

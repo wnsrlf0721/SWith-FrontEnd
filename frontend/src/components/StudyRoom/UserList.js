@@ -2,6 +2,7 @@ import './css/StudyRoom.css';
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import socket from '../../socket/socket';
 
 import searchGray from '../../images/search_gray.png';
 import heartTrue from '../../images/heart_true.png';
@@ -11,6 +12,7 @@ import camera_true from '../../images/camera_default.png';
 import camera_false from '../../images/camera_false.png';
 import speaker_true from '../../images/speaker_default.png';
 import speaker_false from '../../images/speaker_false.png';
+import kickout_default from '../../images/kickout_default.png';
 
 const user = [
   {
@@ -26,25 +28,6 @@ const user = [
     name: '유저2',
   },
 ];
-
-const isUser = (user) => {
-  if (user.id != 1) {
-    return (
-      <>
-        {/* <div className="ImgIcon" style={{height: 'auto'}}>
-                    <img
-                        style ={{width:'15px'}}
-                        src={heartTrue}
-                        alt="heartTrue"
-                    />
-                </div> */}
-        <div className="ImgIcon" style={{ height: 'auto' }}>
-          <img style={{ width: '15px' }} src={planner} alt="planner" />
-        </div>
-      </>
-    );
-  }
-};
 
 const UserList = (
   userId,
@@ -64,26 +47,7 @@ const UserList = (
   ];
 
   useEffect(() => {
-    //console.log(connnectedUsers);
-    // axios
-    // .get(`/users/${session.userId}`)
-    // .then((response) => {
-    //   const data = response.data;
-    //   console.log(data);
-    //   if (data.status === "200" && data.message === "OK") {
-
-    //     // setImUser({
-    //     //     id:data.data.id,
-    //     //     nickName:data.data.
-    //     // })
-    //   }
-    // })
-    // .catch((error) => {
-    //   console.log(error.toJSON());
-    // });
     setImUser(users.concat(connnectedUsers));
-    //console.log(imUser)
-    //console.log(connnectedUsers)
   }, [connnectedUsers]);
 
   const videoMute = (userSocketId) => {
@@ -96,6 +60,12 @@ const UserList = (
     setAudioMute(userSocketId);
     console.log(userAudioMute.get(userSocketId));
     console.log(userAudioMute);
+  };
+
+  const kickOutUser = (userSocketId) => {
+    socket.emit('kickOut', {
+      socketId: userSocketId,
+    });
   };
 
   return (
@@ -144,8 +114,19 @@ const UserList = (
                 </div>
               </div>
               <div className="rowContainer">
-                {index != 0 ? (
+                {index !== 0 ? (
                   <>
+                    <div
+                      className="ImgIcon"
+                      style={{ height: 'auto', cursor: 'default' }}
+                    >
+                      <img
+                        style={{ width: '15px' }}
+                        src={kickout_default}
+                        alt="kickout_default"
+                        onClick={() => kickOutUser(user.socketId)}
+                      />
+                    </div>
                     <div
                       className="ImgIcon"
                       style={{ height: 'auto', cursor: 'default' }}
@@ -176,8 +157,6 @@ const UserList = (
                 ) : (
                   <></>
                 )}
-
-                {/* {isUser(user)} */}
               </div>
             </div>
           );
