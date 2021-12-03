@@ -92,7 +92,7 @@ const Edit = () => {
           session.userId,
           editInfo.nickname,
           editInfo.beforePassword,
-          editInfo.beforePassword,
+          editInfo.password,
         )
           .then((response) => {
             alert('프로필 정보를 변경하였습니다.');

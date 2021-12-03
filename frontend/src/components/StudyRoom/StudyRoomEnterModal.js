@@ -78,6 +78,7 @@ const StudyRoomEnterModal = ({ setInitSetting, videoRef }) => {
           <Button
             disabled={availableUserVideo && loading ? false : true}
             onClick={videoMute}
+            style={availableUserVideo && loading ? {} : { background: 'gray' }}
           >
             {videoMuted ? '비디오 끄기' : '비디오 켜기'}
           </Button>
@@ -85,6 +86,7 @@ const StudyRoomEnterModal = ({ setInitSetting, videoRef }) => {
           <Button
             disabled={availableUserVideo && loading ? false : true}
             onClick={enterStudyRoomWithVideo}
+            style={availableUserVideo && loading ? {} : { background: 'gray' }}
           >
             입장하기
           </Button>

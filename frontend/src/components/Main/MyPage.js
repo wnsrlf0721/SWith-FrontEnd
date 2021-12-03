@@ -114,6 +114,8 @@ const MyPage = () => {
                       title: data.title,
                       hashtags: data.hashtags,
                       purpose: data.purpose,
+                      maxUserCount: data.maxUserCount,
+                      userCount: data.userCount,
                     });
                   } else {
                     continue;
@@ -163,6 +165,8 @@ const MyPage = () => {
                 body={data.hashtags}
                 studyRoomID={data.id}
                 nickName={NickName}
+                maxUserCount={data.maxUserCount}
+                userCount={data.userCount}
               ></StudyCard>
             </div>
           );
@@ -176,9 +180,7 @@ const MyPage = () => {
     if (!isLogined || postsNum === 0) {
       return (
         <div className="blackBox">
-          <div className="studyText">
-            내가 만든 스터디 또는 초대 받은 스터디가 등록됩니다
-          </div>
+          <div className="studyText">내가 입장했던 스터디가 등록됩니다.</div>
         </div>
       );
     } else if (postsNum < 3) {
@@ -186,9 +188,7 @@ const MyPage = () => {
         <>
           {studyBox()}
           <div className="blackBox">
-            <div className="studyText">
-              내가 만든 스터디 또는 초대 받은 스터디가 등록됩니다
-            </div>
+            <div className="studyText">내가 입장했던 스터디가 등록됩니다.</div>
           </div>
         </>
       );
