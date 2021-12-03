@@ -65,6 +65,16 @@ const studyRoomAtoms = {
     key: 'kicked',
     default: false,
   }),
+
+  kickOutInfo: atom({
+    key: 'kickOutInfo',
+    default: [],
+  }),
+
+  openKickOutModal: atom({
+    key: 'openKickOutModal',
+    default: false,
+  }),
 };
 
 const studyRoomSelectors = {};

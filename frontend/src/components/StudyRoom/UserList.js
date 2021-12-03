@@ -2,7 +2,7 @@ import './css/StudyRoom.css';
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import socket from '../../socket/socket';
+import { studyRoomAtoms } from '../recoils';
 
 import searchGray from '../../images/search_gray.png';
 import heartTrue from '../../images/heart_true.png';
@@ -13,6 +13,7 @@ import camera_false from '../../images/camera_false.png';
 import speaker_true from '../../images/speaker_default.png';
 import speaker_false from '../../images/speaker_false.png';
 import kickout_default from '../../images/kickout_default.png';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 const user = [
   {
@@ -31,14 +32,21 @@ const user = [
 
 const UserList = (
   userId,
+  studyRoomID,
   userNickName,
   connnectedUsers,
   setVideoMute,
   setAudioMute,
   userVideoMute,
   userAudioMute,
+  masterId,
+  maxUserCount,
 ) => {
   const [imUser, setImUser] = useState([]);
+  const [kickOutInfo, setKickOutInfo] = useRecoilState(studyRoomAtoms.kickOutInfo);
+  const [openKickOutModal, setOpenKickOutModal] = useRecoilState(
+    studyRoomAtoms.openKickOutModal,
+  );
   const users = [
     {
       userId: userId,
@@ -62,10 +70,9 @@ const UserList = (
     console.log(userAudioMute);
   };
 
-  const kickOutUser = (userSocketId) => {
-    socket.emit('kickOut', {
-      socketId: userSocketId,
-    });
+  const kickOutUser = (userSocketId, userId, userNickName) => {
+    setKickOutInfo([userSocketId, userId, studyRoomID, userNickName]);
+    setOpenKickOutModal(true);
   };
 
   return (
@@ -76,7 +83,7 @@ const UserList = (
             참여자 목록
           </div>
           <div className="text" style={{ fontSize: '12px' }}>
-            {connnectedUsers.length + 1}/6
+            {connnectedUsers.length + 1}/{maxUserCount}
           </div>
         </div>
         <div className="rowContainer">
@@ -118,13 +125,19 @@ const UserList = (
                   <>
                     <div
                       className="ImgIcon"
-                      style={{ height: 'auto', cursor: 'default' }}
+                      style={
+                        masterId === userId
+                          ? { height: 'auto', cursor: 'default' }
+                          : { display: 'none' }
+                      }
                     >
                       <img
                         style={{ width: '15px' }}
                         src={kickout_default}
                         alt="kickout_default"
-                        onClick={() => kickOutUser(user.socketId)}
+                        onClick={() =>
+                          kickOutUser(user.socketId, user.userId, user.nickName)
+                        }
                       />
                     </div>
                     <div

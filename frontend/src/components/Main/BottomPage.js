@@ -54,6 +54,20 @@ const BottomPage = ({ search }) => {
 
   const [posts, setPosts] = useState([]); //전체 카테고리 list
   const [purpose_list, setPurpose_list] = useState([]); //부분 카테고리 list
+  //pagination 관련 data
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 10;
+
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = purpose_list.slice(indexOfFirstPost, indexOfLastPost);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(purpose_list.length / postsPerPage); i++) {
+    pageNumbers.push(i);
+  }
 
   //카테고리 버튼 누를때 동작
   const toggleTab = (index) => {
@@ -84,13 +98,15 @@ const BottomPage = ({ search }) => {
     getStudyRooms()
       .then((response) => {
         const datas = response.data.data;
-        //console.log(datas);
+        console.log(datas);
         datas.map((data) => {
           roomInfo = roomInfo.concat({
             id: data.id,
             title: data.title,
             hashtags: data.hashtags,
             purpose: data.purpose,
+            maxUserCount: data.maxUserCount,
+            userCount: data.userCount,
           });
         });
 
@@ -164,21 +180,6 @@ const BottomPage = ({ search }) => {
     getStudyTitleHashtag();
   }, []);
 
-  //pagination 관련 data
-  const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 10;
-
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = purpose_list.slice(indexOfFirstPost, indexOfLastPost);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(purpose_list.length / postsPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
   return (
     <Bottompage>
       <div className="StudiesContainer">
@@ -222,6 +223,8 @@ const BottomPage = ({ search }) => {
                   body={data.hashtags}
                   studyRoomID={data.id}
                   nickName={NickName}
+                  maxUserCount={data.maxUserCount}
+                  userCount={data.userCount}
                 ></StudyCard>
               </LinkContainer>
             );

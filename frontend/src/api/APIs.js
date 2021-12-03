@@ -77,6 +77,20 @@ export const postBoardPost = async (board_id, userId, postTitle, postContent) =>
   });
 };
 
+export const postComment = async (boardId, postId, userId, comment) => {
+  return await axios.post(`/boards/${boardId}/posts/${postId}/comment`, {
+    userId: userId,
+    comment: comment,
+  });
+};
+
+export const postBanUser = async (userId, studyRoomId) => {
+  return await axios.post(`/studyrooms/ban-user`, {
+    userId: userId,
+    studyroomId: studyRoomId,
+  });
+};
+
 export const getUserInfo = async (userId) => {
   return await axios.get(`/users/${userId}`);
 };
@@ -113,7 +127,31 @@ export const getPostInfo = async (board_id, post_id) => {
   return await axios.get(`/boards/${board_id}/posts/${post_id}`);
 };
 
-export const patchUserInfo = async (userId, nickname, password, beforePassword) => {
+export const getBoardPostId = async (boardId, postId) => {
+  return await axios.get(`/boards/${boardId}/posts/${postId}`);
+};
+
+export const getFollower = async (userId) => {
+  return await axios.get(`/followers/${userId}`);
+};
+
+export const getFollowing = async (userId) => {
+  return await axios.get(`/followings/${userId}`);
+};
+
+export const getBanUsers = async (studyroom_id) => {
+  return await axios.get(`/studyrooms/ban-user/${studyroom_id}`);
+};
+
+export const getStudyRoomOut = async (studyroom_id) => {
+  return await axios.get(`/studyrooms/${studyroom_id}/out`);
+};
+
+export const getStudyRoomEnter = async (studyroom_id) => {
+  return await axios.get(`/studyrooms/${studyroom_id}/enter`);
+};
+
+export const patchUserInfo = async (userId, nickname, beforePassword, password) => {
   return await axios.patch(`/users/${userId}`, {
     nickname: nickname,
     beforePassword: beforePassword,
@@ -148,6 +186,12 @@ export const putBoardPostId = async (boardId, postId, title, content) => {
   });
 };
 
+export const putComment = async (boardId, postId, commentId, comment) => {
+  return await axios.put(`/boards/${boardId}/posts/${postId}/comment/${commentId}`, {
+    comment: comment,
+  });
+};
+
 export const deletePlannerTask = async (userId, taskId) => {
   return await axios.delete(`/planners/${userId}/${taskId}`, {});
 };
@@ -160,31 +204,6 @@ export const deleteBoardPostId = async (boardId, postId) => {
   return await axios.delete(`/boards/${boardId}/posts/${postId}`);
 };
 
-export const getBoardPostId = async (boardId, postId) => {
-  return await axios.get(`/boards/${boardId}/posts/${postId}`);
-};
-
-export const postComment = async (boardId, postId, userId, comment) => {
-  return await axios.post(`/boards/${boardId}/posts/${postId}/comment`, {
-    userId: userId,
-    comment: comment,
-  });
-};
-
 export const deleteComment = async (boardId, postId, commentId) => {
   return await axios.delete(`/boards/${boardId}/posts/${postId}/comment/${commentId}`);
-};
-
-export const putComment = async (boardId, postId, commentId, comment) => {
-  return await axios.put(`/boards/${boardId}/posts/${postId}/comment/${commentId}`, {
-    comment: comment,
-  });
-};
-
-export const getFollower = async (userId) => {
-  return await axios.get(`/followers/${userId}`);
-};
-
-export const getFollowing = async (userId) => {
-  return await axios.get(`/followings/${userId}`);
 };
