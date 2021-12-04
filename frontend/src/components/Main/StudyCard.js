@@ -2,6 +2,7 @@ import './css/StudyCard.css';
 import { getBanUsers, getStudyRoomInfo } from '../../api/APIs';
 import React from 'react';
 import user_icon from '../../images/user_black.png';
+import key_icon from '../../images/key_icon_black.png';
 
 const StudyCard = ({
   title,
@@ -11,6 +12,7 @@ const StudyCard = ({
   nickName,
   maxUserCount,
   userCount,
+  secret,
 }) => {
   const isLogined = window.sessionStorage.userInfo == null ? false : true;
 
@@ -34,20 +36,15 @@ const StudyCard = ({
               alert('최대 인원수 초과로 입장하실 수 없습니다.');
               window.location.reload();
             } else {
-              window.open(
-                `/StudyRoom/${studyRoomID}/${nickName}/${window.sessionStorage.userInfo}`,
-                '_blank',
-                'noopener noreferrer',
-              );
-              // if (window.localStorage.getItem('enteredStudyRoom') === 'true')
-              //   alert('이미 스터디룸에 입장하였습니다.');
-              // else {
-              //   window.open(
-              //     `/StudyRoom/${studyRoomID}/${nickName}/${window.sessionStorage.userInfo}`,
-              //     '_blank',
-              //     'noopener noreferrer',
-              //   );
-              // }
+              if (window.localStorage.getItem('enteredStudyRoom') === 'true')
+                alert('이미 스터디룸에 입장하였습니다.');
+              else {
+                window.open(
+                  `/StudyRoom/${studyRoomID}/${nickName}/${window.sessionStorage.userInfo}`,
+                  '_blank',
+                  'noopener noreferrer',
+                );
+              }
             }
           })
           .catch((error) => {
@@ -83,9 +80,32 @@ const StudyCard = ({
           </div>
           <div className="card-body">
             <div className="hashtagWrap">
-              {body.map((x) => {
-                return <div className="t">{'#' + x.hashtag}</div>;
-              })}
+              <div className="card-title">
+                <div style={{ width: '100%' }}>
+                  {body.map((x) => {
+                    return <span className="t">{'#' + x.hashtag}</span>;
+                  })}
+                </div>
+                {secret === 0 ? (
+                  <></>
+                ) : (
+                  <div>
+                    <img
+                      style={{
+                        height: '12px',
+                        width: 'auto',
+                        objectFit: 'cover',
+                        marginRight: '2px',
+                        position: 'absolute',
+                        bottom: '15px',
+                        right: '10px',
+                      }}
+                      src={key_icon}
+                      alt="key_icon"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

@@ -89,12 +89,12 @@ const StudyRoom = ({ match }) => {
     setUserId(userId);
     setUserNickName(userNickName);
 
-    getStudyRoomEnter(studyRoomId)
+    postUserStudyRoomHistory(userId, studyRoomId)
       .then((response) => {
         console.log(response);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
 
     getStudyRoomInfo(studyRoomId)
@@ -121,6 +121,13 @@ const StudyRoom = ({ match }) => {
             pwTest = input;
           } else {
             window.localStorage.setItem('enteredStudyRoom', 'true');
+            getStudyRoomEnter(studyRoomId)
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
             return;
           }
           console.log(i);
@@ -132,14 +139,6 @@ const StudyRoom = ({ match }) => {
       })
       .catch((error) => {
         console.log(error);
-      });
-
-    postUserStudyRoomHistory(userId, studyRoomId)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.error(error);
       });
   }, []);
 

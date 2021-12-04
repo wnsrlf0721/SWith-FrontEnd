@@ -267,7 +267,7 @@ const StudyRoomEditModal = ({
                     name="hashtag"
                     placeholder="Enter a tag"
                     onChange={(e) => onChangehandler(e)}
-                    onKeyDown={(e) => onKeyDown(e)}
+                    onKeyPress={(e) => onKeyDown(e)}
                     value={inputTag}
                   />
                 </div>
