@@ -102,6 +102,21 @@ const Index = () => {
               <Box>
                 게시판 목록
                 <ul style={{ listStyleType: 'none' }}>
+                  <li>
+                    <Link href="/comm">
+                      <img
+                        style={{
+                          height: '18px',
+                          width: '18px',
+                          verticalAlign: 'middle',
+                          padding: '0 6px 0 0 ',
+                        }}
+                        src={post_list}
+                        alt="post_list"
+                      />
+                      전체 게시글
+                    </Link>
+                  </li>
                   {boardList.map((board) => {
                     return (
                       <li>
