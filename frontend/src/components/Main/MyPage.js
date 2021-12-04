@@ -116,6 +116,8 @@ const MyPage = () => {
                       purpose: data.purpose,
                       maxUserCount: data.maxUserCount,
                       userCount: data.userCount,
+                      userCount: data.userCount,
+                      secret: data.secret,
                     });
                   } else {
                     continue;
@@ -167,6 +169,8 @@ const MyPage = () => {
                 nickName={NickName}
                 maxUserCount={data.maxUserCount}
                 userCount={data.userCount}
+                userCount={data.userCount}
+                secret={data.secret}
               ></StudyCard>
             </div>
           );

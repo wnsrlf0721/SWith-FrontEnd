@@ -85,6 +85,9 @@ const BottomPage = ({ search }) => {
             title: data.title,
             hashtags: data.hashtags,
             purpose: data.purpose,
+            maxUserCount: data.maxUserCount,
+            userCount: data.userCount,
+            secret: data.secret,
           });
         }
       });
@@ -107,6 +110,7 @@ const BottomPage = ({ search }) => {
             purpose: data.purpose,
             maxUserCount: data.maxUserCount,
             userCount: data.userCount,
+            secret: data.secret,
           });
         });
 
@@ -120,6 +124,9 @@ const BottomPage = ({ search }) => {
                 title: data.title,
                 hashtags: data.hashtags,
                 purpose: data.purpose,
+                maxUserCount: data.maxUserCount,
+                userCount: data.userCount,
+                secret: data.secret,
               });
             } else {
               for (var i in data.hashtags) {
@@ -133,6 +140,9 @@ const BottomPage = ({ search }) => {
                     title: data.title,
                     hashtags: data.hashtags,
                     purpose: data.purpose,
+                    maxUserCount: data.maxUserCount,
+                    userCount: data.userCount,
+                    secret: data.secret,
                   });
                   break;
                 }
@@ -225,6 +235,7 @@ const BottomPage = ({ search }) => {
                   nickName={NickName}
                   maxUserCount={data.maxUserCount}
                   userCount={data.userCount}
+                  secret={data.secret}
                 ></StudyCard>
               </LinkContainer>
             );
