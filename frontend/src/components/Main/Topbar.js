@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import React, { useState } from 'react';
 
-import logo from '../../images/logo.png';
+import logo from '../../images/SWith_logo2.svg';
 import DM_icon from '../../images/DM_icon.png';
 import search_icon from '../../images/search_gray.png';
 import friend_icon from '../../images/heart_default.png';

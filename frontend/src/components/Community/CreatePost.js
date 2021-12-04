@@ -54,13 +54,13 @@ const CreatePost = () => {
 
   const onsubmit = (e) => {
     const userInfo = JSON.parse(window.sessionStorage.userInfo);
-    let contentsLength = submitContents.props.children.length;
     e.preventDefault();
     if (title.length < 1) {
       alert('제목을 입력해주세요.');
       return;
     }
-    if (contentsLength < 1) {
+
+    if (submitContents < 1) {
       alert('내용을 입력해주세요.');
       return;
     }
