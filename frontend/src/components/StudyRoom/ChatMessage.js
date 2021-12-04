@@ -35,6 +35,7 @@ const ContentBox = styled.pre`
   color: #312b30;
   font-family: 'Roboto';
   font-size: 16px;
+  white-space: pre-line;
 `;
 
 export default ChatMessage;
