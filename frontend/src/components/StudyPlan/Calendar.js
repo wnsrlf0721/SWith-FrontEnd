@@ -138,14 +138,14 @@ const Calendar = () => {
     putPlannerTask(userInfo.userId, event.id, event.title, start, end, chch)
       .then((response) => {
         const data = response.data;
-        console.log(todo);
-        console.log(data);
+        // console.log(todo);
+        // console.log(data);
         if (data.status === '200' && data.message === 'OK') {
         }
         window.location.reload();
       })
       .catch((error) => {
-        console.log(todo);
+        // console.log(todo);
         console.log(error.toJSON());
       });
   };
@@ -184,8 +184,8 @@ const Calendar = () => {
       ].join('-') +
       'T' +
       endDate.toTimeString().substring(0, 8);
-    console.log(startDate);
-    console.log(start);
+    // console.log(startDate);
+    // console.log(start);
     if (title) {
       postPlannerTask(userInfo.userId, title, start, end)
         .then((response) => {
@@ -224,48 +224,56 @@ const Calendar = () => {
     setCurrentEvents(events);
   };
 
+  const selectOneday = (selectInfo) => {
+    let startDate = selectInfo.start;
+    let endDate = selectInfo.end;
+    endDate.setSeconds(endDate.getSeconds() - 1); // allow full day selection
+    if (startDate.getDate() === endDate.getDate()) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const renderSidebarEvent = (event) => {
     let Start = event.start.toDateString();
-    let Today = new Date();
-    if (!event.end) {
-      if (Start === todayStr) {
-        return (
-          <li key={event.id}>
-            <input
-              type="checkbox"
-              checked={getTodoCheck(event)}
-              onChange={() => HandleTodoCheck(event)}
-            ></input>
-            <b>{event.title}</b>
-          </li>
-        );
-      }
-    } else {
-      let startMD = String(
-        event.start.getMonth() + event.start.getDate().toString().padStart(2, '0') + '00',
+    if (Start === todayStr) {
+      return (
+        <li key={event.id}>
+          <input
+            type="checkbox"
+            checked={getTodoCheck(event)}
+            onChange={() => HandleTodoCheck(event)}
+          ></input>
+          <b>{event.title}</b>
+        </li>
       );
-      let todayMD = String(
-        Today.getMonth() + Today.getDate().toString().padStart(2, '0') + '01',
-      );
-      let endMD = String(
-        event.end.getMonth() +
-          event.end.getDate().toString().padStart(2, '0') +
-          event.end.getHours().toString().padStart(2, '0'),
-      );
-
-      if (todayMD >= startMD && todayMD <= endMD) {
-        return (
-          <li key={event.id}>
-            <input
-              type="checkbox"
-              checked={getTodoCheck(event)}
-              onChange={() => HandleTodoCheck(event)}
-            ></input>
-            <b>{event.title}</b>
-          </li>
-        );
-      }
     }
+
+    // let startMD = String(
+    //   event.start.getMonth() + event.start.getDate().toString().padStart(2, '0') + '00',
+    // );
+    // let todayMD = String(
+    //   Today.getMonth() + Today.getDate().toString().padStart(2, '0') + '01',
+    // );
+    // let endMD = String(
+    //   event.end.getMonth() +
+    //     event.end.getDate().toString().padStart(2, '0') +
+    //     event.end.getHours().toString().padStart(2, '0'),
+    // );
+
+    // if (todayMD >= startMD && todayMD <= endMD) {
+    //   return (
+    //     <li key={event.id}>
+    //       <input
+    //         type="checkbox"
+    //         checked={getTodoCheck(event)}
+    //         onChange={() => HandleTodoCheck(event)}
+    //       ></input>
+    //       <b>{event.title}</b>
+    //     </li>
+    //   );
+    // }
   };
   const renderSidebar = () => {
     return (
@@ -299,6 +307,7 @@ const Calendar = () => {
           events={getEvent}
           initialEvents={HandleLoad()}
           select={handleDateSelect}
+          selectAllow={selectOneday}
           eventContent={renderEventContent} // custom render function
           eventClick={handleEventClick}
           eventsSet={handleEvents} // called after events are initialized/added/changed/removed
