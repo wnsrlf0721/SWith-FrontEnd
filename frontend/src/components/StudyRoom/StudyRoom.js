@@ -1,5 +1,4 @@
 import './css/StudyRoom.css';
-import axios from '../../api/initialAxios';
 import { useRef, useState, useEffect } from 'react';
 import { useBeforeunload } from 'react-beforeunload';
 import { useSetRecoilState, useRecoilState } from 'recoil';
@@ -12,11 +11,14 @@ import UserList from './UserList';
 import EnlargeVideoModal from './EnlargeVideoModal';
 import { StudyRoomSocket } from '../../socket/studyRoomSocket';
 import UserKickedModal from './UserKickedModal';
+import UserKickOutModal from './UserKickOutModal';
 
 import {
   getStudyRoomInfo,
   postUserStudyRoomHistory,
   postUserstatistics,
+  getStudyRoomOut,
+  getStudyRoomEnter,
 } from '../../api/APIs';
 import socket from '../../socket/socket';
 import { studyRoomAtoms } from '../recoils';
@@ -68,13 +70,17 @@ const StudyRoom = ({ match }) => {
   const [masterId, setMasterId] = useState('');
   const [userId, setUserId] = useState('');
   const [kicked, setKicked] = useRecoilState(studyRoomAtoms.kicked);
+  const [openKickOutModal, setOpenKickOutModal] = useRecoilState(
+    studyRoomAtoms.openKickOutModal,
+  );
 
   useBeforeunload(async (event) => {
-    event.preventDefault();
+    // event.preventDefault();
     socket.disconnect();
+    getStudyRoomOut(studyRoomId);
     await postStatistics();
     window.localStorage.setItem('enteredStudyRoom', 'false');
-    return 'Are you sure to close this tab?';
+    // return 'Are you sure to close this tab?';
   });
 
   useEffect(() => {
@@ -83,6 +89,14 @@ const StudyRoom = ({ match }) => {
     setUserId(userId);
     setUserNickName(userNickName);
 
+    getStudyRoomEnter(studyRoomId)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     getStudyRoomInfo(studyRoomId)
       .then((response) => {
         const data = response.data;
@@ -90,6 +104,8 @@ const StudyRoom = ({ match }) => {
         setStudyRoomInfo({
           id: data.data.id,
           title: data.data.title,
+          maxUserCount: data.data.maxUserCount,
+          masterId: data.data.masterId,
         });
         setMasterId(data.data.masterId);
 
@@ -168,17 +184,25 @@ const StudyRoom = ({ match }) => {
     return hour + ':' + min + ':' + sec;
   };
 
+  const leftPad = (value) => {
+    if (value >= 10) {
+      return value;
+    }
+    return `0${value}`;
+  };
+
+  const toStringByFormatting = (source, delimiter = '-') => {
+    const year = source.getFullYear();
+    const month = leftPad(source.getMonth() + 1);
+    const day = leftPad(source.getDate());
+    return [year, month, day].join(delimiter);
+  };
+
   const postStatistics = async () => {
     clearInterval(timerID);
     const userId = JSON.parse(userInfo)['userId'];
-    const now = new Date();
-    const today = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
-    // await axios
-    //   .post('/statistics', {
-    //     userId: userId,
-    //     studyTime: studyTimer,
-    //     date: today,
-    //   })
+    const today = toStringByFormatting(new Date());
+
     postUserstatistics(userId, studyTimer, today)
       .then((response) => {
         console.log(response);
@@ -306,6 +330,7 @@ const StudyRoom = ({ match }) => {
         <></>
       )}
       {kicked ? <UserKickedModal></UserKickedModal> : <></>}
+      {openKickOutModal ? <UserKickOutModal></UserKickOutModal> : <></>}
       <LeftBar studyRoomId={studyRoomId} masterId={masterId} userId={userId} />
 
       <div className="RightWrap">
@@ -415,12 +440,15 @@ const StudyRoom = ({ match }) => {
         <div className="ListWrap">
           {UserList(
             JSON.parse(userInfo)['userId'],
+            studyRoomId,
             userNickName,
             connectedUsers,
             setVideoMute,
             setAudioMute,
             userVideoMute,
             userAudioMute,
+            studyRoomInfo.masterId,
+            studyRoomInfo.maxUserCount,
           )}
           <Chat userNickName={userNickName} />
         </div>
