@@ -59,67 +59,62 @@ yarn start
 ## 4. 페이지 구성
 
 ### 1. 메인페이지
-
-
+<br/><br/>
 ![홈화면](https://user-images.githubusercontent.com/72532944/144746343-90a6c5b6-2b1c-4ced-b09d-fa23dd56c3f6.png)
-
+<br/>
 * 내 스터디
+<br/><br/>
 ![내 스터디](https://user-images.githubusercontent.com/72532944/144746321-e553344c-acbf-4e94-b191-dbe93953d995.png)
-
+<br/>
 * 스터디 목록
+* <br/><br/>
 ![스터디목록](https://user-images.githubusercontent.com/72532944/144746334-e896c88b-6bb7-4fce-9b2c-7a720b8cf73e.png)
-
+<br/>
 ### 2. 로그인 페이지
+<br/><br/>
 ![로그인](https://user-images.githubusercontent.com/72532944/144746325-e63fbd0f-af67-4402-993c-3e6a99ef1bc1.png)
-
+<br/>
 ### 3. 회원가입 페이지
+<br/><br/>
 ![회원가입](https://user-images.githubusercontent.com/72532944/144746344-92e5d9d4-3870-4b85-81fb-7b75b0b8ebaa.png)
-
-
+<br/>
 ### 4. 프로필 페이지
-
-
+<br/><br/>
 ![프로필](https://user-images.githubusercontent.com/72532944/144746339-584a482e-0dde-499d-9a84-399d4f9726ac.png)
-
+<br/>
 * 프로필 편집 
 ![프로필 편집](https://user-images.githubusercontent.com/72532944/144746338-c4028bab-a57e-412a-b31f-4ba99c8f9105.png)
-
+<br/>
 ### 5.. 스터디룸 페이지
-
-
+<br/><br/>
 ![스터디룸](https://user-images.githubusercontent.com/72532944/144746331-1dd9b11b-2f69-48fd-b9dc-fc84b1adb2d9.png)
-
-
+<br/>
 ![스터디룸2](https://user-images.githubusercontent.com/72532944/144746332-f066dfdd-a61d-408e-a3a9-f59b90f548ad.png)
-
-
+<br/>
 * 스터디룸 만들기
 ![스터디 만들기](https://user-images.githubusercontent.com/72532944/144746326-0cf97491-c330-46b9-8d77-db34fd648543.png)
 
 * 스터디룸 설정 수정
 이미지
-
+<br/>
 ### 6. 학습관리 페이지
-
-
+<br/><br/>
 * 캘린더
 ![학습관리-캘린더](https://user-images.githubusercontent.com/72532944/144746341-c9bf9359-166f-43ee-bf40-655e9ab6aa37.png)
-
-
+<br/>
 * 통계
 ![학습관리-통계](https://user-images.githubusercontent.com/72532944/144746342-4a402be1-c6c5-4f7a-b940-9ca75fa4ab97.png)
-
+<br/>
 ### 7. 커뮤니티 페이지
-
-
+<br/><br/>
 * 게시글 목록
 ![커뮤니티](https://user-images.githubusercontent.com/72532944/144746337-c3097871-f057-49db-82a6-d1a2bf4efaff.png)
-
+<br/>
 * 게시글
 ![게시글](https://user-images.githubusercontent.com/72532944/144746320-c0c08fc1-5862-45bb-96da-4510eff02bdf.png)
-
+<br/>
 * 게시글 작성
 ![게시글 작성](https://user-images.githubusercontent.com/72532944/144746319-3205943e-f07e-4b16-a156-578380b2636b.png)
-
+<br/><br/>
 ## 5. 소개 영상
 https://softcon.ajou.ac.kr/works/works.asp?uid=487
