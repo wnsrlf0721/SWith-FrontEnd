@@ -65,6 +65,7 @@ yarn start
 <br/><br/>
 ![홈화면](https://user-images.githubusercontent.com/72532944/144746343-90a6c5b6-2b1c-4ced-b09d-fa23dd56c3f6.png)
 <br/>
+
 * 내 스터디
 <br/><br/>
 ![내 스터디](https://user-images.githubusercontent.com/72532944/144746321-e553344c-acbf-4e94-b191-dbe93953d995.png)
