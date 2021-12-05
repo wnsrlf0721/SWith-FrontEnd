@@ -11,7 +11,7 @@ import EditPost from './EditPost';
 import search_icon from '../../images/search_gray.png';
 import writing_icon from '../../images/writing_icon.png';
 import post_list from '../../images/post_list.png';
-import { getBoards, getBoardPost } from '../../api/APIs';
+import { getBoards } from '../../api/APIs';
 
 const baseUrl = '/comm/';
 
@@ -24,15 +24,7 @@ const Index = () => {
         let array = [];
         response.data.data.map((board) => {
           array = array.concat(board);
-          // getBoardPost(board.id)
-          //   .then((response) => {
-          //     console.log(response.data);
-          //   })
-          //   .catch((error) => {
-          //     console.log(error);
-          //   });
         });
-        //console.log(array);
         setBoardList(array);
       })
       .catch((error) => {

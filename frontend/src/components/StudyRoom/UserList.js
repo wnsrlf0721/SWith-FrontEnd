@@ -4,16 +4,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { studyRoomAtoms } from '../recoils';
 
-import searchGray from '../../images/search_gray.png';
-import heartTrue from '../../images/heart_true.png';
 import defaultProfile from '../../images/default_profile_Image.png';
-import planner from '../../images/planner2.png';
 import camera_true from '../../images/camera_default.png';
 import camera_false from '../../images/camera_false.png';
 import speaker_true from '../../images/speaker_default.png';
 import speaker_false from '../../images/speaker_false.png';
 import kickout_default from '../../images/kickout_default.png';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 const user = [
   {
@@ -60,14 +57,10 @@ const UserList = (
 
   const videoMute = (userSocketId) => {
     setVideoMute(userSocketId);
-    console.log(userVideoMute.get(userSocketId));
-    console.log(userVideoMute);
   };
 
   const audioMute = (userSocketId) => {
     setAudioMute(userSocketId);
-    console.log(userAudioMute.get(userSocketId));
-    console.log(userAudioMute);
   };
 
   const kickOutUser = (userSocketId, userId, userNickName) => {
@@ -87,9 +80,7 @@ const UserList = (
           </div>
         </div>
         <div className="rowContainer">
-          <div className="ImgIcon" style={{ height: 'auto' }}>
-            {/* <img style={{ width: '15px', backgroundColor: '' }} src={searchGray} alt='searchGray' /> */}
-          </div>
+          <div className="ImgIcon" style={{ height: 'auto' }}></div>
         </div>
       </div>
       <div className="List" style={{ overflow: 'auto' }}>

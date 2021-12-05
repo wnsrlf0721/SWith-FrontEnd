@@ -1,4 +1,3 @@
-// import './StudyCard.css';
 import './css/MyPage.css';
 import styled from 'styled-components';
 
@@ -38,10 +37,9 @@ const MyPage = () => {
   useEffect(() => {
     if (isLogined) {
       const userInfo = JSON.parse(window.sessionStorage.userInfo);
-      const date = moment().format('YYYY-MM-DD'); //현재 날짜
+      const date = moment().format('YYYY-MM-DD');
       const Today = moment(date);
-      //닉네임 설정
-      console.log('useID:' + userInfo.userId);
+
       getUserInfo(userInfo.userId)
         .then((response) => {
           const data = response.data;
@@ -52,13 +50,12 @@ const MyPage = () => {
         .catch((error) => {
           console.log(error.toJSON());
         });
-      //오늘의 공부시간
+
       getUserStatistics(userInfo.userId)
         .then((response) => {
           const datas = response.data.data;
           datas.map((data) => {
             const D_date = moment(data.date);
-            // console.log(D_date);
             const Diff = Math.abs(Today.diff(D_date, 'days'));
 
             const hour = Number(data.studyTime.slice(0, 2));
@@ -78,16 +75,14 @@ const MyPage = () => {
         .catch((error) => {
           console.log(error.toJSON());
         });
-      //오늘의 달성률
+
       getUserPlanner(userInfo.userId)
         .then((response) => {
           const data = response.data.data;
           data.studyplanner_Tasks.map((task) => {
             const plan_date = moment(moment(task.startDate).format('YYYY-MM-DD'));
-            //console.log(Today, plan_date);
             const Diff = Today.diff(plan_date, 'days');
             if (Diff === 0) {
-              //console.log(task.complete);
               setTodaystudy((prev) => ({
                 ...prev,
                 complete: prev.complete + task.complete,
@@ -116,7 +111,6 @@ const MyPage = () => {
                       purpose: data.purpose,
                       maxUserCount: data.maxUserCount,
                       userCount: data.userCount,
-                      userCount: data.userCount,
                       secret: data.secret,
                     });
                   } else {
@@ -131,7 +125,6 @@ const MyPage = () => {
             });
         })
         .catch((error) => {
-          // console.log(error.toJSON());
           console.log(error);
         });
     }
@@ -168,7 +161,6 @@ const MyPage = () => {
                 studyRoomID={data.id}
                 nickName={NickName}
                 maxUserCount={data.maxUserCount}
-                userCount={data.userCount}
                 userCount={data.userCount}
                 secret={data.secret}
               ></StudyCard>
@@ -230,7 +222,6 @@ const MyPage = () => {
                       ? 0
                       : Math.round(Number(todaystudy.complete / todaystudy.count) * 100)
                   }
-                  // ProgressBar
                 />
               </div>
             </div>
@@ -269,7 +260,6 @@ const MyPage = () => {
         <div className="StudyHistoryWrap">
           <div className="StudyHistoryHeader">
             <div className="TextBox">내 스터디</div>
-            {/* <button onClick={console.log(currentPage)}></button> */}
             <div>
               <Img src={BtnPrev} alt="BtnPrev" onClick={pageLeft} />
               <Img src={BtnNext} alt="BtnNext" onClick={pageRight} />

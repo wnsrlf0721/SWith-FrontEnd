@@ -2,11 +2,10 @@ import 'react-quill/dist/quill.snow.css';
 import styled from 'styled-components';
 
 import ReactQuill from 'react-quill';
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { getBoards, postBoardPost } from '../../api/APIs';
 import ReactHtmlParser from 'html-react-parser';
 
-import stats_icon from '../../images/stats_icon.svg';
 import post_icon from '../../images/post_icon.svg';
 
 const CreatePost = () => {
@@ -15,7 +14,6 @@ const CreatePost = () => {
   const [boardsInfo, setBoardsInfo] = useState([]);
   const [selectState, setSelectState] = useState();
   const submitContents = ReactHtmlParser(editorContent);
-  //console.log(editorContent);
   useEffect(() => {
     const isLogined = window.sessionStorage.userInfo == null ? false : true;
     if (!isLogined) {
@@ -27,7 +25,6 @@ const CreatePost = () => {
       .then((response) => {
         const data = response.data;
         const datas = data.data;
-        //console.log(datas);
 
         datas.map((data) => {
           boardsData = boardsData.concat({
@@ -35,7 +32,7 @@ const CreatePost = () => {
             title: data.title,
           });
         });
-        //console.log(boardsData);
+
         setBoardsInfo(boardsData);
       })
 
@@ -49,7 +46,6 @@ const CreatePost = () => {
   };
   const handleSelect = (e) => {
     setSelectState(e.target.value);
-    //console.log(selectState);
   };
 
   const onsubmit = (e) => {
@@ -65,7 +61,6 @@ const CreatePost = () => {
       return;
     }
 
-    //console.log(selectState, userInfo.userId, title, editorContent);
     if (selectState === undefined) {
       alert('게시판을 선택해주세요.');
       return;
@@ -74,7 +69,6 @@ const CreatePost = () => {
     postBoardPost(selectState, userInfo.userId, title, editorContent)
       .then((response) => {
         const data = response.data;
-        //console.log(data);
         if (data.status === '200' && data.message === 'OK') {
           alert('게시글이 등록되었습니다.');
           window.location.href = '/comm';
@@ -86,20 +80,13 @@ const CreatePost = () => {
       });
   };
 
-  // react-quill module
   const modules = useMemo(
     () => ({
       toolbar: {
         container: [
           ['bold', 'italic', 'underline', 'strike'],
           [{ color: [] }],
-          [
-            { list: 'ordered' },
-            { list: 'bullet' },
-            // { indent: "-1" },
-            // { indent: "+1" },
-            { align: [] },
-          ],
+          [{ list: 'ordered' }, { list: 'bullet' }, { align: [] }],
           [],
         ],
       },
@@ -122,12 +109,6 @@ const CreatePost = () => {
           onChange={getTitle}
           value={title}
         ></Title>
-        {/* <ContentEdit 
-                    placeholder="내용을 입력하세요"
-                    onChange={getValue}
-                    name='content'
-                >
-                </ContentEdit> */}
         <ReactQuill
           style={{ minHeight: '350px', marginBottom: '30px' }}
           onChange={setEditorContent}

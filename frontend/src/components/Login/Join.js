@@ -9,25 +9,19 @@ import {
 } from '../../api/APIs';
 
 const Join = () => {
-  //회원가입 정보
   const [joinInfo, setJoinInfo] = useState({
     email: '',
     password: '',
     nickname: '',
     certificationCode: '',
   });
-  //이메일 형식 체크
   const [emailtype, setEmailtype] = useState(false);
   var reg_email = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
-  //이메일 중복 체크
-  const [checkemail, setCheckEmail] = useState(false); //email dup check
-  //이메일 인증번호 확인
+  const [checkemail, setCheckEmail] = useState(false);
   const [checkcode, setCheckcode] = useState(false);
-  //비밀번호 일치 확인
   const [checkpw, setCheckpw] = useState(false);
   const [repeatpw, setRepeatpw] = useState('');
 
-  //input에 입력하는 값 onChange
   const onChangehandler = (e) => {
     const { name, value } = e.target;
     if (name === 'repeatpw') {
@@ -66,7 +60,6 @@ const Join = () => {
     postCheckDuplication(joinInfo.email)
       .then((response) => {
         const data = response.data;
-        console.log(data);
         if (data.status === '200' && data.message === 'OK') {
           setCheckEmail(true);
           alert('사용가능한 이메일입니다.');
@@ -83,7 +76,6 @@ const Join = () => {
     postSendCertificationCode(joinInfo.email)
       .then((response) => {
         const data = response.data;
-        console.log(data);
         if (data.status === '200' && data.message === 'OK') {
           alert(
             `${joinInfo.email}에 인증번호를 전송했습니다.\n이메일 인증번호를 확인해주세요.`,
@@ -100,7 +92,6 @@ const Join = () => {
     postCertifiacteCode(joinInfo.email, joinInfo.certificationCode)
       .then((response) => {
         const data = response.data;
-        console.log(data);
         if (data.status === '200' && data.message === 'OK') {
           setCheckcode(true);
         }
@@ -112,21 +103,18 @@ const Join = () => {
   };
 
   const onSignup = (e) => {
-    //console.log(joinInfo.nickname);
     if (!emailtype || !checkemail || !checkcode || !checkpw || !joinInfo.nickname) {
       return alert('빈칸을 다시 한번 확인해주세요.');
     }
     postSignUp(joinInfo.email, joinInfo.password, joinInfo.nickname)
       .then((response) => {
         const data = response.data;
-        console.log(data);
         if (data.status === '200' && data.message === 'OK') {
           alert('회원가입이 완료되었습니다!');
           window.location.href = '/login';
         }
       })
       .catch((error) => {
-        //console.log(joinInfo.nickname);
         console.log(error.toJSON());
         alert('빈칸이 없는지 확인해주세요.');
       });

@@ -23,7 +23,6 @@ const MakeStudyRoom = () => {
     }
   }, []);
   const [swapleft, setSwapleft] = useState(true);
-  // title(방 제목), purpose(필터링), password(비밀번호), notice(공지사항), endDate, hashTag(해시태그), maxUserCount(최대인원)
   const [inputTag, setInputTag] = useState('');
   const [toggleState, setToggleState] = useState(1);
   const [roominfo, setRoominfo] = useState({
@@ -31,7 +30,7 @@ const MakeStudyRoom = () => {
     purpose: 'k-exam',
     notice: '',
     hashtag: [],
-    endDate: new Date(), //'YYYY-MM-DD HH:MM:SS' 형식
+    endDate: new Date(),
     secret: 0,
     password: '',
     maxUserCount: '4',
@@ -140,20 +139,16 @@ const MakeStudyRoom = () => {
       const room = roominfo;
       var moment = require('moment');
       require('moment-timezone');
-      //moment.tz.setDefault("Asia/Seoul");
       if (Number(room.maxUserCount) > 8) {
         alert('최대인원은 8명 이하로 입력되어야 합니다');
         return;
       }
       room.endDate = moment(room.endDate).tz('Asia/Seoul').format('YYYY-MM-DD 00:00:00');
-      console.log(room.endDate);
       if (room.password) {
         room.secret = 1;
       }
-      console.log(room);
       postStudyRoom(room)
         .then((response) => {
-          console.log(response);
           alert('스터디룸 생성 성공!');
           return (window.location.href = '/');
         })
@@ -179,7 +174,6 @@ const MakeStudyRoom = () => {
           </Rowarea>
           <Rowarea>
             <Label>카테고리</Label>
-            {/* 국가고시, 독서, 수능, 어학, 자격증, 기타 */}
             <Cate>
               {category.map((data) => (
                 <CategoryButton
