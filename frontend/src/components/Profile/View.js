@@ -18,19 +18,14 @@ const View = () => {
     getUserInfo(session.userId)
       .then((response) => {
         const data = response.data;
-        console.log(data);
         if (data.status === '200' && data.message === 'OK') {
           const api_data = data.data;
           let user = {
             email: api_data.email,
             nickname: api_data.nickname,
-            // following: api_data.following.length,
-            // boards: api_data.boards.length,
           };
           setEmail(user.email);
           setNickname(user.nickname);
-          // setFollowing(user.following);
-          // setBoards(user.boards);
         }
       })
       .catch((error) => {
@@ -80,7 +75,7 @@ const Container = styled.div`
   flex-direction: column;
   margin-top: 120px;
   justify-content: space-between;
-`; //모든것의 바깥
+`;
 
 const Wrap = styled.div`
   display: flex;
@@ -136,7 +131,7 @@ const Button = styled.button`
   border: 0;
   outline: 0;
   text-decoration: none;
-`; //폰트 15
+`;
 
 const ButtonWrap = styled.div`
   display: flex;

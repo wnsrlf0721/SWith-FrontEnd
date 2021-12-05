@@ -68,7 +68,6 @@ const Calendar = () => {
           });
           setEvent(tempEvents);
           setTodo(tempTodo);
-          //return getEvent;
         })
         .catch((error) => {
           console.log(error);
@@ -81,14 +80,11 @@ const Calendar = () => {
     deletePlannerTask(userInfo.userId, event.id)
       .then((response) => {
         const data = response.data;
-        console.log(data);
         if (data.status === '200' && data.message === 'OK') {
-          //alert(`성공`);
         }
       })
       .catch((error) => {
         console.log(error.response.data);
-        //alert("오류");
       });
   };
 
@@ -138,14 +134,11 @@ const Calendar = () => {
     putPlannerTask(userInfo.userId, event.id, event.title, start, end, chch)
       .then((response) => {
         const data = response.data;
-        // console.log(todo);
-        // console.log(data);
         if (data.status === '200' && data.message === 'OK') {
         }
         window.location.reload();
       })
       .catch((error) => {
-        // console.log(todo);
         console.log(error.toJSON());
       });
   };
@@ -184,8 +177,6 @@ const Calendar = () => {
       ].join('-') +
       'T' +
       endDate.toTimeString().substring(0, 8);
-    // console.log(startDate);
-    // console.log(start);
     if (title) {
       postPlannerTask(userInfo.userId, title, start, end)
         .then((response) => {
@@ -199,14 +190,11 @@ const Calendar = () => {
           });
           let event = calendarApi.getEventById(data.data.taskId);
           handleTodoCreate(event);
-          console.log(data);
           if (data.status === '200' && data.message === 'OK') {
-            //alert(`성공`);
           }
         })
         .catch((error) => {
           console.log(error.response.data);
-          //alert("오류");
         });
     }
   };
@@ -227,7 +215,7 @@ const Calendar = () => {
   const selectOneday = (selectInfo) => {
     let startDate = selectInfo.start;
     let endDate = selectInfo.end;
-    endDate.setSeconds(endDate.getSeconds() - 1); // allow full day selection
+    endDate.setSeconds(endDate.getSeconds() - 1);
     if (startDate.getDate() === endDate.getDate()) {
       return true;
     } else {
@@ -249,31 +237,6 @@ const Calendar = () => {
         </li>
       );
     }
-
-    // let startMD = String(
-    //   event.start.getMonth() + event.start.getDate().toString().padStart(2, '0') + '00',
-    // );
-    // let todayMD = String(
-    //   Today.getMonth() + Today.getDate().toString().padStart(2, '0') + '01',
-    // );
-    // let endMD = String(
-    //   event.end.getMonth() +
-    //     event.end.getDate().toString().padStart(2, '0') +
-    //     event.end.getHours().toString().padStart(2, '0'),
-    // );
-
-    // if (todayMD >= startMD && todayMD <= endMD) {
-    //   return (
-    //     <li key={event.id}>
-    //       <input
-    //         type="checkbox"
-    //         checked={getTodoCheck(event)}
-    //         onChange={() => HandleTodoCheck(event)}
-    //       ></input>
-    //       <b>{event.title}</b>
-    //     </li>
-    //   );
-    // }
   };
   const renderSidebar = () => {
     return (
@@ -308,9 +271,9 @@ const Calendar = () => {
           initialEvents={HandleLoad()}
           select={handleDateSelect}
           selectAllow={selectOneday}
-          eventContent={renderEventContent} // custom render function
+          eventContent={renderEventContent}
           eventClick={handleEventClick}
-          eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+          eventsSet={handleEvents}
         />
       </div>
       {renderSidebar()}
@@ -327,10 +290,10 @@ function renderEventContent(eventInfo) {
   );
 }
 function fillZero(str) {
-  return str.length >= 2 ? str : new Array(2 - str.length + 1).join('0') + str; //남는 길이만큼 0으로 채움
+  return str.length >= 2 ? str : new Array(2 - str.length + 1).join('0') + str;
 }
 
-let todayStr = new Date().toDateString(); // YYYY-MM-DD of today
+let todayStr = new Date().toDateString();
 let today = new Date().toLocaleDateString();
 
 export default React.memo(Calendar);

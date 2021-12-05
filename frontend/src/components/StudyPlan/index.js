@@ -6,7 +6,6 @@ import { getUserPlanner } from '../../api/APIs';
 import Calendar from './Calendar';
 import Statistics from './Statistics';
 import Topbar from '../Main/Topbar';
-//import ToggleBtn from "./ToggleBtn";
 
 const Index = () => {
   const [task, setTask] = useState([]);
@@ -15,15 +14,12 @@ const Index = () => {
     if (!isLogined) {
       alert('로그인이 필요합니다.');
       return (window.location.href = '/login');
-    } else {
-      console.log(window.sessionStorage.userInfo);
     }
     const userInfo = JSON.parse(window.sessionStorage.userInfo);
     let tempEvents = [];
     getUserPlanner(userInfo.userId)
       .then((response) => {
         const data = response.data.data;
-        console.log(data);
         data.studyplanner_Tasks.map((task) => {
           tempEvents = tempEvents.concat({
             id: task.id,
@@ -58,7 +54,6 @@ const Index = () => {
         </TabWrap>
       </TabWrapContainer>
 
-      {/* <ToggleBtn/> */}
       {swapleft ? <Calendar /> : <Statistics task={task} />}
     </>
   );

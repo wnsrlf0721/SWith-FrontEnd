@@ -1,11 +1,8 @@
-import { React, useRef, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import { React, useState } from 'react';
 import './css/FriendModal.css';
 
 import defaultProfile from '../../images/default_profile_Image.png';
-import { getFollower, getFollowing } from '../../api/APIs';
-//{ className, visible, maskClosable, onClose }
+
 const FriendModal = ({ closeModal }) => {
   const [swapleft, setSwapleft] = useState(true);
   const [friends, setFriends] = useState([
@@ -56,42 +53,18 @@ const FriendModal = ({ closeModal }) => {
       closeModal();
     }
   };
+
   const changeFollowState = (id) => {
-    // followState.map((x) => {
-    //   if (x.id == id) {
-    //     const tempFollower =
-    //     setFollowState(!followState);
-    //   }
     setFriends(
       friends.map((user) => (user.id === id ? { ...user, follow: !user.follow } : user)),
     );
   };
 
-  // useEffect(() => {
-  //   const userId = JSON.parse(window.sessionStorage.userInfo).userId;
-  //   getFollower(userId)
-  //     .then((response) => {
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  //   getFollowing(userId)
-  //     .then((response) => {
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, []);
   return (
     <>
       <div className="ModalWrapper" onClick={onCloseModal}>
         <div className="modalInner">
           <div className="friendModalWrap">
-            {/* <div className="closeBtn" onClick={closeModal}>
-              닫기
-            </div> */}
             <div className="friendHeader">
               <button
                 className={swapleft === true ? 'friendTapActive' : 'friendTap'}
@@ -107,22 +80,11 @@ const FriendModal = ({ closeModal }) => {
               </button>
             </div>
             <div className="friendsWrap">
-              {/* <div className="userWrap">
-                <div className="rowWrap"></div>
-                <div className="rowWrap"></div>
-              </div> */}
               {friends.map((user, index) => {
                 return (
                   <div className="userWrap">
                     <div className="rowWrap">
                       <div className="profile">
-                        {/* <Link
-                          to={{
-                            pathname: `/profile/${user.userId}/other`,
-                          }}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        > */}
                         <img
                           style={{
                             height: '30px',
@@ -132,7 +94,6 @@ const FriendModal = ({ closeModal }) => {
                           src={defaultProfile}
                           alt="defaultProfile"
                         />
-                        {/* </Link> */}
                       </div>
                       <div
                         className="text"
@@ -148,7 +109,6 @@ const FriendModal = ({ closeModal }) => {
                             className={user.follow === true ? 'pinkBtn' : 'whiteBtn'}
                             onClick={() => changeFollowState(user.id)}
                           >
-                            {/* {number} */}
                             팔로잉 삭제
                           </button>
                         ) : (
@@ -179,23 +139,5 @@ const FriendModal = ({ closeModal }) => {
     </>
   );
 };
-
-// function Index() {
-//   useEffect(() => {
-//     const isLogined = window.sessionStorage.userInfo == null ? false : true;
-//     if (!isLogined) {
-//       alert("로그인이 필요합니다.");
-//       return (window.location.href = "/login");
-//     }
-//   }, []);
-//   return (
-//     <>
-//       <Topbar />
-//       <div style={{ position: "relative", marginTop: "64px" }}>
-//         <h1>팔로우 페이지</h1>
-//       </div>
-//     </>
-//   );
-// }
 
 export default FriendModal;

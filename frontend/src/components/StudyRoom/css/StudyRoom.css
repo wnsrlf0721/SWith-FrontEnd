@@ -1,15 +1,8 @@
 .videoGrid {
-  /* display: flex;
-  flex-direction: column;
-  min-height: 800px;
-  min-width: 800px;
-  text-align: left;
-  align-items: center; */
   display: flex;
   position: relative;
   float: left;
   box-sizing: border-box;
-  /* border: 1px solid rgba(0,0,0,0.4); */
   justify-content: center;
   background-color: black;
   margin: 5px;
@@ -22,8 +15,6 @@ body {
 }
 
 video {
-  /* max-width: 100%;
-  width: 320px; */
   display: flex;
   position: relative;
   width: 100%;

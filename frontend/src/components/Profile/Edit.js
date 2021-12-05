@@ -6,7 +6,6 @@ import { getUserInfo, patchUserInfo } from '../../api/APIs';
 import userImage from '../../images/default_profile_Image.png';
 
 const Edit = () => {
-  //UI에 보여지는 value
   const UserimgUrl = userImage;
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
@@ -17,7 +16,6 @@ const Edit = () => {
     getUserInfo(session.userId)
       .then((response) => {
         const data = response.data;
-        console.log(data);
         if (data.status === '200' && data.message === 'OK') {
           const api_data = data.data;
           let user = {
@@ -37,7 +35,6 @@ const Edit = () => {
       });
   }, []);
 
-  //Input으로 변경할 value
   const [editInfo, setEditInfo] = useState({
     nickname: '',
     beforePassword: '',
@@ -187,7 +184,7 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   margin-top: 120px;
-`; //모든것의 바깥
+`;
 
 const PictureTextWrap = styled.div`
   display: flex;
@@ -200,7 +197,7 @@ const EditBoxWrap = styled.div`
   align-items: center;
   flex-direction: column;
   margin-top: 70px;
-`; //입력창+완료버튼
+`;
 
 const TextB = styled.div`
   margin: 0 auto;
@@ -227,7 +224,7 @@ const TextG = styled.div`
   text-align: left;
   color: #595959;
   margin: 5px 0;
-`; //기본 회색
+`;
 
 const TextInputBox = styled.input`
   width: 400px;
@@ -254,9 +251,7 @@ const Button = styled.button`
   border: 0;
   outline: 0;
   text-decoration: none;
-`; //폰트 15
-
-//////
+`;
 
 const EditProfilePictureWrap = styled.div`
   margin: 50px 20px;
