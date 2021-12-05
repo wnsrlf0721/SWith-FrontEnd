@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../../api/defaultaxios';
-import eventList from './EventList';
 export function LoadTest() {
   const [getEvent, setEvent] = useState([
     {
@@ -32,7 +31,6 @@ export function LoadTest() {
         console.log(error);
       });
   }, []);
-  //console.log(getEvent);
   return 0;
 }
 export default LoadTest;

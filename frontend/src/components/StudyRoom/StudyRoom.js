@@ -64,7 +64,6 @@ const StudyRoom = ({ match }) => {
 
   const [camera, setCamera] = useState(true);
   const [mic, setMic] = useState(true);
-  const [speaker, setSpeaker] = useState(true);
   const [sharing, setSharing] = useState(false);
   const [studyRoomInfo, setStudyRoomInfo] = useState([]);
   const [masterId, setMasterId] = useState('');
@@ -75,12 +74,12 @@ const StudyRoom = ({ match }) => {
   );
 
   useBeforeunload(async (event) => {
-    // event.preventDefault();
+    event.preventDefault();
     socket.disconnect();
     getStudyRoomOut(studyRoomId);
     await postStatistics();
     window.localStorage.setItem('enteredStudyRoom', 'false');
-    // return 'Are you sure to close this tab?';
+    return 'Are you sure to close this tab?';
   });
 
   useEffect(() => {
@@ -90,9 +89,7 @@ const StudyRoom = ({ match }) => {
     setUserNickName(userNickName);
 
     postUserStudyRoomHistory(userId, studyRoomId)
-      .then((response) => {
-        console.log(response);
-      })
+      .then((response) => {})
       .catch((error) => {
         console.error(error);
       });
@@ -100,7 +97,6 @@ const StudyRoom = ({ match }) => {
     getStudyRoomInfo(studyRoomId)
       .then((response) => {
         const data = response.data;
-        console.log(data.data);
         setStudyRoomInfo({
           id: data.data.id,
           title: data.data.title,
@@ -122,15 +118,12 @@ const StudyRoom = ({ match }) => {
           } else {
             window.localStorage.setItem('enteredStudyRoom', 'true');
             getStudyRoomEnter(studyRoomId)
-              .then((response) => {
-                console.log(response);
-              })
+              .then((response) => {})
               .catch((error) => {
                 console.log(error);
               });
             return;
           }
-          console.log(i);
           if (i > 3) {
             window.open('', '_self').close();
             window.localStorage.setItem('enteredStudyRoom', 'false');
@@ -203,9 +196,7 @@ const StudyRoom = ({ match }) => {
     const today = toStringByFormatting(new Date());
 
     postUserstatistics(userId, studyTimer, today)
-      .then((response) => {
-        console.log(response);
-      })
+      .then((response) => {})
       .catch((error) => {
         console.log(error.response.data);
       });
@@ -361,18 +352,18 @@ const StudyRoom = ({ match }) => {
               onClick={videoMute}
               alt="camera"
             />
-            {/* <img src={speaker ? speaker_true : speaker_false} alt='speaker' /> */}
-            <img src={sharing ? screen_true : screen_false} onClick={sharingScreen} />
-            {/* <button onClick={postStatistics}></button> */}
+            <img
+              src={sharing ? screen_true : screen_false}
+              onClick={sharingScreen}
+              alt={screen_false}
+            />
           </div>
           <div
             style={{
               padding: '0 20px',
               marginRight: '20px',
             }}
-          >
-            {/* <img src={user_invite} alt='userInvite' /> */}
-          </div>
+          ></div>
         </div>
 
         {initSetting ? (
@@ -403,7 +394,6 @@ const StudyRoom = ({ match }) => {
                 }}
               >
                 <>
-                  {/* <div style={{backgroundColor:"white",width:"100%",height:"20px"}}></div> */}
                   <video muted autoPlay playsInline ref={userVideoRef}></video>
                   {userNickName} {studyTimer}
                 </>

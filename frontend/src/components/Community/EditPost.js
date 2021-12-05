@@ -2,11 +2,10 @@ import 'react-quill/dist/quill.snow.css';
 import styled from 'styled-components';
 
 import ReactQuill from 'react-quill';
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
-import { getBoardPostId, getBoards, postBoardPost, putBoardPostId } from '../../api/APIs';
+import React, { useState, useMemo, useEffect } from 'react';
+import { getBoardPostId, putBoardPostId } from '../../api/APIs';
 import ReactHtmlParser from 'html-react-parser';
 
-import stats_icon from '../../images/stats_icon.svg';
 import post_icon from '../../images/post_icon.svg';
 
 const CreatePost = ({ match }) => {
@@ -42,7 +41,6 @@ const CreatePost = ({ match }) => {
     putBoardPostId(boardId, postId, title, editorContent)
       .then((response) => {
         const data = response.data;
-        console.log(data);
         if (data.status === '200' && data.message === 'OK') {
           alert('게시글이 수정되었습니다.');
           window.location.href = `/comm/post/${boardId}/${postId}`;
@@ -54,20 +52,13 @@ const CreatePost = ({ match }) => {
       });
   };
 
-  // react-quill module
   const modules = useMemo(
     () => ({
       toolbar: {
         container: [
           ['bold', 'italic', 'underline', 'strike'],
           [{ color: [] }],
-          [
-            { list: 'ordered' },
-            { list: 'bullet' },
-            // { indent: "-1" },
-            // { indent: "+1" },
-            { align: [] },
-          ],
+          [{ list: 'ordered' }, { list: 'bullet' }, { align: [] }],
           [],
         ],
       },

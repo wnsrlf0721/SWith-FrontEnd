@@ -10,7 +10,6 @@ const Chat = ({ userNickName }) => {
 
   useEffect(() => {
     socket.on('chatting', (data) => {
-      console.log(data);
       setMessages((old) => [...old, data]);
     });
   }, []);
@@ -32,7 +31,6 @@ const Chat = ({ userNickName }) => {
         },
       ]);
 
-      console.log(content);
       socket.emit('chatting', {
         name: userNickName,
         messageSendID: socket.id,

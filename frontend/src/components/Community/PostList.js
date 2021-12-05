@@ -1,43 +1,18 @@
 import './css/PostList.css';
 
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
-import { getBoards, getBoardPost, postBoardPost } from '../../api/APIs';
+import { getBoards, getBoardPost } from '../../api/APIs';
 
 import writeIMG from '../../images/write.png';
 
-// const PostList = () => {
-
-//   //console.log(query.search);
-//   useEffect(() => {
-
-//   }, []);
 const PostList = ({ location, match }) => {
   const [post, setPost] = useState([]);
-  //const [boardType, setBoardType] = useState('');
   const query = queryString.parse(location.search);
   const boardId = match.params.boardId;
   const boardTitle = match.params.boardTitle;
+
   useEffect(() => {
-    // if (boardId == undefined) {
-    //   boardId = 'all';
-    // }
-
-    // postBoardPost(53, 32, '테스트중2', '테스트중입니다.')
-    //   .then((response) => {
-    //     console.log(response);
-    //     //alert('스터디룸 생성 성공!');
-    //     //return (window.location.href = '/');
-    //   })
-    //   .catch((error) => {
-    //     console.log(error.toJSON());
-    //     //alert('input 입력이 잘못된것 같습니다.');
-    //   });
-    // console.log(boardId);
-    // console.log(boardTitle);
-
-    //setBoardType(boardId);
     if (boardId == undefined) {
       getBoards()
         .then((response) => {
@@ -46,17 +21,13 @@ const PostList = ({ location, match }) => {
           tempBoards.map((x) => {
             boardsId = boardsId.concat(x.id);
           });
-          //console.log(boardsId);
           let tempPs = [];
           boardsId.map((x) => {
-            //console.log(x);
-            //게시글 검색
             if (query.search) {
               getBoardPost(x)
                 .then((response) => {
                   const tempPosts = response.data.data;
                   tempPosts.map((tempPost) => {
-                    //console.log(tempPost, query.search);
                     if (
                       tempPost.title.toLowerCase().indexOf(query.search.toLowerCase()) !==
                       -1
@@ -73,10 +44,8 @@ const PostList = ({ location, match }) => {
               getBoardPost(x)
                 .then((response) => {
                   const tempPosts = response.data.data;
-                  //console.log(tempPosts);
                   tempPs = tempPs.concat(tempPosts);
                   setPost(tempPs.sort((a, b) => getDateNum(a, b)));
-                  //console.log(tempPs);
                 })
                 .catch((error) => {
                   console.log(error.response);
@@ -92,7 +61,6 @@ const PostList = ({ location, match }) => {
         .then((response) => {
           const tempPosts = response.data.data;
           setPost(tempPosts.sort((a, b) => getDateNum(a, b)));
-          //console.log(tempPosts);
         })
         .catch((error) => {
           console.log(error.response);
@@ -147,24 +115,20 @@ const PostList = ({ location, match }) => {
   const getDateNum = (a, b) => {
     const dateA = new Date(a.createdDate);
     const dateB = new Date(b.createdDate);
-    //console.log(a.title, a.createdDate);
+
     return dateB - dateA;
   };
   const getKrDate = (date) => {
-    //x.createdDate.substring(0, 10)
     let tempDate = new Date(date);
     tempDate.setHours(tempDate.getHours() + 9);
-    //console.log(tempDate.toISOString());
     return tempDate.toISOString().substring(0, 10);
   };
 
   const DoSort = (sortNum) => {
     if (sortNum == 1) {
-      //조회순
       let tempPost = post;
       setPost(tempPost.sort((a, b) => b.viewCount - a.viewCount));
     } else if (sortNum == 0) {
-      //최신순
       let tempPost = post;
       setPost(tempPost.sort((a, b) => getDateNum(a, b)));
     }

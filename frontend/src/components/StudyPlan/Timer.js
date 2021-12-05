@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import React from 'react';
 
 const Timer = ({ hours = 0, minutes = 0, seconds = 0, count = 0 }) => {
-  //평균 시간 계산
   if (count > 1) {
     const total_sec = Number(hours * 3600 + minutes * 60 + seconds);
     const sub_time = parseInt(total_sec / count);
@@ -12,7 +11,6 @@ const Timer = ({ hours = 0, minutes = 0, seconds = 0, count = 0 }) => {
     minutes = tnd_time % 60;
     hours = parseInt(tnd_time / 60);
   }
-  //초과 시간 재조정
   if (seconds >= 60) {
     const quo = parseInt(seconds / 60);
     const rem = seconds % 60;

@@ -19,7 +19,6 @@ import {
 const Post = ({ match }) => {
   const boardId = match.params.boardId;
   const postId = match.params.postId;
-  //console.log(boardId, postId);
   const [postInfo, setPostInfo] = useState({
     title: '',
     id: '',
@@ -41,7 +40,6 @@ const Post = ({ match }) => {
     getBoardPostId(boardId, postId)
       .then((response) => {
         const info = response.data.data;
-        console.log(info);
         setPostInfo(info);
       })
       .catch((error) => {
@@ -59,10 +57,7 @@ const Post = ({ match }) => {
       if (name === 'newComment') {
         const userId = JSON.parse(window.sessionStorage.userInfo).userId;
         postComment(boardId, postId, userId, comment)
-          .then((response) => {
-            const data = response.data.data;
-            console.log(data);
-          })
+          .then((response) => {})
           .catch((error) => {
             console.log(error);
           });
@@ -95,7 +90,6 @@ const Post = ({ match }) => {
       if (type === '댓글') {
         deleteComment(boardId, postId, id)
           .then((response) => {
-            console.log(response.data);
             window.location.reload();
           })
           .catch((error) => {
@@ -105,7 +99,6 @@ const Post = ({ match }) => {
       } else if (type === '게시글') {
         deleteBoardPostId(boardId, id)
           .then((response) => {
-            console.log(response.data);
             alert('게시글 삭제를 완료하였습니다!');
             window.location.href = '/comm';
           })
