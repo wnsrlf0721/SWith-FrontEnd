@@ -66,9 +66,10 @@ yarn start
 <br/><br/>
 ![내 스터디](https://user-images.githubusercontent.com/72532944/144746321-e553344c-acbf-4e94-b191-dbe93953d995.png)
 <br/>
+
 * 스터디 목록
 <br/><br/>
-![스터디목록](https://user-images.githubusercontent.com/72532944/144746334-e896c88b-6bb7-4fce-9b2c-7a720b8cf73e.png)
+
 <br/>
 ### 2. 로그인 페이지
 <br/><br/>
