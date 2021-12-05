@@ -22,7 +22,7 @@
 또한 WebRTC 기반의 화상공유 플랫폼으로 다른 사람들과 실시간 소통을 할 수 있고, 자유롭게 누구나 참여가 가능합니다.
 학습관리 서비스로 자신의 공부방법을 세울 수 있으며, 다른 사람들의 공부방식도 참고할 수 있습니다.
 ## 2. 시스템 개요
-<div><img src="https://user-images.githubusercontent.com/55420438/144746701-c06ab59d-0e0d-4d77-add3-b4a5998bb6cd.png" alt="systemOverview"></div>
+<div align="center"><img src="https://user-images.githubusercontent.com/55420438/144746701-c06ab59d-0e0d-4d77-add3-b4a5998bb6cd.png" alt="systemOverview"></div>
 
 * Jenkins를 이용하여 빌드 및 배포 자동화를 구현했습니다.
 
