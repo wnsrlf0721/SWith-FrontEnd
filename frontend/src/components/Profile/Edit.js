@@ -112,9 +112,6 @@ const Edit = () => {
               <img src={UserimgUrl} alt="기본사용자이미지" />
             </EditProfilePictureImg>
           </EditProfilePicture>
-          <EditProfilePictureButton>
-            <h3>프로필 사진 변경</h3>
-          </EditProfilePictureButton>
         </EditProfilePictureWrap>
 
         <EditBoxWrap>
@@ -240,7 +237,7 @@ const TextInputBox = styled.input`
 
 const Button = styled.button`
   align-items: center;
-  width: 80%;
+  width: 100%;
   height: 48px;
   margin-top: 30px;
   background-color: #ef8585;
