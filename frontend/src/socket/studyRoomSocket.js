@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useRecoilState, selector, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { studyRoomAtoms } from '../components/recoils';
 import configs from '../utils/configs.json';
 import socket from './socket';
@@ -31,7 +31,6 @@ export const StudyRoomSocket = ({ secTimer, userVideoRef, userInfo, userNickName
   }, []);
 
   useEffect(() => {
-    console.log(enlargedUserSocketId);
     if (enlargedUserSocketId === exitUserSocketId) {
       setEnlargeVideo(false);
       setEnlargedUserSocketId('');
@@ -41,7 +40,6 @@ export const StudyRoomSocket = ({ secTimer, userVideoRef, userInfo, userNickName
   const initSocket = () => {
     socket.on('all_users', (allUsers) => {
       let len = allUsers.length;
-      console.log(allUsers);
       for (let i = 0; i < len; i++) {
         createPeerConnection(
           allUsers[i].socketId,
@@ -56,7 +54,6 @@ export const StudyRoomSocket = ({ secTimer, userVideoRef, userInfo, userNickName
             offerToReceiveVideo: true,
           })
             .then((sdp) => {
-              console.log('create offer success');
               pc.setLocalDescription(new RTCSessionDescription(sdp));
               socket.emit('offer', {
                 sdp: sdp,
@@ -75,8 +72,6 @@ export const StudyRoomSocket = ({ secTimer, userVideoRef, userInfo, userNickName
     });
 
     socket.on('getOffer', (data) => {
-      console.log('get offer');
-      console.log(data);
       let pc = createPeerConnection(
         data.offerSendID,
         data.offerSendUserName,
@@ -84,13 +79,11 @@ export const StudyRoomSocket = ({ secTimer, userVideoRef, userInfo, userNickName
       );
       if (pc) {
         pc.setRemoteDescription(new RTCSessionDescription(data.sdp)).then(() => {
-          console.log('answer set remote description success');
           pc.createAnswer({
             offerToReceiveVideo: true,
             offerToReceiveAudio: true,
           })
             .then((sdp) => {
-              console.log('create answer success');
               pc.setLocalDescription(new RTCSessionDescription(sdp));
               socket.emit('answer', {
                 sdp: sdp,
@@ -112,7 +105,6 @@ export const StudyRoomSocket = ({ secTimer, userVideoRef, userInfo, userNickName
     });
 
     socket.on('getAnswer', (data) => {
-      console.log('get answer');
       let pc = PCs.get(data.answerSendID);
       if (pc) {
         pc.setRemoteDescription(new RTCSessionDescription(data.sdp));
@@ -125,17 +117,13 @@ export const StudyRoomSocket = ({ secTimer, userVideoRef, userInfo, userNickName
     });
 
     socket.on('getCandidate', (data) => {
-      console.log('get candidate');
       let pc = PCs.get(data.candidateSendID);
       if (pc) {
-        pc.addIceCandidate(new RTCIceCandidate(data.candidate)).then(() => {
-          console.log('candidate add success');
-        });
+        pc.addIceCandidate(new RTCIceCandidate(data.candidate));
       }
     });
 
     socket.on('user_exit', (data) => {
-      console.log(data.socketId);
       PCs.get(data.socketId).close();
       PCs.delete(data.socketId);
       RTCSenders.delete(data.socketId);
@@ -157,19 +145,15 @@ export const StudyRoomSocket = ({ secTimer, userVideoRef, userInfo, userNickName
     setPCs(new Map(PCs.set(socketID, newPC)));
 
     if (userVideoRef.current.srcObject) {
-      console.log('localstream add');
-
       userVideoRef.current.srcObject.getTracks().forEach((track) => {
         let rtcSender = newPC.addTrack(track, userVideoRef.current.srcObject);
         setRTCSenders(new Map(RTCSenders.set(socketID, rtcSender)));
       });
     } else {
-      console.log('no local stream');
     }
 
     newPC.onicecandidate = (e) => {
       if (e.candidate) {
-        console.log('onicecandidate');
         socket.emit('candidate', {
           candidate: e.candidate,
           candidateSendID: socket.id,
@@ -178,12 +162,11 @@ export const StudyRoomSocket = ({ secTimer, userVideoRef, userInfo, userNickName
       }
     };
 
-    newPC.oniceconnectionstatechange = (e) => {
-      console.log(e);
+    newPC.oniceconnectionstatechange = (error) => {
+      console.log(error);
     };
 
     newPC.ontrack = (e) => {
-      console.log('ontrack success');
       setConnectedUsers((oldUsers) =>
         oldUsers.filter((user) => user.socketId !== socketID),
       );
@@ -196,7 +179,6 @@ export const StudyRoomSocket = ({ secTimer, userVideoRef, userInfo, userNickName
           stream: e.streams[0],
         },
       ]);
-      console.log(connectedUsers);
     };
     return newPC;
   };

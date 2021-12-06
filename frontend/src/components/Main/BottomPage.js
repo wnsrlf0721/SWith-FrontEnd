@@ -7,7 +7,6 @@ import StudyCard from './StudyCard';
 
 import studyImage from '../../images/studyImage.jpg';
 
-//카테고리 버튼 array
 const category = [
   {
     id: 1,
@@ -49,12 +48,8 @@ const category = [
 const BottomPage = ({ search }) => {
   const [NickName, setNickName] = useState('');
   const [toggleState, setToggleState] = useState(1);
-  const [Users, setUsers] = useState([]);
-  const [hashcheck, setHashcheck] = useState(false);
-
-  const [posts, setPosts] = useState([]); //전체 카테고리 list
-  const [purpose_list, setPurpose_list] = useState([]); //부분 카테고리 list
-  //pagination 관련 data
+  const [posts, setPosts] = useState([]);
+  const [purpose_list, setPurpose_list] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
 
@@ -69,7 +64,6 @@ const BottomPage = ({ search }) => {
     pageNumbers.push(i);
   }
 
-  //카테고리 버튼 누를때 동작
   const toggleTab = (index) => {
     let sub_array = [];
     setToggleState(index.id);
@@ -85,6 +79,9 @@ const BottomPage = ({ search }) => {
             title: data.title,
             hashtags: data.hashtags,
             purpose: data.purpose,
+            maxUserCount: data.maxUserCount,
+            userCount: data.userCount,
+            secret: data.secret,
           });
         }
       });
@@ -92,13 +89,11 @@ const BottomPage = ({ search }) => {
     }
   };
 
-  //useEffect시 호출되는 default setting
   const getStudyTitleHashtag = () => {
     let roomInfo = [];
     getStudyRooms()
       .then((response) => {
         const datas = response.data.data;
-        console.log(datas);
         datas.map((data) => {
           roomInfo = roomInfo.concat({
             id: data.id,
@@ -107,10 +102,10 @@ const BottomPage = ({ search }) => {
             purpose: data.purpose,
             maxUserCount: data.maxUserCount,
             userCount: data.userCount,
+            secret: data.secret,
           });
         });
 
-        //스터디 검색
         if (search) {
           let srh_array = [];
           roomInfo.map((data) => {
@@ -120,10 +115,12 @@ const BottomPage = ({ search }) => {
                 title: data.title,
                 hashtags: data.hashtags,
                 purpose: data.purpose,
+                maxUserCount: data.maxUserCount,
+                userCount: data.userCount,
+                secret: data.secret,
               });
             } else {
               for (var i in data.hashtags) {
-                //console.log(data.hashtags[i].hashtag);
                 if (
                   data.hashtags[i].hashtag.toLowerCase().indexOf(search.toLowerCase()) !==
                   -1
@@ -133,6 +130,9 @@ const BottomPage = ({ search }) => {
                     title: data.title,
                     hashtags: data.hashtags,
                     purpose: data.purpose,
+                    maxUserCount: data.maxUserCount,
+                    userCount: data.userCount,
+                    secret: data.secret,
                   });
                   break;
                 }
@@ -141,9 +141,7 @@ const BottomPage = ({ search }) => {
           });
           setPosts(srh_array);
           setPurpose_list(srh_array);
-        }
-        //일반적인 홈화면
-        else {
+        } else {
           setPosts(roomInfo);
           setPurpose_list(roomInfo);
         }
@@ -157,18 +155,11 @@ const BottomPage = ({ search }) => {
     const isLogined = window.sessionStorage.userInfo == null ? false : true;
     if (isLogined) {
       const session = JSON.parse(window.sessionStorage.userInfo);
-      //console.log(session)
       getUserInfo(session.userId)
         .then((response) => {
           const data = response.data;
-          //console.log(data.data.nickname);
           if (data.status === '200' && data.message === 'OK') {
             setNickName(data.data.nickname);
-            // setUsers({
-            //     id:data.data.id,
-            //     nickname:data.data.nickname
-            //   })
-            //console.log(NickName,Users.id)
           }
         })
         .catch((error) => {
@@ -225,6 +216,7 @@ const BottomPage = ({ search }) => {
                   nickName={NickName}
                   maxUserCount={data.maxUserCount}
                   userCount={data.userCount}
+                  secret={data.secret}
                 ></StudyCard>
               </LinkContainer>
             );
@@ -249,7 +241,6 @@ const BottomPage = ({ search }) => {
 
 export default BottomPage;
 
-/*styled components*/
 const Bottompage = styled.div`
   padding: 70px 20px 0;
   width: 1200px;

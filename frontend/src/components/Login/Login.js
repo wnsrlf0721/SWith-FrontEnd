@@ -32,7 +32,6 @@ const Login = () => {
       postLogIn(email, password)
         .then((response) => {
           const result = response.data;
-          console.log(result);
           if (result.status === '200' && result.message === 'OK') {
             const data = result.data;
             alert('로그인 성공!');

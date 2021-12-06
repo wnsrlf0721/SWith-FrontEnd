@@ -17,14 +17,13 @@ const StudyRoomEditModal = ({
   studyRoomId,
 }) => {
   const [swapleft, setSwapleft] = useState(true);
-  // title(방 제목), purpose(필터링), password(비밀번호), notice(공지사항), endDate, hashTag(해시태그)
   const [inputTag, setInputTag] = useState('');
   const [roominfo, setRoominfo] = useState({
     title: '',
     purpose: '',
     notice: '',
     hashtag: [],
-    endDate: new Date(), //'YYYY-MM-DD HH:MM:SS' 형식
+    endDate: new Date(),
     secret: 0,
     password: '',
     masterId: '',
@@ -33,12 +32,6 @@ const StudyRoomEditModal = ({
   const [toggleState, setToggleState] = useState(1);
   const onMaskClick = (e) => {
     if (e.target === e.currentTarget) {
-      onClose(e);
-    }
-  };
-
-  const close = (e) => {
-    if (onClose) {
       onClose(e);
     }
   };
@@ -76,14 +69,9 @@ const StudyRoomEditModal = ({
     },
   ];
 
-  //기존 정보 받아오기
   useEffect(() => {
-    // const tempDay = roomData.endDate.substring(0,10);
-    // console.log(moment(roomData.endDate.substring(0,10), "YYYY-MM-DD")._d)
-    // var moment = require('moment');
     require('moment-timezone');
     moment.tz.setDefault('Asia/Seoul');
-    console.log(studyRoomId);
     getStudyRoomInfo(studyRoomId)
       .then((response) => {
         const data = response.data;
@@ -92,14 +80,14 @@ const StudyRoomEditModal = ({
         roomData.hashtags.map((x) => {
           temphash = temphash.concat(x.hashtag);
         });
-        console.log(data.data);
+
         if (data.status === '200' && data.message === 'OK') {
           setRoominfo({
             title: roomData.title,
             purpose: roomData.purpose,
             notice: roomData.notice,
             hashtag: temphash,
-            endDate: moment(roomData.endDate)._d, //'YYYY-MM-DD HH:MM:SS' 형식
+            endDate: moment(roomData.endDate)._d,
             secret: roomData.secret,
             password: roomData.password,
             maxUserCount: roomData.maxUserCount,
@@ -179,18 +167,15 @@ const StudyRoomEditModal = ({
   };
 
   const onsubmit = useCallback(
-    //api patch 요청시 500에러
     (e) => {
       e.preventDefault();
       const room = roominfo;
       var moment = require('moment');
       require('moment-timezone');
-      //moment.tz.setDefault("Asia/Seoul");
       room.endDate = moment(room.endDate).tz('Asia/Seoul').format('YYYY-MM-DD 00:00:00');
       if (room.password) {
         room.secret = 1;
       }
-      console.log(room);
 
       patchStudyRoomInfo(studyRoomId, room)
         .then((response) => {
@@ -200,7 +185,6 @@ const StudyRoomEditModal = ({
         })
         .catch((error) => {
           console.log(error.toJSON());
-          console.log(roominfo.title);
           alert('input 입력이 잘못된 것 같습니다.');
         });
     },
@@ -209,7 +193,6 @@ const StudyRoomEditModal = ({
 
   return (
     <>
-      {/* {console.log(roominfo)} */}
       <ModalOverlay visible={visible} />
       <ModalWrapper
         className={className}
@@ -233,7 +216,6 @@ const StudyRoomEditModal = ({
               </Rowarea>
               <Rowarea>
                 <Label>카테고리</Label>
-                {/* 국가고시, 독서, 수능, 어학, 자격증, 기타 */}
                 <Cate>
                   {category.map((data) => (
                     <CategoryButton
@@ -267,7 +249,7 @@ const StudyRoomEditModal = ({
                     name="hashtag"
                     placeholder="Enter a tag"
                     onChange={(e) => onChangehandler(e)}
-                    onKeyDown={(e) => onKeyDown(e)}
+                    onKeyPress={(e) => onKeyDown(e)}
                     value={inputTag}
                   />
                 </div>

@@ -10,7 +10,6 @@ import Profile from '../routes/Profile';
 import DM from './DM/index';
 import MakeStudyRoom from './StudyRoom/MakeStudyRoom';
 import StudyRoom from './StudyRoom/StudyRoom';
-// import testSR from "./room/index";
 
 function App() {
   return (
@@ -30,7 +29,6 @@ function App() {
               path="/StudyRoom/:studyRoomId/:nickName/:userInfo"
               component={StudyRoom}
             />
-            {/* <Route path="/testSR" component={testSR} /> */}
           </Switch>
         </BrowserRouter>
       </RecoilRoot>

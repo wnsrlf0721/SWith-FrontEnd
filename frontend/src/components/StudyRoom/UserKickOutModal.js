@@ -16,9 +16,7 @@ const UserKickOutModal = () => {
       socketId: kickOutInfo[0],
     });
     postBanUser(kickOutInfo[1], kickOutInfo[2])
-      .then((response) => {
-        console.log(response);
-      })
+      .then((response) => {})
       .catch((error) => {
         console.log(error);
       });

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import React, { useState } from 'react';
 
-import logo from '../../images/logo.png';
+import logo from '../../images/SWith_logo2.svg';
 import DM_icon from '../../images/DM_icon.png';
 import search_icon from '../../images/search_gray.png';
 import friend_icon from '../../images/heart_default.png';
@@ -29,27 +29,9 @@ const Topbar = () => {
     }
   };
   const onLogout = (e) => {
-    const data = JSON.parse(window.sessionStorage.userInfo);
-    console.log(data);
     alert('로그아웃 하였습니다.');
     sessionStorage.removeItem('userInfo');
     return (window.location.href = '/');
-    // axios
-    //   .post("/logout", {
-    //     email: data.name,
-    //   })
-    //   .then((response) => {
-    //     const result = response.data;
-    //     console.log(result);
-    //     if (result.status === "200" && result.message === "OK") {
-    //       alert("로그아웃 하였습니다.");
-    //       sessionStorage.removeItem("userInfo");
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log(error.toJSON());
-    //     alert("로그아웃하는데 문제가 발생했습니다.");
-    //   });
   };
 
   return (
@@ -71,8 +53,6 @@ const Topbar = () => {
             <a href="/">홈</a>
             <a href="/plan">학습관리</a>
             <a href="/comm">커뮤니티</a>
-            {/* <a href="/UserProfile">프로필편집</a> */}
-            {/* <a href="/profile">프로필</a> */}
           </Link>
           <Search onSubmit={(e) => onsearch(e)}>
             <Inputdiv>
@@ -99,13 +79,6 @@ const Topbar = () => {
           <a className="rLink" href="/MakeRoom">
             스터디 만들기
           </a>
-          {/* <a href="/friend">
-            <img
-              style={{ height: '25px', width: '25px', padding: '5.5px' }}
-              src={friend_icon}
-              alt="friend_icon"
-            />
-          </a> */}
 
           <img
             style={{ height: '25px', width: '25px', padding: '5.5px', cursor: 'pointer' }}
