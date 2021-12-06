@@ -87,13 +87,13 @@ const Topbar = () => {
             onClick={closeModal}
           />
           {modalVisible && <FriendModal closeModal={closeModal}></FriendModal>}
-          <a href="/dm">
+          {/* <a href="/dm">
             <img
               style={{ height: '20px', width: '20px', padding: '8px' }}
               src={DM_icon}
               alt="DM_icon"
             />
-          </a>
+          </a> */}
           {!isLogined ? (
             <a href="/login" className="login">
               로그인

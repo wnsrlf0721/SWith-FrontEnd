@@ -11,41 +11,6 @@ const FriendModal = ({ closeModal }) => {
       name: '사용자1',
       follow: true,
     },
-    {
-      id: '2',
-      name: '사용자2',
-      follow: true,
-    },
-    {
-      id: '3',
-      name: '사용자3',
-      follow: true,
-    },
-    {
-      id: '4',
-      name: '사용자4',
-      follow: true,
-    },
-    {
-      id: '5',
-      name: '사용자5',
-      follow: true,
-    },
-    {
-      id: '6',
-      name: '사용자3',
-      follow: true,
-    },
-    {
-      id: '7',
-      name: '사용자4',
-      follow: true,
-    },
-    {
-      id: '8',
-      name: '사용자5',
-      follow: true,
-    },
   ]);
 
   const onCloseModal = (e) => {
