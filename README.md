@@ -24,6 +24,7 @@
 ## 2. 시스템 개요
 
 <div align="center"><img src="https://user-images.githubusercontent.com/55420438/144746701-c06ab59d-0e0d-4d77-add3-b4a5998bb6cd.png" alt="systemOverview"></div>
+
 * Jenkins를 이용하여 빌드 및 배포 자동화를 구현했습니다.
 
 * webRTC를 이용한 화상 공유를 구현하여 SDK를
