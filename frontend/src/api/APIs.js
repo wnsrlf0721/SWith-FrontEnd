@@ -91,6 +91,13 @@ export const postBanUser = async (userId, studyRoomId) => {
   });
 };
 
+export const postFollow = async (senderId, receiverid) => {
+  return await axios.post('/follow', {
+    senderId: senderId,
+    receiverid: receiverid,
+  });
+};
+
 export const getUserInfo = async (userId) => {
   return await axios.get(`/users/${userId}`);
 };
