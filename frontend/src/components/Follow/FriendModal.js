@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import {
   getFollowing,
   deleteFollow,
+  getFollower,
   postFollow,
   postFollowApprove,
 } from '../../api/APIs';
@@ -12,8 +13,10 @@ import {
 import defaultProfile from '../../images/default_profile_Image.png';
 
 const FriendModal = ({ closeModal }) => {
+  const userInfo = JSON.parse(window.sessionStorage.userInfo);
   const [swapleft, setSwapleft] = useState(true);
   const [friends, setFriends] = useState([]);
+  const [followerLists, setFollowerLists] = useState([]);
 
   const onCloseModal = (e) => {
     if (e.target === e.currentTarget) {
@@ -28,22 +31,55 @@ const FriendModal = ({ closeModal }) => {
           user.id === id ? { ...user, approve: !user.approve } : user,
         ),
       );
-      const userInfo = JSON.parse(window.sessionStorage.userInfo);
+
       deleteFollow(userInfo.userId, id)
         .then((response) => {
           console.log(response);
         })
         .catch((error) => {
-          alert('삭제하는데 오류가 생겼습니다');
+          alert('삭제하는데 오류가 생겼습니다.');
           console.log(error);
         });
     }
   };
 
+  const followerRefuse = (id) => {
+    if (window.confirm('팔로우 요청을 거절하시겠습니까?')) {
+      setFollowerLists(
+        followerLists.map((user) =>
+          user.id === id ? { ...user, approve: !user.approve } : user,
+        ),
+      );
+      console.log(userInfo.userId);
+      deleteFollow(id, userInfo.userId)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
+  const followerApprove = (id) => {
+    setFollowerLists(
+      followerLists.map((user) =>
+        user.id === id ? { ...user, approve: !user.approve } : user,
+      ),
+    );
+    postFollowApprove(id, userInfo.userId)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     const userInfo = JSON.parse(window.sessionStorage.userInfo);
     console.log(userInfo.userId);
-    // postFollow(userInfo.userId, 19)
+    // postFollow(userInfo.userId, 58)
     //   .then((response) => {
     //     const data = response.data;
     //     console.log(data);
@@ -61,6 +97,12 @@ const FriendModal = ({ closeModal }) => {
       .catch((error) => {
         console.log(error.response);
       });
+
+    getFollower(userInfo.userId).then((response) => {
+      const followers = response.data.data.users;
+      setFollowerLists(followers);
+    });
+    console.log();
   }, []);
 
   return (
@@ -73,79 +115,121 @@ const FriendModal = ({ closeModal }) => {
                 className={swapleft === true ? 'friendTapActive' : 'friendTap'}
                 onClick={() => setSwapleft(true)}
               >
-                친구
+                팔로잉
               </button>
               <button
                 className={swapleft === false ? 'friendTapActive' : 'friendTap'}
                 onClick={() => setSwapleft(false)}
               >
-                친구 요청
+                팔로워
               </button>
             </div>
-            <div className="friendsWrap">
-              {friends.map((user, index) => {
-                if (user.approve == 1) {
-                  return (
-                    <div className="userWrap">
-                      <div className="rowWrap">
-                        <div className="profile">
-                          <Link
-                            to={{
-                              pathname: `/profile/${user.id}/other`,
-                            }}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <img
-                              style={{
-                                height: '30px',
-                                width: 'auto',
-                                objectFit: 'cover',
+            {swapleft ? (
+              <div className="friendsWrap">
+                {friends.map((user, index) => {
+                  if (user.approve == 1) {
+                    return (
+                      <div className="userWrap">
+                        <div className="rowWrap">
+                          <div className="profile">
+                            <Link
+                              to={{
+                                pathname: `/profile/${user.id}/other`,
                               }}
-                              src={defaultProfile}
-                              alt="defaultProfile"
-                            />
-                          </Link>
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <img
+                                style={{
+                                  height: '30px',
+                                  width: 'auto',
+                                  objectFit: 'cover',
+                                }}
+                                src={defaultProfile}
+                                alt="defaultProfile"
+                              />
+                            </Link>
+                          </div>
+                          <div
+                            className="text"
+                            style={{ maxWidth: '140px', overflow: 'hidden' }}
+                          >
+                            {user.nickname}
+                          </div>
                         </div>
-                        <div
-                          className="text"
-                          style={{ maxWidth: '140px', overflow: 'hidden' }}
-                        >
-                          {user.nickname}
-                        </div>
-                      </div>
-                      <div className="rowWrap">
-                        <div className="StudiesTabListWrap">
-                          {swapleft ? (
+                        <div className="rowWrap">
+                          <div className="StudiesTabListWrap">
                             <button
                               className={user.approve == true ? 'pinkBtn' : 'whiteBtn'}
                               onClick={() => changeFollowState(user.id)}
                             >
                               팔로잉 삭제
                             </button>
-                          ) : (
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }
+                })}
+              </div>
+            ) : (
+              <div className="friendsWrap">
+                {console.log(followerLists)}
+                {followerLists.map((user, index) => {
+                  if (user.approve == 0) {
+                    return (
+                      <div className="userWrap">
+                        <div className="rowWrap">
+                          <div className="profile">
+                            <Link
+                              to={{
+                                pathname: `/profile/${user.id}/other`,
+                              }}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <img
+                                style={{
+                                  height: '30px',
+                                  width: 'auto',
+                                  objectFit: 'cover',
+                                }}
+                                src={defaultProfile}
+                                alt="defaultProfile"
+                              />
+                            </Link>
+                          </div>
+                          <div
+                            className="text"
+                            style={{ maxWidth: '140px', overflow: 'hidden' }}
+                          >
+                            {user.nickname}
+                          </div>
+                        </div>
+                        <div className="rowWrap">
+                          <div className="StudiesTabListWrap">
                             <div>
-                              {/* <button
-                                className={user.approve === true ? 'pinkBtn' : 'whiteBtn'}
-                                onClick={() => changeFollowState(user.id)}
+                              <button
+                                className="pinkBtn"
+                                onClick={() => followerApprove(user.id)}
                               >
                                 수락
                               </button>
                               <button
-                                className={user.approve === true ? 'pinkBtn' : 'whiteBtn'}
-                                onClick={() => changeFollowState(user.id)}
+                                className="whiteBtn"
+                                onClick={() => followerRefuse(user.id)}
                               >
                                 거절
-                              </button> */}
+                              </button>
                             </div>
-                          )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                }
-              })}
-            </div>
+                    );
+                  }
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>
