@@ -78,8 +78,8 @@ const FriendModal = ({ closeModal }) => {
 
   useEffect(() => {
     const userInfo = JSON.parse(window.sessionStorage.userInfo);
-    console.log(userInfo.userId);
-    // postFollow(userInfo.userId, 58)
+    // console.log(userInfo.userId);
+    // postFollow(20, userInfo.userId)
     //   .then((response) => {
     //     const data = response.data;
     //     console.log(data);
@@ -104,6 +104,35 @@ const FriendModal = ({ closeModal }) => {
     });
     console.log();
   }, []);
+
+  const getUserProfile = (user) => {
+    return (
+      <div className="rowWrap">
+        <div className="profile">
+          <Link
+            to={{
+              pathname: `/profile/${user.id}/other`,
+            }}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              style={{
+                height: '30px',
+                width: 'auto',
+                objectFit: 'cover',
+              }}
+              src={defaultProfile}
+              alt="defaultProfile"
+            />
+          </Link>
+        </div>
+        <div className="text" style={{ maxWidth: '140px', overflow: 'hidden' }}>
+          {user.nickname}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -130,33 +159,7 @@ const FriendModal = ({ closeModal }) => {
                   if (user.approve == 1) {
                     return (
                       <div className="userWrap">
-                        <div className="rowWrap">
-                          <div className="profile">
-                            <Link
-                              to={{
-                                pathname: `/profile/${user.id}/other`,
-                              }}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <img
-                                style={{
-                                  height: '30px',
-                                  width: 'auto',
-                                  objectFit: 'cover',
-                                }}
-                                src={defaultProfile}
-                                alt="defaultProfile"
-                              />
-                            </Link>
-                          </div>
-                          <div
-                            className="text"
-                            style={{ maxWidth: '140px', overflow: 'hidden' }}
-                          >
-                            {user.nickname}
-                          </div>
-                        </div>
+                        {getUserProfile(user)}
                         <div className="rowWrap">
                           <div className="StudiesTabListWrap">
                             <button
@@ -174,38 +177,11 @@ const FriendModal = ({ closeModal }) => {
               </div>
             ) : (
               <div className="friendsWrap">
-                {console.log(followerLists)}
                 {followerLists.map((user, index) => {
                   if (user.approve == 0) {
                     return (
                       <div className="userWrap">
-                        <div className="rowWrap">
-                          <div className="profile">
-                            <Link
-                              to={{
-                                pathname: `/profile/${user.id}/other`,
-                              }}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <img
-                                style={{
-                                  height: '30px',
-                                  width: 'auto',
-                                  objectFit: 'cover',
-                                }}
-                                src={defaultProfile}
-                                alt="defaultProfile"
-                              />
-                            </Link>
-                          </div>
-                          <div
-                            className="text"
-                            style={{ maxWidth: '140px', overflow: 'hidden' }}
-                          >
-                            {user.nickname}
-                          </div>
-                        </div>
+                        {getUserProfile(user)}
                         <div className="rowWrap">
                           <div className="StudiesTabListWrap">
                             <div>
@@ -226,6 +202,11 @@ const FriendModal = ({ closeModal }) => {
                         </div>
                       </div>
                     );
+                  }
+                })}
+                {followerLists.map((user, index) => {
+                  if (user.approve == 1) {
+                    return <div className="userWrap">{getUserProfile(user)}</div>;
                   }
                 })}
               </div>
