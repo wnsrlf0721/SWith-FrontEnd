@@ -195,3 +195,26 @@ export const deleteBoardPostId = async (boardId, postId) => {
 export const deleteComment = async (boardId, postId, commentId) => {
   return await axios.delete(`/boards/${boardId}/posts/${postId}/comment/${commentId}`);
 };
+
+export const postFollow = async (senderId, receiverId) => {
+  return await axios.post(`/follow/`, {
+    senderId: senderId,
+    receiverId: receiverId,
+  });
+};
+
+export const postFollowApprove = async (senderId, receiverId) => {
+  return await axios.post(`/follow-approve/`, {
+    senderId: senderId,
+    receiverId: receiverId,
+  });
+};
+
+export const deleteFollow = async (senderId, receiverId) => {
+  return await axios.delete(`/followings/`, {
+    data: {
+      senderId: senderId,
+      receiverId: receiverId,
+    },
+  });
+};
