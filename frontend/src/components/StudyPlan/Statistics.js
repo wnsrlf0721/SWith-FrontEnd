@@ -10,7 +10,12 @@ import Progress from './Progress';
 const Statistics = ({ task }) => {
   const Today = moment(moment().format('YYYY-MM-DD'));
   const MonthsEndday = moment(moment().endOf('month').format('YYYY-MM-DD'));
-  const weekOfMonth = (m) => m.week() - moment(m).startOf('month').week() + 1;
+  const weekOfMonth = (m) =>
+    m.week() < moment(m).startOf('month').week()
+      ? moment(moment().endOf('month').subtract(7, 'days')).week() -
+        moment(m).startOf('month').week() +
+        2
+      : m.week() - moment(m).startOf('month').week() + 1;
   const [todaytime, setTodaytime] = useState({
     hour: 0,
     minute: 0,
@@ -60,7 +65,7 @@ const Statistics = ({ task }) => {
   const [mcCount, setMcCount] = useState(0);
 
   useEffect(() => {
-    const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    const userInfo = JSON.parse(window.localStorage.userInfo);
 
     getUserStatistics(userInfo.userId)
       .then((response) => {

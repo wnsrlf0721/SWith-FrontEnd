@@ -12,9 +12,6 @@ const ViewOtherUser = ({ match }) => {
   const [following, setFollowing] = useState(0);
   const [boards, setBoards] = useState(0);
 
-  //로그인 UserInfo
-  const session = JSON.parse(window.sessionStorage.userInfo);
-
   //프로필 UserInfo
   const userId = match.params.userId;
 
@@ -40,7 +37,9 @@ const ViewOtherUser = ({ match }) => {
 
   const onFollow = (e) => {
     e.preventDefault();
-    postFollow(session.userId, userId)
+    //로그인 UserInfo
+    const local = JSON.parse(window.localStorage.userInfo);
+    postFollow(local.userId, userId)
       .then((response) => {
         alert('팔로우 요청을 성공하였습니다');
         console.log(response);

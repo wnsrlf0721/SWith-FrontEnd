@@ -9,7 +9,7 @@ import friend_icon from '../../images/heart_default.png';
 import FriendModal from '../Follow/FriendModal';
 
 const Topbar = () => {
-  const isLogined = window.sessionStorage.userInfo == null ? false : true;
+  const isLogined = window.localStorage.userInfo == null ? false : true;
   const [search, setSearch] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -30,7 +30,7 @@ const Topbar = () => {
   };
   const onLogout = (e) => {
     alert('로그아웃 하였습니다.');
-    sessionStorage.removeItem('userInfo');
+    localStorage.removeItem('userInfo');
     return (window.location.href = '/');
   };
 

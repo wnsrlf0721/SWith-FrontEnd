@@ -10,12 +10,12 @@ import Topbar from '../Main/Topbar';
 const Index = () => {
   const [task, setTask] = useState([]);
   useEffect(() => {
-    const isLogined = window.sessionStorage.userInfo == null ? false : true;
+    const isLogined = window.localStorage.userInfo == null ? false : true;
     if (!isLogined) {
       alert('로그인이 필요합니다.');
       return (window.location.href = '/login');
     }
-    const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    const userInfo = JSON.parse(window.localStorage.userInfo);
     let tempEvents = [];
     getUserPlanner(userInfo.userId)
       .then((response) => {

@@ -12,7 +12,7 @@ export function LoadTest() {
   const { id, title, start, end } = getEvent;
   useEffect(() => {
     let tempEvents = [];
-    const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    const userInfo = JSON.parse(window.localStorage.userInfo);
     axios
       .get(`/planners/${userInfo.userId}`)
       .then((events) => {
