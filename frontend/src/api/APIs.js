@@ -91,6 +91,20 @@ export const postBanUser = async (userId, studyRoomId) => {
   });
 };
 
+export const postFollowRequest = async (senderId, receiverId) => {
+  return await axios.post(`/follow`, {
+    senderId: senderId,
+    receiverId: receiverId,
+  });
+};
+
+export const postFollowApprove = async (senderId, receiverId) => {
+  return await axios.post(`/follow-approve`, {
+    senderId: senderId,
+    receiverId: receiverId,
+  });
+};
+
 export const getUserInfo = async (userId) => {
   return await axios.get(`/users/${userId}`);
 };
@@ -206,4 +220,11 @@ export const deleteBoardPostId = async (boardId, postId) => {
 
 export const deleteComment = async (boardId, postId, commentId) => {
   return await axios.delete(`/boards/${boardId}/posts/${postId}/comment/${commentId}`);
+};
+
+export const deleteFollowings = async (senderId, receiverId) => {
+  return await axios.delete(`/followings`, {
+    senderId: senderId,
+    receiverId: receiverId,
+  });
 };
