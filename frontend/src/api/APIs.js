@@ -45,14 +45,6 @@ export const postUserStudyRoomHistory = async (userId, studyRoomId) => {
   });
 };
 
-export const postUserstatistics = async (userId, studyTime, today) => {
-  return await axios.post(`/statistics`, {
-    userId: userId,
-    studyTime: studyTime,
-    date: today,
-  });
-};
-
 export const postPlannerTask = async (userId, taskTitle, startDate, endDate) => {
   return await axios.post(`/planners/${userId}`, {
     taskDescription: taskTitle,
@@ -141,10 +133,6 @@ export const getFollowing = async (userId) => {
 
 export const getBanUsers = async (studyroom_id) => {
   return await axios.get(`/studyrooms/ban-user/${studyroom_id}`);
-};
-
-export const getStudyRoomOut = async (studyroom_id) => {
-  return await axios.get(`/studyrooms/${studyroom_id}/out`);
 };
 
 export const getStudyRoomEnter = async (studyroom_id) => {
