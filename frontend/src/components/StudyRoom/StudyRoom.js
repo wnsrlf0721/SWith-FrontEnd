@@ -16,8 +16,6 @@ import UserKickOutModal from './UserKickOutModal';
 import {
   getStudyRoomInfo,
   postUserStudyRoomHistory,
-  postUserstatistics,
-  getStudyRoomOut,
   getStudyRoomEnter,
 } from '../../api/APIs';
 import socket from '../../socket/socket';
@@ -28,7 +26,6 @@ import camera_true from '../../images/camera_true.png';
 import camera_false from '../../images/camera_false.png';
 import mic_true from '../../images/mic_true.png';
 import mic_false from '../../images/mic_false.png';
-// import user_invite from '../../images/user_invite.png';
 import screen_false from '../../images/screen_false.png';
 import screen_true from '../../images/screen_true.png';
 
@@ -74,12 +71,10 @@ const StudyRoom = ({ match }) => {
   );
 
   useBeforeunload(async (event) => {
-    event.preventDefault();
+    // event.preventDefault();
     socket.disconnect();
-    getStudyRoomOut(studyRoomId);
-    await postStatistics();
     window.localStorage.setItem('enteredStudyRoom', 'false');
-    return 'Are you sure to close this tab?';
+    // return 'Are you sure to close this tab?';
   });
 
   useEffect(() => {
@@ -87,6 +82,12 @@ const StudyRoom = ({ match }) => {
     const userId = JSON.parse(userInfo)['userId'];
     setUserId(userId);
     setUserNickName(userNickName);
+
+    socket.emit('join_room', {
+      room: studyRoomId,
+      userName: userNickName,
+      userId: JSON.parse(userInfo)['userId'],
+    });
 
     postUserStudyRoomHistory(userId, studyRoomId)
       .then((response) => {})
@@ -143,10 +144,8 @@ const StudyRoom = ({ match }) => {
     setAvailableUserMedia(availableUserVideo);
     setInitSetting(true);
 
-    socket.emit('join_room', {
+    socket.emit('users_in_room', {
       room: studyRoomId,
-      userName: userNickName,
-      userId: JSON.parse(userInfo)['userId'],
     });
 
     let timerID = setInterval(() => {
@@ -174,32 +173,6 @@ const StudyRoom = ({ match }) => {
         : parseInt((seconds % 3600) / 60);
     var sec = seconds % 60 < 10 ? '0' + (seconds % 60) : seconds % 60;
     return hour + ':' + min + ':' + sec;
-  };
-
-  const leftPad = (value) => {
-    if (value >= 10) {
-      return value;
-    }
-    return `0${value}`;
-  };
-
-  const toStringByFormatting = (source, delimiter = '-') => {
-    const year = source.getFullYear();
-    const month = leftPad(source.getMonth() + 1);
-    const day = leftPad(source.getDate());
-    return [year, month, day].join(delimiter);
-  };
-
-  const postStatistics = async () => {
-    clearInterval(timerID);
-    const userId = JSON.parse(userInfo)['userId'];
-    const today = toStringByFormatting(new Date());
-
-    postUserstatistics(userId, studyTimer, today)
-      .then((response) => {})
-      .catch((error) => {
-        console.log(error.response.data);
-      });
   };
 
   const videoMute = () => {
