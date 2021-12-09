@@ -33,9 +33,10 @@ const Post = ({ match }) => {
   const [loginId, setLoginId] = useState('');
   const [editNum, setEditNum] = useState('');
   const [editComment, setEditComment] = useState('');
+  const [pathname, setPathName] = useState('/profile');
   useEffect(() => {
-    if (window.sessionStorage.userInfo) {
-      setLoginId(JSON.parse(window.sessionStorage.userInfo).userId);
+    if (window.localStorage.userInfo) {
+      setLoginId(JSON.parse(window.localStorage.userInfo).userId);
     }
     getBoardPostId(boardId, postId)
       .then((response) => {
@@ -48,14 +49,14 @@ const Post = ({ match }) => {
   }, []);
 
   const onclick = (e) => {
-    const isLogined = window.sessionStorage.userInfo == null ? false : true;
+    const isLogined = window.localStorage.userInfo == null ? false : true;
     if (!isLogined) {
       alert('로그인이 필요합니다.');
       return (window.location.href = '/login');
     } else {
       const name = e.target.name;
       if (name === 'newComment') {
-        const userId = JSON.parse(window.sessionStorage.userInfo).userId;
+        const userId = JSON.parse(window.localStorage.userInfo).userId;
         postComment(boardId, postId, userId, comment)
           .then((response) => {})
           .catch((error) => {
@@ -118,15 +119,27 @@ const Post = ({ match }) => {
         <Title>{postInfo.title}</Title>
         <Info>
           <Divimg>
-            <Link
-              to={{
-                pathname: `/profile/${postInfo.user.id}/other`,
-              }}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img src={DefaultProfile} alt="기본사용자이미지" width="40" height="40" />
-            </Link>
+            {loginId === postInfo.user.id ? (
+              <Link
+                to={{
+                  pathname: '/profile',
+                }}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={DefaultProfile} alt="기본사용자이미지" width="40" height="40" />
+              </Link>
+            ) : (
+              <Link
+                to={{
+                  pathname: `/profile/${postInfo.user.id}/other`,
+                }}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src={DefaultProfile} alt="기본사용자이미지" width="40" height="40" />
+              </Link>
+            )}
           </Divimg>
           <div>
             <div style={{ fontWeight: 'bold' }}>{postInfo.user.nickname}</div>
@@ -189,20 +202,37 @@ const Post = ({ match }) => {
             return (
               <li>
                 <CommentArea>
-                  <Link
-                    to={{
-                      pathname: `/profile/${comment.user.id}/other`,
-                    }}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img
-                      src={DefaultProfile}
-                      alt="기본사용자이미지"
-                      width="35"
-                      height="35"
-                    />
-                  </Link>
+                  {loginId === comment.user.id ? (
+                    <Link
+                      to={{
+                        pathname: '/profile',
+                      }}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        src={DefaultProfile}
+                        alt="기본사용자이미지"
+                        width="35"
+                        height="35"
+                      />
+                    </Link>
+                  ) : (
+                    <Link
+                      to={{
+                        pathname: `/profile/${comment.user.id}/other`,
+                      }}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        src={DefaultProfile}
+                        alt="기본사용자이미지"
+                        width="35"
+                        height="35"
+                      />
+                    </Link>
+                  )}
                   <div style={{ padding: '0 0 0 10px' }}>
                     <div style={{ fontWeight: 'bold' }}>{comment.user.nickname}</div>
                     <Content>

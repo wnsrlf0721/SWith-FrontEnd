@@ -13,7 +13,7 @@ import {
 import defaultProfile from '../../images/default_profile_Image.png';
 
 const FriendModal = ({ closeModal }) => {
-  const userInfo = JSON.parse(window.sessionStorage.userInfo);
+  const userInfo = JSON.parse(window.localStorage.userInfo);
   const [swapleft, setSwapleft] = useState(true);
   const [friends, setFriends] = useState([]);
   const [followerLists, setFollowerLists] = useState([]);
@@ -77,7 +77,7 @@ const FriendModal = ({ closeModal }) => {
   };
 
   useEffect(() => {
-    const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    const userInfo = JSON.parse(window.localStorage.userInfo);
     // console.log(userInfo.userId);
     // postFollow(20, userInfo.userId)
     //   .then((response) => {
