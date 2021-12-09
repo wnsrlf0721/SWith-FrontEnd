@@ -10,10 +10,10 @@ const Edit = () => {
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
 
-  const session = JSON.parse(window.sessionStorage.userInfo);
+  const local = JSON.parse(window.localStorage.userInfo);
 
   useEffect(() => {
-    getUserInfo(session.userId)
+    getUserInfo(local.userId)
       .then((response) => {
         const data = response.data;
         if (data.status === '200' && data.message === 'OK') {
@@ -71,7 +71,7 @@ const Edit = () => {
       }
       if (!editInfo.password) {
         patchUserInfo(
-          session.userId,
+          local.userId,
           editInfo.nickname,
           editInfo.beforePassword,
           editInfo.beforePassword,
@@ -86,7 +86,7 @@ const Edit = () => {
           });
       } else {
         patchUserInfo(
-          session.userId,
+          local.userId,
           editInfo.nickname,
           editInfo.beforePassword,
           editInfo.password,

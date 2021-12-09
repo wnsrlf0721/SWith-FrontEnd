@@ -11,7 +11,7 @@ const baseUrl = '/profile/';
 
 const Profile = () => {
   useEffect(() => {
-    const isLogined = window.sessionStorage.userInfo == null ? false : true;
+    const isLogined = window.localStorage.userInfo == null ? false : true;
     if (!isLogined) {
       alert('로그인이 필요합니다.');
       return (window.location.href = '/login');

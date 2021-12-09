@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 
-import { getUserInfo } from '../../api/APIs';
+import { getUserInfo, postFollow } from '../../api/APIs';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
 import userImage from '../../images/default_profile_Image.png';
 
 const ViewOtherUser = ({ match }) => {
@@ -13,18 +12,14 @@ const ViewOtherUser = ({ match }) => {
   const [following, setFollowing] = useState(0);
   const [boards, setBoards] = useState(0);
 
+  //프로필 UserInfo
+  const userId = match.params.userId;
+
   useEffect(() => {
-    const userId = match.params.userId;
-    let user = {
-      userId: userId,
-    };
-    sessionStorage.setItem('userInfo', JSON.stringify(user));
-
-    const session = JSON.parse(window.sessionStorage.userInfo);
-
-    getUserInfo(session.userId)
+    getUserInfo(userId)
       .then((response) => {
         const data = response.data;
+        console.log(data);
         if (data.status === '200' && data.message === 'OK') {
           const api_data = data.data;
           let user = {
@@ -40,6 +35,20 @@ const ViewOtherUser = ({ match }) => {
       });
   }, []);
 
+  const onFollow = (e) => {
+    e.preventDefault();
+    //로그인 UserInfo
+    const local = JSON.parse(window.localStorage.userInfo);
+    postFollow(local.userId, userId)
+      .then((response) => {
+        alert('팔로우 요청을 성공하였습니다');
+        console.log(response);
+      })
+      .catch((error) => {
+        alert('팔로우 요청이 실패하였습니다');
+        console.log(error);
+      });
+  };
   return (
     <Container>
       <Wrap>
@@ -65,6 +74,9 @@ const ViewOtherUser = ({ match }) => {
           <Link to="/plan">
             <Button style={{ color: '#595959' }}>학습관리</Button>
           </Link>
+          <Button style={{ backgroundColor: '#ef8585' }} onClick={(e) => onFollow(e)}>
+            팔로우 요청
+          </Button>
         </ButtonWrap>
       </Wrap>
     </Container>

@@ -40,7 +40,7 @@ const Login = () => {
               jwt: data.jwt,
               userId: data.userId,
             };
-            sessionStorage.setItem('userInfo', JSON.stringify(user));
+            localStorage.setItem('userInfo', JSON.stringify(user));
             return (window.location.href = '/');
           }
         })

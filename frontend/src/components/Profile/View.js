@@ -14,8 +14,8 @@ const View = () => {
   const [boards, setBoards] = useState(0);
 
   useEffect(() => {
-    const session = JSON.parse(window.sessionStorage.userInfo);
-    getUserInfo(session.userId)
+    const local = JSON.parse(window.localStorage.userInfo);
+    getUserInfo(local.userId)
       .then((response) => {
         const data = response.data;
         if (data.status === '200' && data.message === 'OK') {

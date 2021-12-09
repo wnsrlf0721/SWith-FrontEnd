@@ -2,7 +2,6 @@ import './css/StudyCard.css';
 import { getBanUsers, getStudyRoomInfo } from '../../api/APIs';
 import React from 'react';
 import user_icon from '../../images/user_black.png';
-import key_icon from '../../images/key_icon_black.png';
 
 const StudyCard = ({
   title,
@@ -12,9 +11,8 @@ const StudyCard = ({
   nickName,
   maxUserCount,
   userCount,
-  secret,
 }) => {
-  const isLogined = window.sessionStorage.userInfo == null ? false : true;
+  const isLogined = window.localStorage.userInfo == null ? false : true;
 
   const enterStudyRoom = () => {
     if (!isLogined) {
@@ -25,7 +23,7 @@ const StudyCard = ({
       .then((response) => {
         const res = response.data.data;
         for (let i = 0; i < res.length; i++) {
-          if (res[i].user.id === JSON.parse(window.sessionStorage.userInfo).userId) {
+          if (res[i].user.id === JSON.parse(window.localStorage.userInfo).userId) {
             alert('강퇴당한 방에 다시 입장하실 수 없습니다.');
             return;
           }
@@ -36,15 +34,20 @@ const StudyCard = ({
               alert('최대 인원수 초과로 입장하실 수 없습니다.');
               window.location.reload();
             } else {
-              if (window.localStorage.getItem('enteredStudyRoom') === 'true')
-                alert('이미 스터디룸에 입장하였습니다.');
-              else {
-                window.open(
-                  `/StudyRoom/${studyRoomID}/${nickName}/${window.sessionStorage.userInfo}`,
-                  '_blank',
-                  'noopener noreferrer',
-                );
-              }
+              window.open(
+                `/StudyRoom/${studyRoomID}/${nickName}/${window.localStorage.userInfo}`,
+                '_blank',
+                'noopener noreferrer',
+              );
+              // if (window.localStorage.getItem('enteredStudyRoom') === 'true')
+              //   alert('이미 스터디룸에 입장하였습니다.');
+              // else {
+              //   window.open(
+              //     `/StudyRoom/${studyRoomID}/${nickName}/${window.localStorage.userInfo}`,
+              //     '_blank',
+              //     'noopener noreferrer',
+              //   );
+              // }
             }
           })
           .catch((error) => {
@@ -80,32 +83,9 @@ const StudyCard = ({
           </div>
           <div className="card-body">
             <div className="hashtagWrap">
-              <div className="card-title">
-                <div style={{ width: '100%' }}>
-                  {body.map((x) => {
-                    return <span className="t">{'#' + x.hashtag}</span>;
-                  })}
-                </div>
-                {secret === 0 ? (
-                  <></>
-                ) : (
-                  <div>
-                    <img
-                      style={{
-                        height: '12px',
-                        width: 'auto',
-                        objectFit: 'cover',
-                        marginRight: '2px',
-                        position: 'absolute',
-                        bottom: '15px',
-                        right: '10px',
-                      }}
-                      src={key_icon}
-                      alt="key_icon"
-                    />
-                  </div>
-                )}
-              </div>
+              {body.map((x) => {
+                return <div className="t">{'#' + x.hashtag}</div>;
+              })}
             </div>
           </div>
         </div>

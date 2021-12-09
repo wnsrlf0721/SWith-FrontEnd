@@ -11,7 +11,7 @@ import EditPost from './EditPost';
 import search_icon from '../../images/search_gray.png';
 import writing_icon from '../../images/writing_icon.png';
 import post_list from '../../images/post_list.png';
-import { getBoards } from '../../api/APIs';
+import { getBoards, postBoard } from '../../api/APIs';
 
 const baseUrl = '/comm/';
 
@@ -19,6 +19,8 @@ const Index = () => {
   const [boardList, setBoardList] = useState([]);
   const [search, setSearch] = useState('');
   useEffect(() => {
+    //const local = JSON.parse(window.localStorage.userInfo);
+    //postBoard('정보 공유', local.userId);
     getBoards()
       .then((response) => {
         let array = [];

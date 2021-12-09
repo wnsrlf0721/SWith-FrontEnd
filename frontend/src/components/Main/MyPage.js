@@ -32,11 +32,11 @@ const MyPage = () => {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-  const isLogined = window.sessionStorage.userInfo == null ? false : true;
+  const isLogined = window.localStorage.userInfo == null ? false : true;
 
   useEffect(() => {
     if (isLogined) {
-      const userInfo = JSON.parse(window.sessionStorage.userInfo);
+      const userInfo = JSON.parse(window.localStorage.userInfo);
       const date = moment().format('YYYY-MM-DD');
       const Today = moment(date);
 

@@ -33,7 +33,7 @@ const Calendar = () => {
     useEffect(() => {
       let tempEvents = [];
       let tempTodo = [];
-      const userInfo = JSON.parse(window.sessionStorage.userInfo);
+      const userInfo = JSON.parse(window.localStorage.userInfo);
       getUserPlanner(userInfo.userId)
         .then((events) => {
           const tasks = events.data.data.studyplanner_Tasks;
@@ -76,7 +76,7 @@ const Calendar = () => {
   };
 
   const handleEventDelete = (event) => {
-    const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    const userInfo = JSON.parse(window.localStorage.userInfo);
     deletePlannerTask(userInfo.userId, event.id)
       .then((response) => {
         const data = response.data;
@@ -108,7 +108,7 @@ const Calendar = () => {
   };
 
   const HandleTodoUpdate = (event) => {
-    const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    const userInfo = JSON.parse(window.localStorage.userInfo);
     const startDate = event.start;
     const endDate = event.end;
     let chch = 0;
@@ -158,7 +158,7 @@ const Calendar = () => {
     let title = prompt('새로운 일정을 등록하세요');
     let calendarApi = selectInfo.view.calendar;
     calendarApi.unselect(); // clear date selection
-    const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    const userInfo = JSON.parse(window.localStorage.userInfo);
     const startDate = selectInfo.start;
     const endDate = selectInfo.end;
     const start =
