@@ -14,7 +14,7 @@ const StudyCard = ({
   userCount,
   secret,
 }) => {
-  const isLogined = window.sessionStorage.userInfo == null ? false : true;
+  const isLogined = window.localStorage.userInfo == null ? false : true;
 
   const enterStudyRoom = () => {
     if (!isLogined) {
@@ -25,7 +25,7 @@ const StudyCard = ({
       .then((response) => {
         const res = response.data.data;
         for (let i = 0; i < res.length; i++) {
-          if (res[i].user.id === JSON.parse(window.sessionStorage.userInfo).userId) {
+          if (res[i].user.id === JSON.parse(window.localStorage.userInfo).userId) {
             alert('강퇴당한 방에 다시 입장하실 수 없습니다.');
             return;
           }
@@ -40,7 +40,7 @@ const StudyCard = ({
                 alert('이미 스터디룸에 입장하였습니다.');
               else {
                 window.open(
-                  `/StudyRoom/${studyRoomID}/${nickName}/${window.sessionStorage.userInfo}`,
+                  `/StudyRoom/${studyRoomID}/${nickName}/${window.localStorage.userInfo}`,
                   '_blank',
                   'noopener noreferrer',
                 );
