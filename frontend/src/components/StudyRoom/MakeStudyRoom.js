@@ -130,6 +130,14 @@ const MakeStudyRoom = () => {
       hashtag: previnfo.hashtag.filter((tag, i) => i !== index),
     }));
   };
+
+  const onchangeLeft = () => {
+    setSwapleft(true);
+    setRoominfo((previnfo) => ({
+      ...previnfo,
+      password: '',
+    }));
+  };
   const onsubmit = useCallback(
     (e) => {
       e.preventDefault();
@@ -146,6 +154,8 @@ const MakeStudyRoom = () => {
       room.endDate = moment(room.endDate).tz('Asia/Seoul').format('YYYY-MM-DD 00:00:00');
       if (room.password) {
         room.secret = 1;
+      } else {
+        room.secret = 0;
       }
       postStudyRoom(room)
         .then((response) => {
@@ -238,7 +248,7 @@ const MakeStudyRoom = () => {
           <TabWrap>
             <KeyButton
               className={swapleft ? 'active' : ''}
-              onClick={() => setSwapleft(true)}
+              onClick={() => onchangeLeft()}
             >
               공개방
             </KeyButton>

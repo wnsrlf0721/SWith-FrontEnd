@@ -76,6 +76,7 @@ const StudyRoomEditModal = ({
       .then((response) => {
         const data = response.data;
         const roomData = data.data;
+        console.log(roomData);
         let temphash = [];
         roomData.hashtags.map((x) => {
           temphash = temphash.concat(x.hashtag);
@@ -96,6 +97,7 @@ const StudyRoomEditModal = ({
           category.map((data) =>
             roomData.purpose === data.purpose ? setToggleState(data.id) : data,
           );
+          setSwapleft(!roomData.secret);
         }
       })
       .catch((error) => {
@@ -166,6 +168,14 @@ const StudyRoomEditModal = ({
     }));
   };
 
+  const onchangeLeft = () => {
+    setSwapleft(true);
+    setRoominfo((previnfo) => ({
+      ...previnfo,
+      password: '',
+    }));
+  };
+
   const onsubmit = useCallback(
     (e) => {
       e.preventDefault();
@@ -175,6 +185,8 @@ const StudyRoomEditModal = ({
       room.endDate = moment(room.endDate).tz('Asia/Seoul').format('YYYY-MM-DD 00:00:00');
       if (room.password) {
         room.secret = 1;
+      } else {
+        room.secret = 0;
       }
 
       patchStudyRoomInfo(studyRoomId, room)
@@ -296,7 +308,7 @@ const StudyRoomEditModal = ({
               <TabWrap>
                 <KeyButton
                   className={swapleft ? 'active' : ''}
-                  onClick={() => setSwapleft(true)}
+                  onClick={() => onchangeLeft()}
                 >
                   공개방
                 </KeyButton>
@@ -312,6 +324,7 @@ const StudyRoomEditModal = ({
                   <Label>비밀번호</Label>
                   <Input
                     name="password"
+                    type="password"
                     onChange={(e) => onChangehandler(e)}
                     value={roominfo.password}
                   />
