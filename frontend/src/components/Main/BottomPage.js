@@ -152,10 +152,10 @@ const BottomPage = ({ search }) => {
   };
 
   useEffect(() => {
-    const isLogined = window.sessionStorage.userInfo == null ? false : true;
+    const isLogined = window.localStorage.userInfo == null ? false : true;
     if (isLogined) {
-      const session = JSON.parse(window.sessionStorage.userInfo);
-      getUserInfo(session.userId)
+      const local = JSON.parse(window.localStorage.userInfo);
+      getUserInfo(local.userId)
         .then((response) => {
           const data = response.data;
           if (data.status === '200' && data.message === 'OK') {

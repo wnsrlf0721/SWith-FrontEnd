@@ -12,21 +12,6 @@ import speaker_false from '../../images/speaker_false.png';
 import kickout_default from '../../images/kickout_default.png';
 import { useRecoilState } from 'recoil';
 
-const user = [
-  {
-    id: 1,
-    name: '사용자',
-  },
-  {
-    id: 2,
-    name: '유저1',
-  },
-  {
-    id: 3,
-    name: '유저2',
-  },
-];
-
 const UserList = (
   userId,
   studyRoomID,
@@ -44,6 +29,7 @@ const UserList = (
   const [openKickOutModal, setOpenKickOutModal] = useRecoilState(
     studyRoomAtoms.openKickOutModal,
   );
+  const loginUser = window.localStorage.userInfo;
   const users = [
     {
       userId: userId,
@@ -89,23 +75,43 @@ const UserList = (
             <div className="UserList">
               <div className="rowContainer">
                 <div className="profile">
-                  <Link
-                    to={{
-                      pathname: `/profile/${user.userId}/other`,
-                    }}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img
-                      style={{
-                        height: '30px',
-                        width: 'auto',
-                        objectFit: 'cover',
+                  {JSON.parse(loginUser)['userId'] === user.userId ? (
+                    <Link
+                      to={{
+                        pathname: '/profile',
                       }}
-                      src={defaultProfile}
-                      alt="defaultProfile"
-                    />
-                  </Link>
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        style={{
+                          height: '30px',
+                          width: 'auto',
+                          objectFit: 'cover',
+                        }}
+                        src={defaultProfile}
+                        alt="defaultProfile"
+                      />
+                    </Link>
+                  ) : (
+                    <Link
+                      to={{
+                        pathname: `/profile/${user.userId}/other`,
+                      }}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        style={{
+                          height: '30px',
+                          width: 'auto',
+                          objectFit: 'cover',
+                        }}
+                        src={defaultProfile}
+                        alt="defaultProfile"
+                      />
+                    </Link>
+                  )}
                 </div>
                 <div className="text" style={{ maxWidth: '140px', overflow: 'hidden' }}>
                   {user.nickName}
