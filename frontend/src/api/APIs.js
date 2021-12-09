@@ -45,14 +45,6 @@ export const postUserStudyRoomHistory = async (userId, studyRoomId) => {
   });
 };
 
-export const postUserstatistics = async (userId, studyTime, today) => {
-  return await axios.post(`/statistics`, {
-    userId: userId,
-    studyTime: studyTime,
-    date: today,
-  });
-};
-
 export const postPlannerTask = async (userId, taskTitle, startDate, endDate) => {
   return await axios.post(`/planners/${userId}`, {
     taskDescription: taskTitle,
@@ -91,10 +83,17 @@ export const postBanUser = async (userId, studyRoomId) => {
   });
 };
 
-export const postFollow = async (senderId, receiverid) => {
-  return await axios.post('/follow', {
+export const postFollowRequest = async (senderId, receiverId) => {
+  return await axios.post(`/follow`, {
     senderId: senderId,
-    receiverid: receiverid,
+    receiverId: receiverId,
+  });
+};
+
+export const postFollowApprove = async (senderId, receiverId) => {
+  return await axios.post(`/follow-approve`, {
+    senderId: senderId,
+    receiverId: receiverId,
   });
 };
 
@@ -148,10 +147,6 @@ export const getFollowing = async (userId) => {
 
 export const getBanUsers = async (studyroom_id) => {
   return await axios.get(`/studyrooms/ban-user/${studyroom_id}`);
-};
-
-export const getStudyRoomOut = async (studyroom_id) => {
-  return await axios.get(`/studyrooms/${studyroom_id}/out`);
 };
 
 export const getStudyRoomEnter = async (studyroom_id) => {
@@ -213,4 +208,20 @@ export const deleteBoardPostId = async (boardId, postId) => {
 
 export const deleteComment = async (boardId, postId, commentId) => {
   return await axios.delete(`/boards/${boardId}/posts/${postId}/comment/${commentId}`);
+};
+
+export const postFollow = async (senderId, receiverId) => {
+  return await axios.post(`/follow/`, {
+    senderId: senderId,
+    receiverId: receiverId,
+  });
+};
+
+export const deleteFollow = async (senderId, receiverId) => {
+  return await axios.delete(`/followings/`, {
+    data: {
+      senderId: senderId,
+      receiverId: receiverId,
+    },
+  });
 };

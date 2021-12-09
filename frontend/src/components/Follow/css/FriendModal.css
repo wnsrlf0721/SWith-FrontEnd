@@ -98,7 +98,7 @@
 }
 .pinkBtn {
   margin: 4px;
-  border: 1px solid #ef7575;
+  border: 1px solid #ef8585;
   background-color: #ef8585;
   font-weight: 700;
   color: #fff;
@@ -113,11 +113,11 @@
 .whiteBtn {
   margin: 4px;
   border: 1px solid #d0d0d0;
-  border-radius: 100px;
+  border-radius: 4px;
   padding: 3px 18px;
   background-color: #fff;
-  font-size: 15px;
-  line-height: 34px;
+  font-size: 13px;
+  line-height: 25px;
   cursor: pointer;
   color: #454648;
 }
