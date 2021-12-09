@@ -16,7 +16,7 @@ import '@fullcalendar/core';
 import '@fullcalendar/daygrid/main.css';
 import '@fullcalendar/timegrid/main.css';
 
-const Calendar = () => {
+const Calendar = ({ userId }) => {
   const [currentEvents, setCurrentEvents] = useState([]);
   const [todo, setTodo] = useState([]);
   const [getEvent, setEvent] = useState([
@@ -28,13 +28,13 @@ const Calendar = () => {
       allDay: '',
     },
   ]);
+  const userInfo = JSON.parse(window.localStorage.userInfo);
 
   const HandleLoad = () => {
     useEffect(() => {
       let tempEvents = [];
       let tempTodo = [];
-      const userInfo = JSON.parse(window.localStorage.userInfo);
-      getUserPlanner(userInfo.userId)
+      getUserPlanner(userId)
         .then((events) => {
           const tasks = events.data.data.studyplanner_Tasks;
           tasks.map((task) => {
@@ -74,9 +74,7 @@ const Calendar = () => {
         });
     }, []);
   };
-
   const handleEventDelete = (event) => {
-    const userInfo = JSON.parse(window.localStorage.userInfo);
     deletePlannerTask(userInfo.userId, event.id)
       .then((response) => {
         const data = response.data;
@@ -108,7 +106,10 @@ const Calendar = () => {
   };
 
   const HandleTodoUpdate = (event) => {
-    const userInfo = JSON.parse(window.localStorage.userInfo);
+    if (userInfo.userId !== Number(userId)) {
+      alert('다른사람의 일정은 변경할 수 없습니다!');
+      return;
+    }
     const startDate = event.start;
     const endDate = event.end;
     let chch = 0;
@@ -155,10 +156,13 @@ const Calendar = () => {
   };
 
   const handleDateSelect = (selectInfo) => {
+    if (userInfo.userId !== Number(userId)) {
+      alert('다른사람의 일정은 변경할 수 없습니다!');
+      return;
+    }
     let title = prompt('새로운 일정을 등록하세요');
     let calendarApi = selectInfo.view.calendar;
     calendarApi.unselect(); // clear date selection
-    const userInfo = JSON.parse(window.localStorage.userInfo);
     const startDate = selectInfo.start;
     const endDate = selectInfo.end;
     const start =
@@ -200,6 +204,10 @@ const Calendar = () => {
   };
 
   const handleEventClick = (clickInfo) => {
+    if (userInfo.userId !== Number(userId)) {
+      alert('다른사람의 일정은 변경할 수 없습니다!');
+      return;
+    }
     if (window.confirm(`정말 '${clickInfo.event.title}'을 삭제하시겠습니까?`)) {
       clickInfo.event.remove();
       handleTodoRemove(clickInfo.event);

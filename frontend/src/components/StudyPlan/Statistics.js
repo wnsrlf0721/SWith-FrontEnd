@@ -7,7 +7,7 @@ import moment from 'moment';
 import Timer from './Timer';
 import Progress from './Progress';
 
-const Statistics = ({ task }) => {
+const Statistics = ({ task, time }) => {
   const Today = moment(moment().format('YYYY-MM-DD'));
   const MonthsEndday = moment(moment().endOf('month').format('YYYY-MM-DD'));
   const weekOfMonth = (m) =>
@@ -65,39 +65,18 @@ const Statistics = ({ task }) => {
   const [mcCount, setMcCount] = useState(0);
 
   useEffect(() => {
-    const userInfo = JSON.parse(window.localStorage.userInfo);
+    time.map((data) => {
+      const D_date = moment(data.date);
+      const Diff = Math.abs(Today.diff(D_date, 'days'));
 
-    getUserStatistics(userInfo.userId)
-      .then((response) => {
-        const datas = response.data.data;
-        datas.map((data) => {
-          const D_date = moment(data.date);
-          const Diff = Math.abs(Today.diff(D_date, 'days'));
+      const hour = Number(data.studyTime.slice(0, 2));
+      const minute = Number(data.studyTime.slice(3, 5));
+      const second = Number(data.studyTime.slice(6, 8));
 
-          const hour = Number(data.studyTime.slice(0, 2));
-          const minute = Number(data.studyTime.slice(3, 5));
-          const second = Number(data.studyTime.slice(6, 8));
-
-          if (Today.month() + 1 === D_date.month() + 1) {
-            if (Today.week() === D_date.week()) {
-              if (Diff === 0) {
-                setTodaytime((prevmonth) => ({
-                  ...prevmonth,
-                  hour: prevmonth.hour + hour,
-                  minute: prevmonth.minute + minute,
-                  second: prevmonth.second + second,
-                  count: prevmonth.count + 1,
-                }));
-              }
-              setWeektime((prevmonth) => ({
-                ...prevmonth,
-                hour: prevmonth.hour + hour,
-                minute: prevmonth.minute + minute,
-                second: prevmonth.second + second,
-                count: prevmonth.count + 1,
-              }));
-            }
-            setMonthtime((prevmonth) => ({
+      if (Today.month() + 1 === D_date.month() + 1) {
+        if (Today.week() === D_date.week()) {
+          if (Diff === 0) {
+            setTodaytime((prevmonth) => ({
               ...prevmonth,
               hour: prevmonth.hour + hour,
               minute: prevmonth.minute + minute,
@@ -105,11 +84,23 @@ const Statistics = ({ task }) => {
               count: prevmonth.count + 1,
             }));
           }
-        });
-      })
-      .catch((error) => {
-        console.log(error.toJSON());
-      });
+          setWeektime((prevmonth) => ({
+            ...prevmonth,
+            hour: prevmonth.hour + hour,
+            minute: prevmonth.minute + minute,
+            second: prevmonth.second + second,
+            count: prevmonth.count + 1,
+          }));
+        }
+        setMonthtime((prevmonth) => ({
+          ...prevmonth,
+          hour: prevmonth.hour + hour,
+          minute: prevmonth.minute + minute,
+          second: prevmonth.second + second,
+          count: prevmonth.count + 1,
+        }));
+      }
+    });
     task.map((event) => {
       const D_event = moment(event.start);
 
