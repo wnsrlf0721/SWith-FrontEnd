@@ -153,6 +153,10 @@ export const getStudyRoomEnter = async (studyroom_id) => {
   return await axios.get(`/studyrooms/${studyroom_id}/enter`);
 };
 
+export const getUserCount = async (userId) => {
+  return await axios.get(`/user-info/${userId}`);
+};
+
 export const patchUserInfo = async (userId, nickname, beforePassword, password) => {
   return await axios.patch(`/users/${userId}`, {
     nickname: nickname,
@@ -208,13 +212,6 @@ export const deleteBoardPostId = async (boardId, postId) => {
 
 export const deleteComment = async (boardId, postId, commentId) => {
   return await axios.delete(`/boards/${boardId}/posts/${postId}/comment/${commentId}`);
-};
-
-export const postFollow = async (senderId, receiverId) => {
-  return await axios.post(`/follow/`, {
-    senderId: senderId,
-    receiverId: receiverId,
-  });
 };
 
 export const deleteFollow = async (senderId, receiverId) => {

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { getUserInfo, postFollow } from '../../api/APIs';
+import { getUserCount, getUserInfo, postFollowRequest } from '../../api/APIs';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import userImage from '../../images/default_profile_Image.png';
@@ -9,8 +9,8 @@ const ViewOtherUser = ({ match }) => {
   const UserimgUrl = userImage;
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
-  const [following, setFollowing] = useState(0);
-  const [boards, setBoards] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
+  const [postCount, setPostCount] = useState(0);
 
   //프로필 UserInfo
   const userId = match.params.userId;
@@ -33,13 +33,29 @@ const ViewOtherUser = ({ match }) => {
       .catch((error) => {
         console.log(error);
       });
+    getUserCount(userId)
+      .then((response) => {
+        const data = response.data;
+        if (data.status === '200' && data.message === 'OK') {
+          const api_data = data.data;
+          let count = {
+            followingCount: api_data.followingCount,
+            postCount: api_data.postCount,
+          };
+          setFollowingCount(count.followingCount);
+          setPostCount(count.postCount);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   const onFollow = (e) => {
     e.preventDefault();
     //로그인 UserInfo
     const local = JSON.parse(window.localStorage.userInfo);
-    postFollow(local.userId, userId)
+    postFollowRequest(local.userId, userId)
       .then((response) => {
         alert('팔로우 요청을 성공하였습니다');
         console.log(response);
@@ -65,8 +81,8 @@ const ViewOtherUser = ({ match }) => {
           </TextB>
 
           <div>
-            <p>팔로우: {following}</p>
-            <p style={{ display: 'flex' }}>게시글: {boards}</p>
+            <p>팔로우: {followingCount}</p>
+            <p style={{ display: 'flex' }}>게시글: {postCount}</p>
           </div>
         </InfoWrap>
 

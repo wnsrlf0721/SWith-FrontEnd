@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { getUserInfo } from '../../api/APIs';
+import { getUserInfo, getUserCount } from '../../api/APIs';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -10,8 +10,8 @@ const View = () => {
   const UserimgUrl = userImage;
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
-  const [following, setFollowing] = useState(0);
-  const [boards, setBoards] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
+  const [postCount, setPostCount] = useState(0);
 
   useEffect(() => {
     const local = JSON.parse(window.localStorage.userInfo);
@@ -26,6 +26,23 @@ const View = () => {
           };
           setEmail(user.email);
           setNickname(user.nickname);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    getUserCount(local.userId)
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+        if (data.status === '200' && data.message === 'OK') {
+          const api_data = data.data;
+          let count = {
+            followingCount: api_data.followingCount,
+            postCount: api_data.postCount,
+          };
+          setFollowingCount(count.followingCount);
+          setPostCount(count.postCount);
         }
       })
       .catch((error) => {
@@ -49,8 +66,8 @@ const View = () => {
           </TextB>
 
           <div>
-            <p>팔로우: {following}</p>
-            <p style={{ display: 'flex' }}>게시글: {boards}</p>
+            <p>팔로우: {followingCount}</p>
+            <p style={{ display: 'flex' }}>게시글: {postCount}</p>
           </div>
         </InfoWrap>
 
