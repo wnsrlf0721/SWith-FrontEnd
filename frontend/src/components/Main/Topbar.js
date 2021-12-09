@@ -7,12 +7,19 @@ import DM_icon from '../../images/DM_icon.png';
 import search_icon from '../../images/search_gray.png';
 import friend_icon from '../../images/heart_default.png';
 import FriendModal from '../Follow/FriendModal';
+import { useEffect } from 'react';
 
 const Topbar = () => {
   const isLogined = window.localStorage.userInfo == null ? false : true;
   const [search, setSearch] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [userId, setUserId] = useState(0);
+  useEffect(() => {
+    if (isLogined) {
+      const userInfo = JSON.parse(window.localStorage.userInfo);
+      setUserId(userInfo.userId);
+    }
+  }, []);
   const openModal = () => {
     setModalVisible(true);
   };
@@ -51,7 +58,11 @@ const Topbar = () => {
           </a>
           <Link>
             <a href="/">홈</a>
-            <a href="/plan">학습관리</a>
+            {isLogined ? (
+              <a href={`/plan/${userId}`}>학습관리</a>
+            ) : (
+              <a href={`/login`}>학습관리</a>
+            )}
             <a href="/comm">커뮤니티</a>
           </Link>
           <Search onSubmit={(e) => onsearch(e)}>

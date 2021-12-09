@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 
-import { getUserCount, getUserInfo, postFollowRequest } from '../../api/APIs';
+import {
+  getUserCount,
+  getUserInfo,
+  postFollowRequest,
+  getFollowing,
+} from '../../api/APIs';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import userImage from '../../images/default_profile_Image.png';
@@ -11,6 +16,8 @@ const ViewOtherUser = ({ match }) => {
   const [nickname, setNickname] = useState('');
   const [followingCount, setFollowingCount] = useState(0);
   const [postCount, setPostCount] = useState(0);
+  const [isFollowed, setIsFollowed] = useState(false);
+  const [relation, setRelation] = useState(0);
 
   //프로필 UserInfo
   const userId = match.params.userId;
@@ -19,7 +26,6 @@ const ViewOtherUser = ({ match }) => {
     getUserInfo(userId)
       .then((response) => {
         const data = response.data;
-        console.log(data);
         if (data.status === '200' && data.message === 'OK') {
           const api_data = data.data;
           let user = {
@@ -48,6 +54,21 @@ const ViewOtherUser = ({ match }) => {
       })
       .catch((error) => {
         console.log(error);
+      });
+    const userInfo = JSON.parse(window.localStorage.userInfo);
+    getFollowing(userInfo.userId)
+      .then((response) => {
+        const followings = response.data.data.users;
+        followings.map((userInfo) => {
+          if (userInfo.id === Number(userId)) {
+            setIsFollowed(true);
+            setRelation(userInfo.approve);
+            console.log('이미 요청을 보냇거나 친구인 상태');
+          }
+        });
+      })
+      .catch((error) => {
+        console.log(error.response);
       });
   }, []);
 
@@ -87,12 +108,24 @@ const ViewOtherUser = ({ match }) => {
         </InfoWrap>
 
         <ButtonWrap>
-          <Link to="/plan">
+          <a href={`/plan/${userId}`}>
             <Button style={{ color: '#595959' }}>학습관리</Button>
-          </Link>
-          <Button style={{ backgroundColor: '#ef8585' }} onClick={(e) => onFollow(e)}>
-            팔로우 요청
-          </Button>
+          </a>
+          {isFollowed ? (
+            relation === 1 ? (
+              <Button style={{ backgroundColor: '#ef8585', cursor: 'auto' }} disabled>
+                팔로우 중
+              </Button>
+            ) : (
+              <Button style={{ backgroundColor: '#ef8585', cursor: 'auto' }} disabled>
+                요청 보냄
+              </Button>
+            )
+          ) : (
+            <Button style={{ backgroundColor: '#ef8585' }} onClick={(e) => onFollow(e)}>
+              팔로우 요청
+            </Button>
+          )}
         </ButtonWrap>
       </Wrap>
     </Container>

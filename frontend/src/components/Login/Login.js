@@ -72,20 +72,6 @@ const Login = () => {
                   올바른 이메일 형식이 아닙니다
                 </div>
               )}
-              <div>
-                <label>
-                  <input type="checkbox" />
-                  <span
-                    style={{
-                      color: '#ef8585',
-                      fontFamily: 'Roboto',
-                      fontSize: '15px',
-                    }}
-                  >
-                    아이디 저장
-                  </span>
-                </label>
-              </div>
             </Text>
             <Text>
               <Label>비밀번호</Label>
@@ -96,7 +82,6 @@ const Login = () => {
                 value={password}
                 onChange={(e) => onChangehandler(e)}
               />
-              <a>비밀번호를 잊어버리셨나요?</a>
             </Text>
             <Button>로그인</Button>
           </form>

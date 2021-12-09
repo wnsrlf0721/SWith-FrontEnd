@@ -2,24 +2,24 @@ import './css/styles.css';
 import styled from 'styled-components';
 
 import React, { useState, useEffect } from 'react';
-import { getUserPlanner } from '../../api/APIs';
+import { getUserPlanner, getUserStatistics } from '../../api/APIs';
 import Calendar from './Calendar';
 import Statistics from './Statistics';
 import Topbar from '../Main/Topbar';
 
-const Index = () => {
+const Index = ({ match }) => {
   const [task, setTask] = useState([]);
+  const [time, setTime] = useState([]);
   useEffect(() => {
     const isLogined = window.localStorage.userInfo == null ? false : true;
     if (!isLogined) {
       alert('로그인이 필요합니다.');
       return (window.location.href = '/login');
     }
-    const userInfo = JSON.parse(window.localStorage.userInfo);
-    let tempEvents = [];
-    getUserPlanner(userInfo.userId)
+    getUserPlanner(match.params.userId)
       .then((response) => {
         const data = response.data.data;
+        let tempEvents = [];
         data.studyplanner_Tasks.map((task) => {
           tempEvents = tempEvents.concat({
             id: task.id,
@@ -30,6 +30,22 @@ const Index = () => {
           });
         });
         setTask(tempEvents);
+      })
+      .catch((error) => {
+        console.log(error.toJSON());
+      });
+    getUserStatistics(match.params.userId)
+      .then((response) => {
+        const data = response.data.data;
+        let tempTimes = [];
+        data.map((time) => {
+          tempTimes = tempTimes.concat({
+            id: time.id,
+            studyTime: time.studyTime,
+            date: time.date,
+          });
+        });
+        setTime(tempTimes);
       })
       .catch((error) => {
         console.log(error.toJSON());
@@ -54,7 +70,11 @@ const Index = () => {
         </TabWrap>
       </TabWrapContainer>
 
-      {swapleft ? <Calendar /> : <Statistics task={task} />}
+      {swapleft ? (
+        <Calendar userId={match.params.userId} />
+      ) : (
+        <Statistics task={task} time={time} />
+      )}
     </>
   );
 };
