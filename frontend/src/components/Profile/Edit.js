@@ -54,11 +54,11 @@ const Edit = () => {
   const onChangehandler = (e) => {
     const { name, value } = e.target;
     if (name === 'PWconfirm') {
-      setPwConfirm(value);
+      setPwConfirm(value.trim());
     } else {
       setEditInfo((prevInfo) => ({
         ...prevInfo,
-        [name]: value,
+        [name]: value.trim(),
       }));
     }
   };
@@ -68,6 +68,10 @@ const Edit = () => {
       e.preventDefault();
       if (!editInfo.nickname) {
         alert('닉네임을 한 글자 이상 입력해야합니다');
+        return;
+      }
+      if (editInfo.nickname.length > 9) {
+        alert('닉네임을 9자 이하로 작성해주세요');
         return;
       }
       if (!editInfo.beforePassword) {

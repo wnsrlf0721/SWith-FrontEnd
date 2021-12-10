@@ -90,14 +90,6 @@ const Topbar = () => {
           <a className="rLink" href="/MakeRoom">
             스터디 만들기
           </a>
-
-          <img
-            style={{ height: '25px', width: '25px', padding: '5.5px', cursor: 'pointer' }}
-            src={friend_icon}
-            alt="friend_icon"
-            onClick={closeModal}
-          />
-          {modalVisible && <FriendModal closeModal={closeModal}></FriendModal>}
           {/* <a href="/dm">
             <img
               style={{ height: '20px', width: '20px', padding: '8px' }}
@@ -110,7 +102,19 @@ const Topbar = () => {
               로그인
             </a>
           ) : (
-            <div style={{ gap: '15px', display: 'flex' }}>
+            <div style={{ gap: '15px', display: 'flex', alignItems: 'center' }}>
+              <img
+                style={{
+                  height: '25px',
+                  width: '25px',
+                  padding: '5.5px',
+                  cursor: 'pointer',
+                }}
+                src={friend_icon}
+                alt="friend_icon"
+                onClick={closeModal}
+              />
+              {modalVisible && <FriendModal closeModal={closeModal}></FriendModal>}
               <a href="/profile" className="rLink">
                 프로필
               </a>
