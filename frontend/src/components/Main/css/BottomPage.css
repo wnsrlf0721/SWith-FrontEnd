@@ -12,7 +12,14 @@
   -webkit-box-align: end;
   align-items: flex-end;
   display: flex;
-  font-size: 100px;
+}
+.TitleTextBox {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 30px;
+  height: auto;
+  display: flex;
+  align-items: center;
 }
 
 .StudiesHeaderNum {
