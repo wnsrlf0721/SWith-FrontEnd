@@ -7,6 +7,7 @@ import { getStudyRoomInfo, patchStudyRoomInfo } from '../../api/APIs';
 import DatePicker from 'react-datepicker';
 import { ko } from 'date-fns/esm/locale';
 import moment from 'moment';
+import socket from '../../socket/socket';
 
 const StudyRoomEditModal = ({
   className,
@@ -193,6 +194,9 @@ const StudyRoomEditModal = ({
         .then((response) => {
           console.log(response);
           alert('스터디룸 수정 완료');
+          socket.emit('reload_all_users', {
+            room: studyRoomId,
+          });
           window.location.reload();
         })
         .catch((error) => {
