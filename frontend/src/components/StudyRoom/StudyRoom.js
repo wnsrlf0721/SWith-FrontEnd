@@ -12,12 +12,9 @@ import EnlargeVideoModal from './EnlargeVideoModal';
 import { StudyRoomSocket } from '../../socket/studyRoomSocket';
 import UserKickedModal from './UserKickedModal';
 import UserKickOutModal from './UserKickOutModal';
+import StudyRoomReloadModal from './StudyRoomReloadModal';
 
-import {
-  getStudyRoomInfo,
-  postUserStudyRoomHistory,
-  getStudyRoomEnter,
-} from '../../api/APIs';
+import { getStudyRoomInfo, postUserStudyRoomHistory } from '../../api/APIs';
 import socket from '../../socket/socket';
 import { studyRoomAtoms } from '../recoils';
 
@@ -69,6 +66,9 @@ const StudyRoom = ({ match }) => {
   const [openKickOutModal, setOpenKickOutModal] = useRecoilState(
     studyRoomAtoms.openKickOutModal,
   );
+  const [openReloadModal, setOpenReloadModal] = useRecoilState(
+    studyRoomAtoms.openReloadModal,
+  );
 
   useBeforeunload(async (event) => {
     // event.preventDefault();
@@ -82,7 +82,6 @@ const StudyRoom = ({ match }) => {
     const userId = JSON.parse(userInfo)['userId'];
     setUserId(userId);
     setUserNickName(userNickName);
-
     socket.emit('join_room', {
       room: studyRoomId,
       userName: userNickName,
@@ -118,11 +117,6 @@ const StudyRoom = ({ match }) => {
             pwTest = input;
           } else {
             window.localStorage.setItem('enteredStudyRoom', 'true');
-            getStudyRoomEnter(studyRoomId)
-              .then((response) => {})
-              .catch((error) => {
-                console.log(error);
-              });
             return;
           }
           if (i > 3) {
@@ -294,6 +288,7 @@ const StudyRoom = ({ match }) => {
       )}
       {kicked ? <UserKickedModal></UserKickedModal> : <></>}
       {openKickOutModal ? <UserKickOutModal></UserKickOutModal> : <></>}
+      {openReloadModal ? <StudyRoomReloadModal></StudyRoomReloadModal> : <></>}
       <LeftBar studyRoomId={studyRoomId} masterId={masterId} userId={userId} />
 
       <div className="RightWrap">
