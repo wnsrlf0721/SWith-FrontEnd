@@ -139,7 +139,7 @@ const StudyRoomEditModal = ({
     } else if (name === 'password') {
       setRoominfo((previnfo) => ({
         ...previnfo,
-        password: value,
+        password: value.trim(),
       }));
     }
   };
@@ -151,6 +151,8 @@ const StudyRoomEditModal = ({
     if (
       key === 'Enter' &&
       trimmedInput.length &&
+      trimmedInput.length < 10 &&
+      roominfo.hashtag.length < 3 &&
       !roominfo.hashtag.includes(trimmedInput)
     ) {
       e.preventDefault();
@@ -159,6 +161,10 @@ const StudyRoomEditModal = ({
         hashtag: [...previnfo.hashtag, trimmedInput],
       }));
       setInputTag('');
+    } else if (roominfo.hashtag.length > 2) {
+      return alert('해시태그는 3개 이상 추가할 수 없습니다');
+    } else if (trimmedInput.length > 9) {
+      return alert('해시태그를 9자 이하로 작성해주세요');
     }
   };
   const deleteTag = (index) => {
@@ -179,10 +185,19 @@ const StudyRoomEditModal = ({
   const onsubmit = useCallback(
     (e) => {
       e.preventDefault();
+      if (!roominfo.title.trim()) {
+        return alert('스터디룸 이름이 비어있으면 안됩니다');
+      } else if (roominfo.title.length > 10) {
+        return alert('스터디룸 이름을 10자 이하로 작성해주세요');
+      }
       const room = roominfo;
       var moment = require('moment');
       require('moment-timezone');
       room.endDate = moment(room.endDate).tz('Asia/Seoul').format('YYYY-MM-DD 00:00:00');
+      if (Number(room.maxUserCount) > 8) {
+        alert('최대인원은 8명 이하로 입력되어야 합니다');
+        return;
+      }
       if (room.password) {
         room.secret = 1;
       } else {

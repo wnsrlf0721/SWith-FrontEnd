@@ -255,7 +255,6 @@ const LinkContainer = styled.div`
   background-color: #fff;
   position: relative;
   cursor: pointer;
-  overflow: hidden;
   border: 0px;
   text-align: left;
 `;

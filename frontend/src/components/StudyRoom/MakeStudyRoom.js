@@ -102,7 +102,7 @@ const MakeStudyRoom = () => {
     } else if (name === 'password') {
       setRoominfo((previnfo) => ({
         ...previnfo,
-        password: value,
+        password: value.trim(),
       }));
     }
   };
@@ -114,6 +114,8 @@ const MakeStudyRoom = () => {
     if (
       key === 'Enter' &&
       trimmedInput.length &&
+      trimmedInput.length < 10 &&
+      roominfo.hashtag.length < 3 &&
       !roominfo.hashtag.includes(trimmedInput)
     ) {
       e.preventDefault();
@@ -122,6 +124,10 @@ const MakeStudyRoom = () => {
         hashtag: [...previnfo.hashtag, trimmedInput],
       }));
       setInputTag('');
+    } else if (roominfo.hashtag.length > 2) {
+      return alert('해시태그는 3개 이상 추가할 수 없습니다');
+    } else if (trimmedInput.length > 9) {
+      return alert('해시태그를 9자 이하로 작성해주세요');
     }
   };
   const deleteTag = (index) => {
@@ -141,8 +147,10 @@ const MakeStudyRoom = () => {
   const onsubmit = useCallback(
     (e) => {
       e.preventDefault();
-      if (!roominfo.title) {
+      if (!roominfo.title.trim()) {
         return alert('스터디룸 이름이 비어있으면 안됩니다');
+      } else if (roominfo.title.length > 10) {
+        return alert('스터디룸 이름을 10자 이하로 작성해주세요');
       }
       const room = roominfo;
       var moment = require('moment');
@@ -293,6 +301,7 @@ const Container = styled.div`
     position: relative;
     margin: 0 auto;
     padding: 50px 50px 63px;
+    min-width: max-content;
 
     flex-direction: column;
   }
@@ -338,6 +347,7 @@ const Label = styled.label`
   font-weight: 500;
   color: #333;
   line-height: 1;
+  min-width: fit-content;
 `;
 const Input = styled.input`
   padding: 15px;
