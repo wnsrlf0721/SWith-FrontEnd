@@ -134,7 +134,6 @@ const MyPage = () => {
   const pageRight = () => {
     let pageNum = Math.ceil(posts.length / postsPerPage);
     if (currentPage === pageNum) {
-      setCurrentPage(1);
     } else {
       setCurrentPage(currentPage + 1);
     }
@@ -143,7 +142,6 @@ const MyPage = () => {
   const pageLeft = () => {
     let pageNum = Math.ceil(posts.length / postsPerPage);
     if (currentPage === 1) {
-      setCurrentPage(pageNum);
     } else {
       setCurrentPage(currentPage - 1);
     }
