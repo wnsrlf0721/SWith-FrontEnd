@@ -181,7 +181,7 @@ const Calendar = ({ userId }) => {
       ].join('-') +
       'T' +
       endDate.toTimeString().substring(0, 8);
-    if (title) {
+    if (title && title.length < 21) {
       postPlannerTask(userInfo.userId, title, start, end)
         .then((response) => {
           const data = response.data;
@@ -200,6 +200,12 @@ const Calendar = ({ userId }) => {
         .catch((error) => {
           console.log(error.response.data);
         });
+    }
+    if (title.length > 20) {
+      return alert('일정 내용은 20자 이하로 입력해주세요.');
+    }
+    if (!title) {
+      return alert('일정 내용을 입력해주세요.');
     }
   };
 
