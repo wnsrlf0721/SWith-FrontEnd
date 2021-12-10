@@ -75,6 +75,10 @@ const studyRoomAtoms = {
     key: 'openKickOutModal',
     default: false,
   }),
+  openReloadModal: atom({
+    key: 'openReloadModal',
+    default: false,
+  }),
 };
 
 const studyRoomSelectors = {};

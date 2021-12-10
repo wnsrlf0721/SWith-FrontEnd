@@ -149,10 +149,6 @@ export const getBanUsers = async (studyroom_id) => {
   return await axios.get(`/studyrooms/ban-user/${studyroom_id}`);
 };
 
-export const getStudyRoomEnter = async (studyroom_id) => {
-  return await axios.get(`/studyrooms/${studyroom_id}/enter`);
-};
-
 export const getUserCount = async (userId) => {
   return await axios.get(`/user-info/${userId}`);
 };
