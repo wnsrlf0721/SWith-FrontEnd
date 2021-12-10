@@ -6,6 +6,7 @@ import { getStudyRooms, getUserInfo } from '../../api/APIs';
 import StudyCard from './StudyCard';
 
 import studyImage from '../../images/studyImage.jpg';
+import closeIcon from '../../images/close_icon.svg';
 
 const category = [
   {
@@ -152,10 +153,10 @@ const BottomPage = ({ search }) => {
   };
 
   useEffect(() => {
-    const isLogined = window.localStorage.userInfo == null ? false : true;
+    const isLogined = window.sessionStorage.userInfo == null ? false : true;
     if (isLogined) {
-      const local = JSON.parse(window.localStorage.userInfo);
-      getUserInfo(local.userId)
+      const session = JSON.parse(window.sessionStorage.userInfo);
+      getUserInfo(session.userId)
         .then((response) => {
           const data = response.data;
           if (data.status === '200' && data.message === 'OK') {
@@ -176,15 +177,23 @@ const BottomPage = ({ search }) => {
       <div className="StudiesContainer">
         <div className="StudiesHeader">
           <div className="StudiesHeaderTitle">
-            <h3
-              style={{
-                fontSize: '22px',
-                fontWeight: '700',
-                lineHeight: '30px',
-              }}
-            >
-              {!search ? '스터디 목록' : `"${search}"의 검색 결과`}
-            </h3>
+            {!search ? (
+              <div className="TitleTextBox">스터디 목록</div>
+            ) : (
+              <>
+                <div className="TitleTextBox">
+                  "{search}"의 검색 결과
+                  <a href="/">
+                    <img
+                      style={{
+                        display: 'block',
+                      }}
+                      src={closeIcon}
+                    />
+                  </a>
+                </div>
+              </>
+            )}
             <div className="StudiesHeaderNum">총 {purpose_list.length} 개 스터디</div>
           </div>
         </div>

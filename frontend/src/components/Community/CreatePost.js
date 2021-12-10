@@ -51,6 +51,10 @@ const CreatePost = () => {
   const onsubmit = (e) => {
     const userInfo = JSON.parse(window.localStorage.userInfo);
     e.preventDefault();
+    if (selectState === undefined) {
+      alert('게시판을 선택해주세요.');
+      return;
+    }
     if (title.length < 1) {
       alert('제목을 입력해주세요.');
       return;
@@ -58,11 +62,6 @@ const CreatePost = () => {
 
     if (submitContents < 1) {
       alert('내용을 입력해주세요.');
-      return;
-    }
-
-    if (selectState === undefined) {
-      alert('게시판을 선택해주세요.');
       return;
     }
 

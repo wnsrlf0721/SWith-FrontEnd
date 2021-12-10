@@ -6,7 +6,7 @@ import {
   getFollowing,
   deleteFollow,
   getFollower,
-  postFollow,
+  postFollowRequest,
   postFollowApprove,
 } from '../../api/APIs';
 
@@ -46,9 +46,7 @@ const FriendModal = ({ closeModal }) => {
   const followerRefuse = (id) => {
     if (window.confirm('팔로우 요청을 거절하시겠습니까?')) {
       setFollowerLists(
-        followerLists.map((user) =>
-          user.id === id ? { ...user, approve: !user.approve } : user,
-        ),
+        followerLists.map((user) => (user.id === id ? { ...user, approve: 2 } : user)),
       );
       console.log(userInfo.userId);
       deleteFollow(id, userInfo.userId)
@@ -79,7 +77,7 @@ const FriendModal = ({ closeModal }) => {
   useEffect(() => {
     const userInfo = JSON.parse(window.localStorage.userInfo);
     // console.log(userInfo.userId);
-    // postFollow(20, userInfo.userId)
+    // postFollowRequest(22, userInfo.userId)
     //   .then((response) => {
     //     const data = response.data;
     //     console.log(data);
