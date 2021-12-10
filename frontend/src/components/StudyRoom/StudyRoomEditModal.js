@@ -1,13 +1,17 @@
 import 'react-datepicker/dist/react-datepicker.css';
+import './css/MakeStudyRoom.css';
 import styled from 'styled-components';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { getStudyRoomInfo, patchStudyRoomInfo } from '../../api/APIs';
 import DatePicker from 'react-datepicker';
 import { ko } from 'date-fns/esm/locale';
 import moment from 'moment';
 import socket from '../../socket/socket';
+import { patchStudyRoomImgURL, postImgUpload } from '../../api/APIs';
+
+import studyImage from '../../images/studyImage.jpg';
 
 const StudyRoomEditModal = ({
   className,
@@ -19,6 +23,10 @@ const StudyRoomEditModal = ({
 }) => {
   const [swapleft, setSwapleft] = useState(true);
   const [inputTag, setInputTag] = useState('');
+  const [studyRoomImgUrl, setStudyRoomImgUrl] = useState(studyImage);
+  const [studyRoomImg, setStudyRoomImg] = useState(null);
+  const imgInput = useRef(null);
+  const studyRoomImgRef = useRef(null);
   const [roominfo, setRoominfo] = useState({
     title: '',
     purpose: '',
@@ -82,7 +90,9 @@ const StudyRoomEditModal = ({
         roomData.hashtags.map((x) => {
           temphash = temphash.concat(x.hashtag);
         });
-
+        if (roomData.imageURL) {
+          setStudyRoomImgUrl(roomData.imageURL);
+        }
         if (data.status === '200' && data.message === 'OK') {
           setRoominfo({
             title: roomData.title,
@@ -140,7 +150,7 @@ const StudyRoomEditModal = ({
     } else if (name === 'password') {
       setRoominfo((previnfo) => ({
         ...previnfo,
-        password: value,
+        password: value.trim(),
       }));
     }
   };
@@ -152,6 +162,8 @@ const StudyRoomEditModal = ({
     if (
       key === 'Enter' &&
       trimmedInput.length &&
+      trimmedInput.length < 10 &&
+      roominfo.hashtag.length < 3 &&
       !roominfo.hashtag.includes(trimmedInput)
     ) {
       e.preventDefault();
@@ -160,6 +172,10 @@ const StudyRoomEditModal = ({
         hashtag: [...previnfo.hashtag, trimmedInput],
       }));
       setInputTag('');
+    } else if (roominfo.hashtag.length > 2) {
+      return alert('해시태그는 3개 이상 추가할 수 없습니다');
+    } else if (trimmedInput.length > 9) {
+      return alert('해시태그를 9자 이하로 작성해주세요');
     }
   };
   const deleteTag = (index) => {
@@ -177,32 +193,80 @@ const StudyRoomEditModal = ({
     }));
   };
 
+  const onImgInputBtnClick = (event) => {
+    event.preventDefault();
+    imgInput.current.click();
+  };
+
+  const onImgChange = (event) => {
+    const image = event.target.files[0];
+    if (image) {
+      setStudyRoomImgUrl(URL.createObjectURL(image));
+      setStudyRoomImg(image);
+      studyRoomImgRef.current = image;
+      console.log(image);
+    }
+  };
   const onsubmit = useCallback(
     (e) => {
       e.preventDefault();
+      if (!roominfo.title.trim()) {
+        return alert('스터디룸 이름이 비어있으면 안됩니다');
+      } else if (roominfo.title.length > 10) {
+        return alert('스터디룸 이름을 10자 이하로 작성해주세요');
+      }
       const room = roominfo;
       var moment = require('moment');
       require('moment-timezone');
       room.endDate = moment(room.endDate).tz('Asia/Seoul').format('YYYY-MM-DD 00:00:00');
+      if (Number(room.maxUserCount) > 8) {
+        alert('최대인원은 8명 이하로 입력되어야 합니다');
+        return;
+      }
       if (room.password) {
         room.secret = 1;
       } else {
         room.secret = 0;
       }
-
-      patchStudyRoomInfo(studyRoomId, room)
-        .then((response) => {
-          console.log(response);
-          alert('스터디룸 수정 완료');
-          socket.emit('reload_all_users', {
-            room: studyRoomId,
-          });
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.log(error.toJSON());
-          alert('input 입력이 잘못된 것 같습니다.');
+      console.log(studyRoomImgRef.current);
+      if (studyRoomImgRef.current) {
+        postImgUpload(studyRoomImgRef.current).then((response) => {
+          console.log(response.data);
+          patchStudyRoomImgURL(studyRoomId, response.data)
+            .then((response) => {
+              patchStudyRoomInfo(studyRoomId, room)
+                .then((response) => {
+                  console.log(response);
+                  alert('스터디룸 수정 완료');
+                  socket.emit('reload_all_users', {
+                    room: studyRoomId,
+                  });
+                  window.location.reload();
+                })
+                .catch((error) => {
+                  console.log(error.toJSON());
+                  alert('input 입력이 잘못된 것 같습니다.');
+                });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         });
+      } else {
+        patchStudyRoomInfo(studyRoomId, room)
+          .then((response) => {
+            console.log(response);
+            alert('스터디룸 수정 완료');
+            socket.emit('reload_all_users', {
+              room: studyRoomId,
+            });
+            window.location.reload();
+          })
+          .catch((error) => {
+            console.log(error.toJSON());
+            alert('input 입력이 잘못된 것 같습니다.');
+          });
+      }
     },
     [roominfo],
   );
@@ -222,6 +286,24 @@ const StudyRoomEditModal = ({
               <div style={{ margin: '5px', fontSize: '18px', fontWeight: 'bold' }}>
                 스터디 수정
               </div>
+              <Rowarea>
+                <Label>스터디룸 이미지</Label>
+                <div className="studyRoomImg-container">
+                  <img
+                    src={studyRoomImgUrl}
+                    alt="기본사용자이미지"
+                    onClick={onImgInputBtnClick}
+                  />
+                  <input
+                    ref={imgInput}
+                    type="file"
+                    id="chooseFile"
+                    accept="image/*"
+                    onChange={onImgChange}
+                    style={{ visibility: 'hidden' }}
+                  ></input>
+                </div>
+              </Rowarea>
               <Rowarea>
                 <Label>스터디 이름</Label>
                 <Input
@@ -248,6 +330,7 @@ const StudyRoomEditModal = ({
                 <Label>종료기간</Label>
                 <DateInput
                   selected={roominfo.endDate}
+                  minDate={new Date()}
                   onChange={(date) =>
                     setRoominfo((previnfo) => ({
                       ...previnfo,
@@ -536,8 +619,7 @@ const ModalInner = styled.div`
   max-width: 600px;
   min-width: 600;
   min-height: 500px;
-  top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(5%);
   margin: 0 auto;
 `;
 

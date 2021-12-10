@@ -56,6 +56,9 @@ const Post = ({ match }) => {
     } else {
       const name = e.target.name;
       if (name === 'newComment') {
+        if (comment.trim().length < 1) {
+          return;
+        }
         const userId = JSON.parse(window.localStorage.userInfo).userId;
         postComment(boardId, postId, userId, comment)
           .then((response) => {})
@@ -64,6 +67,9 @@ const Post = ({ match }) => {
           });
         window.location.reload();
       } else if (name === 'editComment') {
+        if (comment.trim().length < 1) {
+          return;
+        }
         putComment(boardId, postId, editNum, editComment)
           .then((response) => {
             const data = response.data.data;

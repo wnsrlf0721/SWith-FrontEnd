@@ -29,11 +29,15 @@ const CreatePost = ({ match }) => {
 
   const onsubmit = (e) => {
     e.preventDefault();
-    if (title.length < 1) {
+    let content = editorContent.replace(/\<p>/g, '');
+    content = content.split('</p>').join('');
+    content = content.replace(/\<br>/g, '');
+    content = content.trim();
+    if (title.trim().length < 1) {
       alert('제목을 입력해주세요.');
       return;
     }
-    if (submitContents < 1) {
+    if (content.length < 1) {
       alert('내용을 입력해주세요.');
       return;
     }

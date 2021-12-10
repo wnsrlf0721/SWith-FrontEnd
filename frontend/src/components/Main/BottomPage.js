@@ -83,6 +83,7 @@ const BottomPage = ({ search }) => {
             maxUserCount: data.maxUserCount,
             userCount: data.userCount,
             secret: data.secret,
+            imageURL: data.imageURL,
           });
         }
       });
@@ -95,6 +96,7 @@ const BottomPage = ({ search }) => {
     getStudyRooms()
       .then((response) => {
         const datas = response.data.data;
+        console.log(datas);
         datas.map((data) => {
           roomInfo = roomInfo.concat({
             id: data.id,
@@ -104,6 +106,7 @@ const BottomPage = ({ search }) => {
             maxUserCount: data.maxUserCount,
             userCount: data.userCount,
             secret: data.secret,
+            imageURL: data.imageURL,
           });
         });
 
@@ -119,6 +122,7 @@ const BottomPage = ({ search }) => {
                 maxUserCount: data.maxUserCount,
                 userCount: data.userCount,
                 secret: data.secret,
+                imageURL: data.imageURL,
               });
             } else {
               for (var i in data.hashtags) {
@@ -134,6 +138,7 @@ const BottomPage = ({ search }) => {
                     maxUserCount: data.maxUserCount,
                     userCount: data.userCount,
                     secret: data.secret,
+                    imageURL: data.imageURL,
                   });
                   break;
                 }
@@ -215,17 +220,19 @@ const BottomPage = ({ search }) => {
 
         <div className="StudyCardWrap">
           {currentPosts.map((data) => {
+            console.log(data);
             return (
               <LinkContainer>
                 <StudyCard
                   title={data.title}
-                  imgUrl={studyImage}
+                  imgUrl={data.imageURL ? data.imageURL : studyImage}
                   body={data.hashtags}
                   studyRoomID={data.id}
                   nickName={NickName}
                   maxUserCount={data.maxUserCount}
                   userCount={data.userCount}
                   secret={data.secret}
+                  bottomPage={true}
                 ></StudyCard>
               </LinkContainer>
             );
@@ -264,7 +271,6 @@ const LinkContainer = styled.div`
   background-color: #fff;
   position: relative;
   cursor: pointer;
-  overflow: hidden;
   border: 0px;
   text-align: left;
 `;

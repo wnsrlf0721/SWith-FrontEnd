@@ -25,7 +25,7 @@ const Join = () => {
   const onChangehandler = (e) => {
     const { name, value } = e.target;
     if (name === 'repeatpw') {
-      setRepeatpw(value);
+      setRepeatpw(value.trim());
       if (joinInfo.password === value) {
         setCheckpw(true);
       } else {
@@ -34,7 +34,7 @@ const Join = () => {
     } else {
       setJoinInfo((previnfo) => ({
         ...previnfo,
-        [name]: value,
+        [name]: value.trim(),
       }));
       if (name === 'email') {
         if (reg_email.test(value)) {
@@ -44,7 +44,10 @@ const Join = () => {
         }
       }
       if (name === 'password') {
-        if (repeatpw === value) {
+        if (!value) {
+          //return alert('비밀번호를 입력해야합니다');
+          setCheckpw(false);
+        } else if (repeatpw === value) {
           setCheckpw(true);
         } else {
           setCheckpw(false);
@@ -103,8 +106,11 @@ const Join = () => {
   };
 
   const onSignup = (e) => {
+    //console.log(joinInfo);
     if (!emailtype || !checkemail || !checkcode || !checkpw || !joinInfo.nickname) {
       return alert('빈칸을 다시 한번 확인해주세요.');
+    } else if (joinInfo.nickname.length > 9) {
+      return alert('닉네임을 9자 이하로 작성해주세요');
     }
     postSignUp(joinInfo.email, joinInfo.password, joinInfo.nickname)
       .then((response) => {

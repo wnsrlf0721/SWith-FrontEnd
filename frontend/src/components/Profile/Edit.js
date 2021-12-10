@@ -1,14 +1,21 @@
 import styled from 'styled-components';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { getUserInfo, patchUserInfo } from '../../api/APIs';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import {
+  getUserInfo,
+  patchUserInfo,
+  patchUserProfileImgURL,
+  postImgUpload,
+} from '../../api/APIs';
 
 import userImage from '../../images/default_profile_Image.png';
 
 const Edit = () => {
-  const UserimgUrl = userImage;
+  const [UserimgUrl, setUserimgUrl] = useState(userImage);
+  const [Userimg, setUserimg] = useState(null);
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
+  const imgInput = useRef(null);
 
   const local = JSON.parse(window.localStorage.userInfo);
 
@@ -18,6 +25,8 @@ const Edit = () => {
         const data = response.data;
         if (data.status === '200' && data.message === 'OK') {
           const api_data = data.data;
+          console.log(api_data);
+          if (api_data.imageURL) setUserimgUrl(api_data.imageURL);
           let user = {
             email: api_data.email,
             nickname: api_data.nickname,
@@ -45,11 +54,11 @@ const Edit = () => {
   const onChangehandler = (e) => {
     const { name, value } = e.target;
     if (name === 'PWconfirm') {
-      setPwConfirm(value);
+      setPwConfirm(value.trim());
     } else {
       setEditInfo((prevInfo) => ({
         ...prevInfo,
-        [name]: value,
+        [name]: value.trim(),
       }));
     }
   };
@@ -59,6 +68,10 @@ const Edit = () => {
       e.preventDefault();
       if (!editInfo.nickname) {
         alert('닉네임을 한 글자 이상 입력해야합니다');
+        return;
+      }
+      if (editInfo.nickname.length > 9) {
+        alert('닉네임을 9자 이하로 작성해주세요');
         return;
       }
       if (!editInfo.beforePassword) {
@@ -77,6 +90,21 @@ const Edit = () => {
           editInfo.beforePassword,
         )
           .then((response) => {
+            if (Userimg) {
+              postImgUpload(Userimg)
+                .then((response) => {
+                  patchUserProfileImgURL(local.userId, response.data)
+                    .then((response) => {
+                      console.log(response);
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            }
             alert('프로필 정보를 변경하였습니다.');
             window.location.reload();
           })
@@ -92,6 +120,21 @@ const Edit = () => {
           editInfo.password,
         )
           .then((response) => {
+            if (Userimg) {
+              postImgUpload(Userimg)
+                .then((response) => {
+                  patchUserProfileImgURL(local.userId, response.data)
+                    .then((response) => {
+                      console.log(response);
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            }
             alert('프로필 정보를 변경하였습니다.');
             window.location.reload();
           })
@@ -103,6 +146,20 @@ const Edit = () => {
     },
     [editInfo, pwConfirm],
   );
+
+  const onImgInputBtnClick = (event) => {
+    event.preventDefault();
+    imgInput.current.click();
+  };
+
+  const onImgChange = async (event) => {
+    const image = event.target.files[0];
+    if (image) {
+      setUserimgUrl(URL.createObjectURL(image));
+      setUserimg(image);
+    }
+  };
+
   return (
     <Container>
       <PictureTextWrap>
@@ -112,8 +169,18 @@ const Edit = () => {
               <img src={UserimgUrl} alt="기본사용자이미지" />
             </EditProfilePictureImg>
           </EditProfilePicture>
+          <EditProfilePictureButton onClick={onImgInputBtnClick}>
+            이미지 선택
+          </EditProfilePictureButton>
+          <input
+            ref={imgInput}
+            type="file"
+            id="chooseFile"
+            accept="image/*"
+            onChange={onImgChange}
+            style={{ visibility: 'hidden' }}
+          ></input>
         </EditProfilePictureWrap>
-
         <EditBoxWrap>
           <form onSubmit={onsubmit}>
             <TextB style={{ marginBottom: '15px' }}>
@@ -275,16 +342,15 @@ const EditProfilePictureImg = styled.div`
 
 const EditProfilePictureButton = styled.button`
   margin: 4px;
+  width: 120px;
   border: 1px solid #ef7575;
   background-color: #ef8585;
   border-radius: 100px;
-  padding: 3px 18px;
+  // padding: 3px 18px;
   font-size: 15px;
   line-height: 34px;
   cursor: pointer;
-  h3 {
-    color: #fff;
-  }
+  color: white;
 `;
 
 export default Edit;

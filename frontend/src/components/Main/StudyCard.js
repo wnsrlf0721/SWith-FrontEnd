@@ -13,6 +13,7 @@ const StudyCard = ({
   maxUserCount,
   userCount,
   secret,
+  bottomPage,
 }) => {
   const isLogined = window.localStorage.userInfo == null ? false : true;
 
@@ -59,7 +60,11 @@ const StudyCard = ({
     <>
       <button className="card-container" onClick={enterStudyRoom}>
         <div className="image-container">
-          <img src={imgUrl} alt="기본스터디이미지" />
+          <img
+            style={bottomPage ? { height: '140px', width: '200px' } : {}}
+            src={imgUrl}
+            alt="기본스터디이미지"
+          />
         </div>
         <div className="card-content">
           <div className="card-title" style={{ display: 'flex' }}>
