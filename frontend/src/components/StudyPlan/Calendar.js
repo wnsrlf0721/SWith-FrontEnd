@@ -267,7 +267,7 @@ const Calendar = ({ userId }) => {
     return (
       <div className="demo-app-sidebar">
         <div className="demo-app-sidebar-section">
-          <h2>오늘의 To-do list</h2>
+          <h2>To-do list</h2>
           <DatePicker
             selected={new Date(dateStr)}
             onChange={(date) => setDateStr(date.toDateString())}
