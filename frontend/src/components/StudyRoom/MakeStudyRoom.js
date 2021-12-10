@@ -208,6 +208,7 @@ const MakeStudyRoom = () => {
             <Label>종료기간</Label>
             <DateInput
               selected={roominfo.endDate}
+              minDate={new Date()}
               onChange={(date) =>
                 setRoominfo((previnfo) => ({
                   ...previnfo,
