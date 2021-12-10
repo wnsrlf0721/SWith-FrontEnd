@@ -1,12 +1,16 @@
 import 'react-datepicker/dist/react-datepicker.css';
+import './css/MakeStudyRoom.css';
 import styled from 'styled-components';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { postStudyRoom } from '../../api/APIs';
 import Topbar from '../Main/Topbar';
 import DatePicker from 'react-datepicker';
 import { ko } from 'date-fns/esm/locale';
 import moment from 'moment';
+import { postImgUpload } from '../../api/APIs';
+
+import studyImage from '../../images/studyImage.jpg';
 
 const MakeStudyRoom = () => {
   useEffect(() => {
@@ -25,6 +29,9 @@ const MakeStudyRoom = () => {
   const [swapleft, setSwapleft] = useState(true);
   const [inputTag, setInputTag] = useState('');
   const [toggleState, setToggleState] = useState(1);
+  const [studyRoomImgUrl, setStudyRoomImgUrl] = useState(studyImage);
+  const [studyRoomImg, setStudyRoomImg] = useState(null);
+  const imgInput = useRef(null);
   const [roominfo, setRoominfo] = useState({
     title: '',
     purpose: 'k-exam',
@@ -138,6 +145,20 @@ const MakeStudyRoom = () => {
       password: '',
     }));
   };
+
+  const onImgInputBtnClick = (event) => {
+    event.preventDefault();
+    imgInput.current.click();
+  };
+
+  const onImgChange = async (event) => {
+    const image = event.target.files[0];
+    if (image) {
+      setStudyRoomImgUrl(URL.createObjectURL(image));
+      setStudyRoomImg(image);
+    }
+  };
+
   const onsubmit = useCallback(
     (e) => {
       e.preventDefault();
@@ -151,21 +172,39 @@ const MakeStudyRoom = () => {
         alert('최대인원은 8명 이하로 입력되어야 합니다');
         return;
       }
-      room.endDate = moment(room.endDate).tz('Asia/Seoul').format('YYYY-MM-DD 00:00:00');
+      room.endDate = moment(room.endDate).tz('Asia/Seoul').format('YYYY-MM-DD 23:59:59');
       if (room.password) {
         room.secret = 1;
       } else {
         room.secret = 0;
       }
-      postStudyRoom(room)
-        .then((response) => {
-          alert('스터디룸 생성 성공!');
-          return (window.location.href = '/');
-        })
-        .catch((error) => {
-          console.log(error.toJSON());
-          alert('input 입력이 잘못된것 같습니다.');
+      if (studyRoomImg) {
+        postImgUpload(studyRoomImg).then((response) => {
+          console.log(response.data);
+          let roomInfo = room;
+          roomInfo = { ...roomInfo, imageURL: response.data };
+          console.log(roomInfo);
+          postStudyRoom(roomInfo)
+            .then((response) => {
+              alert('스터디룸 생성 성공!');
+              return (window.location.href = '/');
+            })
+            .catch((error) => {
+              console.log(error.toJSON());
+              alert('input 입력이 잘못된것 같습니다.');
+            });
         });
+      } else {
+        postStudyRoom(room)
+          .then((response) => {
+            alert('스터디룸 생성 성공!');
+            return (window.location.href = '/');
+          })
+          .catch((error) => {
+            console.log(error.toJSON());
+            alert('input 입력이 잘못된것 같습니다.');
+          });
+      }
     },
     [roominfo],
   );
@@ -174,6 +213,24 @@ const MakeStudyRoom = () => {
       <Topbar />
       <Container>
         <div className="page">
+          <Rowarea>
+            <Label>스터디룸 이미지</Label>
+            <div className="studyRoomImg-container">
+              <img
+                src={studyRoomImgUrl}
+                alt="기본사용자이미지"
+                onClick={onImgInputBtnClick}
+              />
+              <input
+                ref={imgInput}
+                type="file"
+                id="chooseFile"
+                accept="image/*"
+                onChange={onImgChange}
+                style={{ visibility: 'hidden' }}
+              ></input>
+            </div>
+          </Rowarea>
           <Rowarea>
             <Label>스터디 이름</Label>
             <Input
@@ -423,4 +480,16 @@ const Cate = styled.div`
     font-weight: 700;
     color: #fff;
   }
+`;
+const EditProfilePictureButton = styled.button`
+  margin: 4px;
+  width: 120px;
+  border: 1px solid #ef7575;
+  background-color: #ef8585;
+  border-radius: 100px;
+  // padding: 3px 18px;
+  font-size: 15px;
+  line-height: 34px;
+  cursor: pointer;
+  color: white;
 `;

@@ -112,6 +112,7 @@ const MyPage = () => {
                       maxUserCount: data.maxUserCount,
                       userCount: data.userCount,
                       secret: data.secret,
+                      imageURL: data.imageURL,
                     });
                   } else {
                     continue;
@@ -156,7 +157,7 @@ const MyPage = () => {
             <div className="LinkContainer">
               <StudyCard
                 title={data.title}
-                imgUrl={studyImage}
+                imgUrl={data.imageURL ? data.imageURL : studyImage}
                 body={data.hashtags}
                 studyRoomID={data.id}
                 nickName={NickName}

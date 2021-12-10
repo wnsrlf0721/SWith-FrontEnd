@@ -97,6 +97,24 @@ export const postFollowApprove = async (senderId, receiverId) => {
   });
 };
 
+export const postImgUpload = async (img) => {
+  let form = new FormData();
+  form.append('images', img);
+  return await axios.post(`/images`, form);
+};
+
+export const patchUserProfileImgURL = async (userId, imgURL) => {
+  return await axios.patch(`/users/${userId}/images`, {
+    imageURL: imgURL,
+  });
+};
+
+export const patchStudyRoomImgURL = async (studyRoomId, imgURL) => {
+  return await axios.patch(`/studyrooms/${studyRoomId}/images`, {
+    imageURL: imgURL,
+  });
+};
+
 export const getUserInfo = async (userId) => {
   return await axios.get(`/users/${userId}`);
 };
