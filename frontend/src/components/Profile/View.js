@@ -12,9 +12,9 @@ const View = () => {
   const [nickname, setNickname] = useState('');
   const [followingCount, setFollowingCount] = useState(0);
   const [postCount, setPostCount] = useState(0);
+  const local = JSON.parse(window.localStorage.userInfo);
 
   useEffect(() => {
-    const local = JSON.parse(window.localStorage.userInfo);
     getUserInfo(local.userId)
       .then((response) => {
         const data = response.data;
@@ -75,9 +75,9 @@ const View = () => {
           <Link to="/profile/edit">
             <Button style={{ backgroundColor: '#f8ad1d' }}>프로필 편집</Button>
           </Link>
-          <Link to="/plan">
+          <a href={`/plan/${local.userId}`}>
             <Button style={{ color: '#595959' }}>학습관리</Button>
-          </Link>
+          </a>
         </ButtonWrap>
       </Wrap>
     </Container>
