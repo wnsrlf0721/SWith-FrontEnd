@@ -147,6 +147,8 @@ const Wrap = styled.div`
 `;
 
 const PictureWrap = styled.div`
+  height: 150px;
+  width: 150px;
   border-radius: 70%;
   overflow: hidden;
   margin: 70px 40px;

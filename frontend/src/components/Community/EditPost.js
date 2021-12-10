@@ -32,13 +32,21 @@ const CreatePost = ({ match }) => {
     let content = editorContent.replace(/\<p>/g, '');
     content = content.split('</p>').join('');
     content = content.replace(/\<br>/g, '');
-    content = content.trim();
+    const trimmedContent = content.trim();
     if (title.trim().length < 1) {
       alert('제목을 입력해주세요.');
       return;
     }
-    if (content.length < 1) {
+    if (trimmedContent.length < 1) {
       alert('내용을 입력해주세요.');
+      return;
+    }
+    if (title.length > 20) {
+      alert('제목은 40자 이하로 입력해주세요.');
+      return;
+    }
+    if (content.length > 500) {
+      alert('내용은 500자 이하로 입력해주세요.');
       return;
     }
 
