@@ -1,4 +1,6 @@
 import './css/styles.css';
+import 'react-datepicker/dist/react-datepicker.css';
+import styled from 'styled-components';
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -11,12 +13,15 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import DatePicker from 'react-datepicker';
+import { ko } from 'date-fns/esm/locale';
 
 import '@fullcalendar/core';
 import '@fullcalendar/daygrid/main.css';
 import '@fullcalendar/timegrid/main.css';
 
 const Calendar = ({ userId }) => {
+  const [dateStr, setDateStr] = useState(new Date().toDateString());
   const [currentEvents, setCurrentEvents] = useState([]);
   const [todo, setTodo] = useState([]);
   const [getEvent, setEvent] = useState([
@@ -239,7 +244,7 @@ const Calendar = ({ userId }) => {
 
   const renderSidebarEvent = (event) => {
     let Start = event.start.toDateString();
-    if (Start === todayStr) {
+    if (Start === dateStr) {
       return (
         <li key={event.id}>
           <input
@@ -252,12 +257,25 @@ const Calendar = ({ userId }) => {
       );
     }
   };
+  const CustomInputButton = ({ value, onClick }) => (
+    <button class="customDateInput" onClick={onClick}>
+      {' '}
+      {value}{' '}
+    </button>
+  );
   const renderSidebar = () => {
     return (
       <div className="demo-app-sidebar">
         <div className="demo-app-sidebar-section">
           <h2>오늘의 To-do list</h2>
-          <h3>{today}</h3>
+          <DatePicker
+            selected={new Date(dateStr)}
+            onChange={(date) => setDateStr(date.toDateString())}
+            locale={ko}
+            dateFormat="yyyy-MM-dd"
+            customInput={<CustomInputButton />}
+            todayButton="오늘"
+          />
           <ul>{currentEvents.map(renderSidebarEvent)}</ul>
         </div>
       </div>
@@ -307,7 +325,17 @@ function fillZero(str) {
   return str.length >= 2 ? str : new Array(2 - str.length + 1).join('0') + str;
 }
 
-let todayStr = new Date().toDateString();
 let today = new Date().toLocaleDateString();
 
 export default React.memo(Calendar);
+
+const DateInput = styled(DatePicker)`
+  width: 100%;
+  padding: 0;
+  margin: 1em 0 0;
+  background-color: transparent;
+  border: none;
+  font-size: 1.17em;
+  font-weight: bold;
+  font-family: Roboto;
+`;
