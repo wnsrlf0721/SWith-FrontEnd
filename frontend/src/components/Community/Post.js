@@ -41,6 +41,7 @@ const Post = ({ match }) => {
     getBoardPostId(boardId, postId)
       .then((response) => {
         const info = response.data.data;
+        console.log(info);
         setPostInfo(info);
       })
       .catch((error) => {
@@ -139,7 +140,14 @@ const Post = ({ match }) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src={DefaultProfile} alt="기본사용자이미지" width="40" height="40" />
+                <ProfileImg>
+                  <img
+                    src={postInfo.user.imageURL ? postInfo.user.imageURL : DefaultProfile}
+                    alt="기본사용자이미지"
+                    width="40"
+                    height="40"
+                  />
+                </ProfileImg>
               </Link>
             ) : (
               <Link
@@ -149,7 +157,14 @@ const Post = ({ match }) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src={DefaultProfile} alt="기본사용자이미지" width="40" height="40" />
+                <ProfileImg>
+                  <img
+                    src={postInfo.user.imageURL ? postInfo.user.imageURL : DefaultProfile}
+                    alt="기본사용자이미지"
+                    width="40"
+                    height="40"
+                  />
+                </ProfileImg>
               </Link>
             )}
           </Divimg>
@@ -222,12 +237,16 @@ const Post = ({ match }) => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <img
-                        src={DefaultProfile}
-                        alt="기본사용자이미지"
-                        width="35"
-                        height="35"
-                      />
+                      <ProfileImg>
+                        <img
+                          src={
+                            comment.user.imageURL ? comment.user.imageURL : DefaultProfile
+                          }
+                          alt="기본사용자이미지"
+                          width="35"
+                          height="35"
+                        />
+                      </ProfileImg>
                     </Link>
                   ) : (
                     <Link
@@ -237,12 +256,16 @@ const Post = ({ match }) => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <img
-                        src={DefaultProfile}
-                        alt="기본사용자이미지"
-                        width="35"
-                        height="35"
-                      />
+                      <ProfileImg>
+                        <img
+                          src={
+                            comment.user.imageURL ? comment.user.imageURL : DefaultProfile
+                          }
+                          alt="기본사용자이미지"
+                          width="35"
+                          height="35"
+                        />
+                      </ProfileImg>
                     </Link>
                   )}
                   <div style={{ padding: '0 0 0 10px' }}>
@@ -432,4 +455,8 @@ const ChangeButton = styled.button`
   background: transparent;
   cursor: pointer;
   color: skyblue;
+`;
+const ProfileImg = styled.div`
+  border-radius: 70%;
+  overflow: hidden;
 `;
