@@ -66,7 +66,8 @@
   height: 1px;
 }
 .LinkContainer {
-  max-width: 200px;
+  width: 32%;
+  min-width: 32%;
   height: 250px;
   background-color: #fff;
   position: relative;
