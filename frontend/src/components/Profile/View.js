@@ -59,11 +59,13 @@ const View = () => {
 
   return (
     <Container>
-      <Wrap>
+      <ProfileWrap>
         <PictureWrap>
-          <ProfileImg>
-            <img src={UserimgUrl} alt="기본사용자이미지" />
-          </ProfileImg>
+          <ProfilePicture>
+            <ProfileImg>
+              <img src={UserimgUrl} alt="기본사용자이미지" />
+            </ProfileImg>
+          </ProfilePicture>
         </PictureWrap>
 
         <InfoWrap>
@@ -89,7 +91,8 @@ const View = () => {
             <Button style={{ color: '#595959' }}>학습관리</Button>
           </a>
         </ButtonWrap>
-      </Wrap>
+      </ProfileWrap>
+      <IntroWrap></IntroWrap>
     </Container>
   );
 };
@@ -104,24 +107,30 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 
-const Wrap = styled.div`
+const ProfileWrap = styled.div`
   display: flex;
 `;
+const IntroWrap = styled.div``;
 
 const PictureWrap = styled.div`
-  height: 150px;
-  width: 150px;
   border-radius: 70%;
   overflow: hidden;
-  margin: 70px 40px;
+  margin: 50px 40px;
   display: flex;
   align-items: center;
   flex-direction: column;
 `;
+const ProfilePicture = styled.div`
+  width: 150px;
+  height: 150px;
+  border-radius: 70%;
+  overflow: hidden;
+  margin: 20px;
+`;
 
 const ProfileImg = styled.div`
   img {
-    width: auto;
+    width: 100%;
     height: 150px;
     object-fit: cover;
   }

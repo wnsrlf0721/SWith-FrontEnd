@@ -24,6 +24,7 @@ const Calendar = ({ userId }) => {
   const [dateStr, setDateStr] = useState(new Date().toDateString());
   const [currentEvents, setCurrentEvents] = useState([]);
   const [todo, setTodo] = useState([]);
+  const [isUser, setIsUser] = useState(true);
   const [getEvent, setEvent] = useState([
     {
       id: '',
@@ -162,6 +163,7 @@ const Calendar = ({ userId }) => {
 
   const handleDateSelect = (selectInfo) => {
     if (userInfo.userId !== Number(userId)) {
+      setIsUser(false);
       alert('다른사람의 일정은 변경할 수 없습니다!');
       return;
     }
@@ -256,7 +258,7 @@ const Calendar = ({ userId }) => {
     }
   };
   const CustomInputButton = ({ value, onClick }) => (
-    <button class="customDateInput" onClick={onClick}>
+    <button class="customDateInput" style={{ fontSize: '14px' }} onClick={onClick}>
       {' '}
       {value}{' '}
     </button>
@@ -293,7 +295,7 @@ const Calendar = ({ userId }) => {
           locale="ko"
           initialView="dayGridMonth"
           editable={true}
-          selectable={true}
+          selectable={isUser}
           selectMirror={true}
           dayMaxEvents={true}
           weekends={true}

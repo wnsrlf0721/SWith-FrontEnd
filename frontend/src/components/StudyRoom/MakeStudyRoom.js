@@ -280,15 +280,9 @@ const MakeStudyRoom = () => {
               dateFormat="yyyy-MM-dd"
             />
           </Rowarea>
-          <Rowarea>
-            <Label>해시태그</Label>
-            <div className="container">
-              {roominfo.hashtag.map((tag, index) => (
-                <div className="tag">
-                  {'#' + tag}
-                  <button onClick={() => deleteTag(index)}>x</button>
-                </div>
-              ))}
+          <Rowarea style={{ flexDirection: 'column' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Label>해시태그</Label>
               <Input
                 name="hashtag"
                 placeholder="Enter a tag"
@@ -297,9 +291,31 @@ const MakeStudyRoom = () => {
                 value={inputTag}
               />
             </div>
+            <div
+              style={{
+                marginTop: '5px',
+                display: 'flex',
+                justifyContent: 'flex-start',
+              }}
+            >
+              {roominfo.hashtag.map((tag, index) => (
+                <div className="tag">
+                  {'#' + tag}
+                  <button onClick={() => deleteTag(index)}>x</button>
+                </div>
+              ))}
+            </div>
           </Rowarea>
-          <Rowarea>
-            <Label>공지사항</Label>
+          <Rowarea style={{ flexDirection: 'column' }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginBottom: '10px',
+              }}
+            >
+              <Label>공지사항</Label>
+            </div>
             <Input
               name="notice"
               onChange={(e) => onChangehandler(e)}
