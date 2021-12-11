@@ -33,7 +33,7 @@ const Post = ({ match }) => {
   const [loginId, setLoginId] = useState('');
   const [editNum, setEditNum] = useState('');
   const [editComment, setEditComment] = useState('');
-  const [pathname, setPathName] = useState('/profile');
+  const [UserimgUrl, setUserimgUrl] = useState(DefaultProfile);
   useEffect(() => {
     if (window.localStorage.userInfo) {
       setLoginId(JSON.parse(window.localStorage.userInfo).userId);
@@ -42,11 +42,19 @@ const Post = ({ match }) => {
       .then((response) => {
         const info = response.data.data;
         setPostInfo(info);
+        if (info.user.imageURL) {
+          setUserimgUrl(info.user.imageURL);
+        }
+        console.log(info);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
+  const getOtherimgUrl = (comment) => {
+    if (comment.user.imageURL) return comment.user.imageURL;
+    else return DefaultProfile;
+  };
 
   const onclick = (e) => {
     const isLogined = window.localStorage.userInfo == null ? false : true;
@@ -139,7 +147,11 @@ const Post = ({ match }) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src={DefaultProfile} alt="기본사용자이미지" width="40" height="40" />
+                <img
+                  src={UserimgUrl}
+                  alt="기본사용자이미지"
+                  style={{ width: '100%', height: '40px', objectFit: 'cover' }}
+                />
               </Link>
             ) : (
               <Link
@@ -149,7 +161,11 @@ const Post = ({ match }) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src={DefaultProfile} alt="기본사용자이미지" width="40" height="40" />
+                <img
+                  src={UserimgUrl}
+                  alt="기본사용자이미지"
+                  style={{ width: '100%', height: '40px', objectFit: 'cover' }}
+                />
               </Link>
             )}
           </Divimg>
@@ -214,38 +230,38 @@ const Post = ({ match }) => {
             return (
               <li>
                 <CommentArea>
-                  {loginId === comment.user.id ? (
-                    <Link
-                      to={{
-                        pathname: '/profile',
-                      }}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img
-                        src={DefaultProfile}
-                        alt="기본사용자이미지"
-                        width="35"
-                        height="35"
-                      />
-                    </Link>
-                  ) : (
-                    <Link
-                      to={{
-                        pathname: `/profile/${comment.user.id}/other`,
-                      }}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img
-                        src={DefaultProfile}
-                        alt="기본사용자이미지"
-                        width="35"
-                        height="35"
-                      />
-                    </Link>
-                  )}
-                  <div style={{ padding: '0 0 0 10px' }}>
+                  <Divimg style={{ width: '35px', height: '35px' }}>
+                    {loginId === comment.user.id ? (
+                      <Link
+                        to={{
+                          pathname: '/profile',
+                        }}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          src={getOtherimgUrl(comment)}
+                          alt="기본사용자이미지"
+                          style={{ width: '100%', height: '35px', objectFit: 'cover' }}
+                        />
+                      </Link>
+                    ) : (
+                      <Link
+                        to={{
+                          pathname: `/profile/${comment.user.id}/other`,
+                        }}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          src={getOtherimgUrl(comment)}
+                          alt="기본사용자이미지"
+                          style={{ width: '100%', height: '35px', objectFit: 'cover' }}
+                        />
+                      </Link>
+                    )}
+                  </Divimg>
+                  <div>
                     <div style={{ fontWeight: 'bold' }}>{comment.user.nickname}</div>
                     <Content>
                       {ReactHtmlParser(comment.comment.replace(/\n/g, '<br/>'))}
@@ -374,6 +390,8 @@ const Divimg = styled.div`
   margin-right: 10px;
   width: 40px;
   height: 40px;
+  border-radius: 70%;
+  overflow: hidden;
 `;
 
 const Body = styled.div`

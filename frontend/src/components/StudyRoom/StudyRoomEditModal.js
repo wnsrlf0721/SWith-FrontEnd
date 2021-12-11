@@ -218,6 +218,10 @@ const StudyRoomEditModal = ({
       if (Number(roominfo.maxUserCount) > 8) {
         return alert('최대인원은 8명 이하로 입력되어야 합니다');
       }
+      if (Number(roominfo.maxUserCount) < 1) {
+        alert('최대인원은 1명 이상으로 입력되어야 합니다');
+        return;
+      }
       const room = roominfo;
       var moment = require('moment');
       require('moment-timezone');
