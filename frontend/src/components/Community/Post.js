@@ -94,6 +94,10 @@ const Post = ({ match }) => {
           });
         window.location.reload();
       }
+      if (name === 'cancleEditComment') {
+        setEditNum('');
+        setEditComment('');
+      }
     }
   };
   const onEdit = (id, comment) => {
@@ -294,7 +298,7 @@ const Post = ({ match }) => {
                 {editNum === comment.id ? (
                   <CommentArea>
                     <Comment>
-                      댓글 수정
+                      {/* 댓글 수정 */}
                       <textarea
                         placeholder="내용을 입력하세요"
                         className="inputarea"
@@ -303,11 +307,33 @@ const Post = ({ match }) => {
                       />
                       <button
                         style={{
+                          backgroundColor: 'white',
+                          color: '#ef8585',
+                          border: 'none',
+                          cursor: 'pointer',
+                          margin: '0 0 0 10px',
+                          height: '25px',
+                          border: '1px solid #ef8585',
+                          borderRadius: '5px',
+                          fontFamily: 'Roboto',
+                          minWidth: 'fit-content',
+                        }}
+                        name="cancleEditComment"
+                        onClick={(e) => onclick(e)}
+                      >
+                        취소
+                      </button>
+                      <button
+                        style={{
                           backgroundColor: '#ef8585',
                           color: 'white',
                           border: 'none',
                           cursor: 'pointer',
                           margin: '0 0 0 10px',
+                          height: '25px',
+                          borderRadius: '5px',
+                          fontFamily: 'Roboto',
+                          minWidth: 'fit-content',
                         }}
                         name="editComment"
                         onClick={(e) => onclick(e)}
@@ -339,6 +365,7 @@ const Post = ({ match }) => {
               margin: '0 0 0 10px',
               height: '25px',
               borderRadius: '5px',
+              fontFamily: 'Roboto',
             }}
             name="newComment"
             onClick={(e) => onclick(e)}
@@ -403,6 +430,7 @@ const Body = styled.div`
 `;
 
 const Comment = styled.div`
+  width: 100%;
   margin: 12px 0 29px;
   padding: 16px 10px 10px 18px;
   border: 2px solid #e4e6eb;
@@ -413,6 +441,7 @@ const Comment = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  font-family: Roboto;
   .inputarea {
     overflow: visible;
     overflow-wrap: break-word;
