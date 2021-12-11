@@ -59,7 +59,7 @@ const StudyCard = ({
   return (
     <>
       <button className="card-container" onClick={enterStudyRoom}>
-        <div className="image-container">
+        <div className="cardPicture">
           {secret === 0 ? (
             <></>
           ) : (
@@ -79,7 +79,7 @@ const StudyCard = ({
             />
           )}
           <img
-            style={bottomPage ? { height: '140px', width: '200px' } : {}}
+            style={{ height: '140px', width: '100%', objectFit: 'cover' }}
             src={imgUrl}
             alt="기본스터디이미지"
           />
