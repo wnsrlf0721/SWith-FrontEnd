@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import userImage from '../../images/default_profile_Image.png';
 
 const View = () => {
-  const UserimgUrl = userImage;
+  const [UserimgUrl, setUserimgUrl] = useState(userImage);
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
   const [followingCount, setFollowingCount] = useState(0);
@@ -20,6 +20,7 @@ const View = () => {
         const data = response.data;
         if (data.status === '200' && data.message === 'OK') {
           const api_data = data.data;
+          if (api_data.imageURL) setUserimgUrl(api_data.imageURL);
           let user = {
             email: api_data.email,
             nickname: api_data.nickname,
@@ -54,9 +55,11 @@ const View = () => {
     <Container>
       <Wrap>
         <PictureWrap>
-          <ProfileImg>
-            <img src={UserimgUrl} alt="기본사용자이미지" />
-          </ProfileImg>
+          <ProfilePicture>
+            <ProfileImg>
+              <img src={UserimgUrl} alt="기본사용자이미지" />
+            </ProfileImg>
+          </ProfilePicture>
         </PictureWrap>
 
         <InfoWrap>
@@ -101,10 +104,17 @@ const Wrap = styled.div`
 const PictureWrap = styled.div`
   border-radius: 70%;
   overflow: hidden;
-  margin: 70px 40px;
+  margin: 50px 40px;
   display: flex;
   align-items: center;
   flex-direction: column;
+`;
+const ProfilePicture = styled.div`
+  width: 150px;
+  height: 150px;
+  border-radius: 70%;
+  overflow: hidden;
+  margin: 20px;
 `;
 
 const ProfileImg = styled.div`
