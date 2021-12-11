@@ -53,7 +53,7 @@ const View = () => {
 
   return (
     <Container>
-      <Wrap>
+      <ProfileWrap>
         <PictureWrap>
           <ProfilePicture>
             <ProfileImg>
@@ -82,7 +82,8 @@ const View = () => {
             <Button style={{ color: '#595959' }}>학습관리</Button>
           </a>
         </ButtonWrap>
-      </Wrap>
+      </ProfileWrap>
+      <IntroWrap></IntroWrap>
     </Container>
   );
 };
@@ -97,13 +98,12 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 
-const Wrap = styled.div`
+const ProfileWrap = styled.div`
   display: flex;
 `;
+const IntroWrap = styled.div``;
 
 const PictureWrap = styled.div`
-  height: 150px;
-  width: 150px;
   border-radius: 70%;
   overflow: hidden;
   margin: 50px 40px;
