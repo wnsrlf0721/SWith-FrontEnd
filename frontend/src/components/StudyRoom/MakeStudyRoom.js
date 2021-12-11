@@ -180,6 +180,10 @@ const MakeStudyRoom = () => {
         alert('최대인원은 8명 이하로 입력되어야 합니다');
         return;
       }
+      if (Number(room.maxUserCount) < 1) {
+        alert('최대인원은 1명 이상으로 입력되어야 합니다');
+        return;
+      }
       room.endDate = moment(room.endDate).tz('Asia/Seoul').format('YYYY-MM-DD 23:59:59');
       if (room.password) {
         room.secret = 1;

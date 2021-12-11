@@ -206,11 +206,10 @@ const Calendar = ({ userId }) => {
           console.log(error.response.data);
         });
     }
-    if (title.length > 20) {
-      return alert('일정 내용은 20자 이하로 입력해주세요.');
-    }
     if (!title) {
       return alert('일정 내용을 입력해주세요.');
+    } else if (title.length > 20) {
+      return alert('일정 내용은 20자 이하로 입력해주세요.');
     }
   };
 
@@ -223,7 +222,6 @@ const Calendar = ({ userId }) => {
       clickInfo.event.remove();
       handleTodoRemove(clickInfo.event);
       handleEventDelete(clickInfo.event);
-      window.location.reload();
     }
   };
 
