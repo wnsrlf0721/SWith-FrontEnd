@@ -66,6 +66,23 @@ b {
   padding: 3em;
 }
 
+.customDateInput {
+  width: fit-content;
+  display: flex;
+  padding: 7px;
+  margin: 1em 0 0;
+  /* background-color: transparent; */
+  background-color: white;
+  border: 1px solid #f8ad1d;
+  border-radius: 5px;
+  font-size: 1.17em;
+  font-weight: bold;
+  font-family: Roboto;
+  color: black;
+  cursor: pointer;
+}
+/* rgb(0, 117, 255) */
+
 .fc {
   max-width: 1100px;
   margin: 0 auto;
