@@ -30,6 +30,7 @@
   font-size: 15px;
   color: #454648;
   font-family: Roboto;
+  display: flex;
 }
 .btn {
   display: flex;

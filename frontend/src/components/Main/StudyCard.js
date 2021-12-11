@@ -2,7 +2,7 @@ import './css/StudyCard.css';
 import { getBanUsers, getStudyRoomInfo } from '../../api/APIs';
 import React from 'react';
 import user_icon from '../../images/user_black.png';
-import key_icon from '../../images/key_icon_black.png';
+import lock_icon from '../../images/lock_icon.png';
 
 const StudyCard = ({
   title,
@@ -60,6 +60,24 @@ const StudyCard = ({
     <>
       <button className="card-container" onClick={enterStudyRoom}>
         <div className="image-container">
+          {secret === 0 ? (
+            <></>
+          ) : (
+            <img
+              style={{
+                height: '12px',
+                width: '12px',
+                position: 'absolute',
+                top: '10px',
+                left: '15px',
+                padding: '5px',
+                borderRadius: '20px',
+                backgroundColor: '#454648',
+              }}
+              src={lock_icon}
+              alt="lock_icon"
+            />
+          )}
           <img
             style={bottomPage ? { height: '140px', width: '200px' } : {}}
             src={imgUrl}
@@ -91,25 +109,6 @@ const StudyCard = ({
                     return <span className="t">{'#' + x.hashtag}</span>;
                   })}
                 </div>
-                {secret === 0 ? (
-                  <></>
-                ) : (
-                  <div>
-                    <img
-                      style={{
-                        height: '12px',
-                        width: 'auto',
-                        objectFit: 'cover',
-                        marginRight: '2px',
-                        position: 'absolute',
-                        bottom: '15px',
-                        right: '10px',
-                      }}
-                      src={key_icon}
-                      alt="key_icon"
-                    />
-                  </div>
-                )}
               </div>
             </div>
           </div>

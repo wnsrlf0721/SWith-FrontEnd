@@ -55,6 +55,11 @@ const Edit = () => {
     const { name, value } = e.target;
     if (name === 'PWconfirm') {
       setPwConfirm(value.trim());
+    } else if (value.type == 'file') {
+      setEditInfo((prevInfo) => ({
+        ...prevInfo,
+        [name]: value,
+      }));
     } else {
       setEditInfo((prevInfo) => ({
         ...prevInfo,
