@@ -321,6 +321,8 @@ const Post = ({ match }) => {
               border: 'none',
               cursor: 'pointer',
               margin: '0 0 0 10px',
+              height: '25px',
+              borderRadius: '5px',
             }}
             name="newComment"
             onClick={(e) => onclick(e)}
@@ -390,6 +392,9 @@ const Comment = styled.div`
   box-sizing: border-box;
   background: white;
   min-height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
   .inputarea {
     overflow: visible;
     overflow-wrap: break-word;

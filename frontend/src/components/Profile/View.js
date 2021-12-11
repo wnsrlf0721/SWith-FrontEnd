@@ -130,7 +130,7 @@ const ProfilePicture = styled.div`
 
 const ProfileImg = styled.div`
   img {
-    width: auto;
+    width: 100%;
     height: 150px;
     object-fit: cover;
   }
