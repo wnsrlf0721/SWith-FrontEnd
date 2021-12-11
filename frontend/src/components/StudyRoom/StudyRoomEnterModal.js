@@ -8,7 +8,7 @@ const constraints = {
   video: true,
 };
 
-const StudyRoomEnterModal = ({ setInitSetting, videoRef }) => {
+const StudyRoomEnterModal = ({ setInitSetting, videoRef, notice }) => {
   const modalVideoRef = useRef(null);
   const userVideo = (
     <video id="modalVideo" muted autoPlay playsInline ref={modalVideoRef}></video>
@@ -20,6 +20,7 @@ const StudyRoomEnterModal = ({ setInitSetting, videoRef }) => {
     <div id="notAvailableVideo">Loading...</div>,
   );
   const [loading, setLoading] = useState(false);
+  const [noticeChecked, setNoticeChecked] = useState(false);
 
   useEffect(() => {
     navigator.mediaDevices
@@ -70,26 +71,41 @@ const StudyRoomEnterModal = ({ setInitSetting, videoRef }) => {
       });
   };
 
+  const checkNotice = () => {
+    setNoticeChecked(true);
+  };
+
   return (
     <>
       <ModalOverlay />
       <ModalWrapper tabIndex="-1">
         <ModalInner tabIndex="0" className="modal-inner">
-          <Button
-            disabled={availableUserVideo && loading ? false : true}
-            onClick={videoMute}
-            style={availableUserVideo && loading ? {} : { background: 'gray' }}
-          >
-            {videoMuted ? '비디오 끄기' : '비디오 켜기'}
-          </Button>
-          {modalMedia}
-          <Button
-            disabled={availableUserVideo && loading ? false : true}
-            onClick={enterStudyRoomWithVideo}
-            style={availableUserVideo && loading ? {} : { background: 'gray' }}
-          >
-            입장하기
-          </Button>
+          <span style={noticeChecked ? { display: 'none' } : {}}>
+            <p style={{ fontSize: '20px', color: '#ef8585', fontWeight: 'bold' }}>
+              스터디룸 공지사항
+            </p>
+            <p style={{ fontStyle: 'italic', marginBottom: '20px', fontWeight: 'bold' }}>
+              {notice ? notice : '공지사항이 없습니다.'}
+            </p>
+            <Button onClick={checkNotice}>확인</Button>
+          </span>
+          <span style={noticeChecked ? {} : { display: 'none' }}>
+            <Button
+              disabled={availableUserVideo && loading ? false : true}
+              onClick={videoMute}
+              style={availableUserVideo && loading ? {} : { background: 'gray' }}
+            >
+              {videoMuted ? '비디오 끄기' : '비디오 켜기'}
+            </Button>
+            {modalMedia}
+            <Button
+              disabled={availableUserVideo && loading ? false : true}
+              onClick={enterStudyRoomWithVideo}
+              style={availableUserVideo && loading ? {} : { background: 'gray' }}
+            >
+              입장하기
+            </Button>
+          </span>
         </ModalInner>
       </ModalWrapper>
     </>
@@ -133,7 +149,7 @@ const ModalInner = styled.div`
   top: 50%;
   transform: translateY(-50%);
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 20px 20px;
 `;
 
 const Button = styled.button`
