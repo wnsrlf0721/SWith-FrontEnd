@@ -97,11 +97,13 @@ const StudyRoom = ({ match }) => {
     getStudyRoomInfo(studyRoomId)
       .then((response) => {
         const data = response.data;
+        console.log(data);
         setStudyRoomInfo({
           id: data.data.id,
           title: data.data.title,
           maxUserCount: data.data.maxUserCount,
           masterId: data.data.masterId,
+          notice: data.data.notice,
         });
         setMasterId(data.data.masterId);
 
@@ -345,6 +347,7 @@ const StudyRoom = ({ match }) => {
           <StudyRoomModal
             setInitSetting={initSettings}
             videoRef={userVideoRef}
+            notice={studyRoomInfo.notice}
           ></StudyRoomModal>
         )}
 

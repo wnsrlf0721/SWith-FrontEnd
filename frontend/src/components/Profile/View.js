@@ -7,11 +7,12 @@ import { Link } from 'react-router-dom';
 import userImage from '../../images/default_profile_Image.png';
 
 const View = () => {
-  const [UserimgUrl, setUserimgUrl] = useState(userImage);
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
   const [followingCount, setFollowingCount] = useState(0);
+  const [followerCount, setFollowerCount] = useState(0);
   const [postCount, setPostCount] = useState(0);
+  const [UserimgUrl, setUserimgUrl] = useState(userImage);
   const local = JSON.parse(window.localStorage.userInfo);
 
   useEffect(() => {
@@ -38,12 +39,17 @@ const View = () => {
         console.log(data);
         if (data.status === '200' && data.message === 'OK') {
           const api_data = data.data;
+          console.log(api_data);
           let count = {
             followingCount: api_data.followingCount,
+            followerCount: api_data.followerCount,
             postCount: api_data.postCount,
           };
+          setFollowerCount(count.followerCount);
           setFollowingCount(count.followingCount);
           setPostCount(count.postCount);
+          console.log(followerCount);
+          console.log(followingCount);
         }
       })
       .catch((error) => {
@@ -63,13 +69,16 @@ const View = () => {
         </PictureWrap>
 
         <InfoWrap>
-          <TextB style={{ marginBottom: '15px' }}>
+          <TextB style={{ marginBottom: '10px' }}>
             <h2>{email}</h2>
             <h3 style={{ fontSize: '20px' }}>{nickname}</h3>
           </TextB>
 
           <div>
-            <p>팔로우: {followingCount}</p>
+            <p>
+              팔로우: {followerCount}
+              <span style={{ marginLeft: '50px' }}>팔로잉: {followingCount}</span>
+            </p>
             <p style={{ display: 'flex' }}>게시글: {postCount}</p>
           </div>
         </InfoWrap>

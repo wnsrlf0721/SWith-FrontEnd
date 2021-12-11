@@ -11,13 +11,14 @@ import { Link } from 'react-router-dom';
 import userImage from '../../images/default_profile_Image.png';
 
 const ViewOtherUser = ({ match }) => {
-  const UserimgUrl = userImage;
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
   const [followingCount, setFollowingCount] = useState(0);
+  const [followerCount, setFollowerCount] = useState(0);
   const [postCount, setPostCount] = useState(0);
   const [isFollowed, setIsFollowed] = useState(false);
   const [relation, setRelation] = useState(0);
+  const [UserimgUrl, setUserimgUrl] = useState(userImage);
 
   //프로필 UserInfo
   const userId = match.params.userId;
@@ -28,6 +29,7 @@ const ViewOtherUser = ({ match }) => {
         const data = response.data;
         if (data.status === '200' && data.message === 'OK') {
           const api_data = data.data;
+          if (api_data.imageURL) setUserimgUrl(api_data.imageURL);
           let user = {
             email: api_data.email,
             nickname: api_data.nickname,
@@ -46,8 +48,10 @@ const ViewOtherUser = ({ match }) => {
           const api_data = data.data;
           let count = {
             followingCount: api_data.followingCount,
+            followerCount: api_data.followerCount,
             postCount: api_data.postCount,
           };
+          setFollowerCount(count.followerCount);
           setFollowingCount(count.followingCount);
           setPostCount(count.postCount);
         }
@@ -79,6 +83,7 @@ const ViewOtherUser = ({ match }) => {
     postFollowRequest(local.userId, userId)
       .then((response) => {
         alert('팔로우 요청을 성공하였습니다');
+        window.location.reload();
         console.log(response);
       })
       .catch((error) => {
@@ -102,7 +107,10 @@ const ViewOtherUser = ({ match }) => {
           </TextB>
 
           <div>
-            <p>팔로우: {followingCount}</p>
+            <p>
+              팔로우: {followerCount}
+              <span style={{ marginLeft: '50px' }}>팔로잉: {followingCount}</span>
+            </p>
             <p style={{ display: 'flex' }}>게시글: {postCount}</p>
           </div>
         </InfoWrap>
