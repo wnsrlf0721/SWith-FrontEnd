@@ -41,6 +41,7 @@ const Post = ({ match }) => {
     getBoardPostId(boardId, postId)
       .then((response) => {
         const info = response.data.data;
+        console.log(info);
         setPostInfo(info);
         if (info.user.imageURL) {
           setUserimgUrl(info.user.imageURL);
@@ -479,4 +480,8 @@ const ChangeButton = styled.button`
   background: transparent;
   cursor: pointer;
   color: skyblue;
+`;
+const ProfileImg = styled.div`
+  border-radius: 70%;
+  overflow: hidden;
 `;
