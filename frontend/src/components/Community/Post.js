@@ -70,10 +70,10 @@ const Post = ({ match }) => {
           });
         window.location.reload();
       } else if (name === 'editComment') {
-        if (comment.trim().length < 1) {
-          return;
+        if (editComment.trim().length < 1) {
+          return alert('댓글을 입력해주세요');
         }
-        if (comment.length > 100) {
+        if (editComment.length > 100) {
           return alert('댓글은 100자 이하로 입력해주세요.');
         }
         putComment(boardId, postId, editNum, editComment)

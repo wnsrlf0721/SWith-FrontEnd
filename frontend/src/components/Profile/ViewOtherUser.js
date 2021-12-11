@@ -80,6 +80,7 @@ const ViewOtherUser = ({ match }) => {
       .then((response) => {
         alert('팔로우 요청을 성공하였습니다');
         console.log(response);
+        window.location.reload();
       })
       .catch((error) => {
         alert('팔로우 요청이 실패하였습니다');
