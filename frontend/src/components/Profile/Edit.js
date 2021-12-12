@@ -6,6 +6,7 @@ import {
   patchUserInfo,
   patchUserProfileImgURL,
   postImgUpload,
+  patchProfileIntroduce,
 } from '../../api/APIs';
 
 import userImage from '../../images/default_profile_Image.png';
@@ -15,6 +16,7 @@ const Edit = () => {
   const [Userimg, setUserimg] = useState(null);
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
+  const [introduce, setIntroduce] = useState('');
   const imgInput = useRef(null);
 
   const local = JSON.parse(window.localStorage.userInfo);
@@ -25,17 +27,20 @@ const Edit = () => {
         const data = response.data;
         if (data.status === '200' && data.message === 'OK') {
           const api_data = data.data;
-          console.log(api_data);
+          //console.log(api_data);
           if (api_data.imageURL) setUserimgUrl(api_data.imageURL);
           let user = {
             email: api_data.email,
             nickname: api_data.nickname,
+            introduce: api_data.introduce,
           };
           setEmail(user.email);
           setNickname(user.nickname);
+          setIntroduce(user.introduce);
           setEditInfo((prevInfo) => ({
             ...prevInfo,
             nickname: user.nickname,
+            introduce: user.introduce,
           }));
         }
       })
@@ -48,6 +53,7 @@ const Edit = () => {
     nickname: '',
     beforePassword: '',
     password: '',
+    introduce: '',
   });
   const [pwConfirm, setPwConfirm] = useState('');
 
@@ -55,6 +61,11 @@ const Edit = () => {
     const { name, value } = e.target;
     if (name === 'PWconfirm') {
       setPwConfirm(value.trim());
+    } else if (name === 'introduce') {
+      setEditInfo((prevInfo) => ({
+        ...prevInfo,
+        [name]: value,
+      }));
     } else {
       setEditInfo((prevInfo) => ({
         ...prevInfo,
@@ -90,6 +101,13 @@ const Edit = () => {
           editInfo.beforePassword,
         )
           .then((response) => {
+            patchProfileIntroduce(local.userId, editInfo.introduce)
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
             if (Userimg) {
               postImgUpload(Userimg)
                 .then((response) => {
@@ -123,6 +141,13 @@ const Edit = () => {
           editInfo.password,
         )
           .then((response) => {
+            patchProfileIntroduce(local.userId, editInfo.introduce)
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
             if (Userimg) {
               postImgUpload(Userimg)
                 .then((response) => {
@@ -195,6 +220,13 @@ const Edit = () => {
               placeholder="닉네임"
               name="nickname"
               value={editInfo.nickname}
+              onChange={(e) => onChangehandler(e)}
+              style={{ margin: '5px 0 25px' }}
+            />
+            <TextB>소개 글</TextB>
+            <TextInputBox
+              name="introduce"
+              value={editInfo.introduce}
               onChange={(e) => onChangehandler(e)}
               style={{ margin: '5px 0 25px' }}
             />
