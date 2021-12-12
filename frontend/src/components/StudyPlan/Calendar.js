@@ -9,6 +9,8 @@ import {
   putPlannerTask,
   postPlannerTask,
 } from '../../api/APIs';
+import CalendarTutorial from './CalendarTutorial';
+
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -19,6 +21,8 @@ import { ko } from 'date-fns/esm/locale';
 import '@fullcalendar/core';
 import '@fullcalendar/daygrid/main.css';
 import '@fullcalendar/timegrid/main.css';
+
+import infoIcon from '../../images/info_icon.svg';
 
 const Calendar = ({ userId }) => {
   const [dateStr, setDateStr] = useState(new Date().toDateString());
@@ -263,11 +267,31 @@ const Calendar = ({ userId }) => {
       {value}{' '}
     </button>
   );
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const openModal = () => {
+    setModalVisible(true);
+  };
+  const closeModal = () => {
+    setModalVisible(false);
+  };
   const renderSidebar = () => {
     return (
       <div className="demo-app-sidebar">
         <div className="demo-app-sidebar-section">
-          <h2>To-do list</h2>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <h2>To-do list</h2>
+            <img src={infoIcon} onClick={openModal}></img>
+          </div>
+          {modalVisible && (
+            <CalendarTutorial
+              visible={modalVisible}
+              closable={true}
+              maskClosable={true}
+              onClose={closeModal}
+            ></CalendarTutorial>
+          )}
+
           <DatePicker
             selected={new Date(dateStr)}
             onChange={(date) => setDateStr(date.toDateString())}
@@ -294,9 +318,9 @@ const Calendar = ({ userId }) => {
           }}
           locale="ko"
           initialView="dayGridMonth"
-          editable={true}
+          editable={false}
           selectable={isUser}
-          selectMirror={true}
+          selectMirror={false}
           dayMaxEvents={true}
           weekends={true}
           events={getEvent}
