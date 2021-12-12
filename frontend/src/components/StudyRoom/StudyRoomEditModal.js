@@ -222,6 +222,10 @@ const StudyRoomEditModal = ({
         alert('최대인원은 1명 이상으로 입력되어야 합니다');
         return;
       }
+      if (roominfo.notice && roominfo.notice.length > 100) {
+        alert('공지사항은 100자 이하로 입력되어야 합니다.');
+        return;
+      }
       const room = roominfo;
       var moment = require('moment');
       require('moment-timezone');
