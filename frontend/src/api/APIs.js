@@ -121,6 +121,10 @@ export const patchProfileIntroduce = async (userId, introduce) => {
   });
 };
 
+export const getUsers = async () => {
+  return await axios.get(`/users`);
+};
+
 export const getUserInfo = async (userId) => {
   return await axios.get(`/users/${userId}`);
 };
@@ -185,6 +189,18 @@ export const patchUserInfo = async (userId, nickname, beforePassword, password) 
   });
 };
 
+export const patchBanUser = async (userId) => {
+  return await axios.patch(`/users/${userId}/ban`, {
+    banned: 1,
+  });
+};
+
+export const patchLiberateUser = async (userId) => {
+  return await axios.patch(`/users/${userId}/ban`, {
+    banned: 0,
+  });
+};
+
 export const patchStudyRoomInfo = async (studyRoomId, studyRoomInfo) => {
   return await axios.patch(`/studyrooms/${studyRoomId}`, studyRoomInfo);
 };
@@ -241,4 +257,8 @@ export const deleteFollow = async (senderId, receiverId) => {
       receiverId: receiverId,
     },
   });
+};
+
+export const deleteStudyRoom = async (studyRoomId) => {
+  return await axios.delete(`/studyrooms/${studyRoomId}`);
 };

@@ -34,6 +34,10 @@ const Login = () => {
           const result = response.data;
           if (result.status === '200' && result.message === 'OK') {
             const data = result.data;
+            if (data.banned === 1) {
+              alert('정지된 아이디입니다.');
+              return;
+            }
             alert('로그인 성공!');
             let user = {
               name: email,
