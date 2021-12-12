@@ -10,7 +10,7 @@ const Main = ({ location }) => {
   const query = queryString.parse(location.search);
   return (
     <Wrap>
-      <Topbar />
+      <Topbar pageName={'Main'} />
       <Mypage />
       <BottomPage search={query.search} />
     </Wrap>

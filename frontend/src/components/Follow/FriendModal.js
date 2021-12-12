@@ -12,6 +12,7 @@ import {
 } from '../../api/APIs';
 
 import defaultProfile from '../../images/default_profile_Image.png';
+import closeImg from '../../images/close.png';
 
 const FriendModal = ({ closeModal }) => {
   const userInfo = JSON.parse(window.localStorage.userInfo);
@@ -148,8 +149,15 @@ const FriendModal = ({ closeModal }) => {
   return (
     <>
       <div className="ModalWrapper" onClick={onCloseModal}>
-        <div className="modalInner">
+        <div className="modalInner" style={{ width: '400px', height: '500px' }}>
           <div className="friendModalWrap">
+            <div style={{ top: '5px', right: '10px', position: 'absolute' }}>
+              <img
+                src={closeImg}
+                onClick={() => closeModal()}
+                style={{ height: '12px', width: '12px', cursor: 'pointer' }}
+              ></img>
+            </div>
             <div className="friendHeader">
               <button
                 className={swapleft === true ? 'friendTapActive' : 'friendTap'}
