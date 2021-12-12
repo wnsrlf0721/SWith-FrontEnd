@@ -115,6 +115,12 @@ export const patchStudyRoomImgURL = async (studyRoomId, imgURL) => {
   });
 };
 
+export const patchProfileIntroduce = async (userId, introduce) => {
+  return await axios.patch(`/users/${userId}/introduce`, {
+    introduce: introduce,
+  });
+};
+
 export const getUserInfo = async (userId) => {
   return await axios.get(`/users/${userId}`);
 };

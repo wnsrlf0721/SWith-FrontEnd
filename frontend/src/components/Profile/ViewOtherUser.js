@@ -108,7 +108,7 @@ const ViewOtherUser = ({ match }) => {
 
           <div>
             <p>
-              팔로우: {followerCount}
+              팔로워: {followerCount}
               <span style={{ marginLeft: '50px' }}>팔로잉: {followingCount}</span>
             </p>
             <p style={{ display: 'flex' }}>게시글: {postCount}</p>
