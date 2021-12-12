@@ -79,7 +79,11 @@ const StudyCard = ({
             />
           )}
           <img
-            style={{ height: '140px', width: '100%', objectFit: 'cover' }}
+            style={
+              bottomPage
+                ? { height: '140px', objectFit: 'cover', width: '200px' }
+                : { height: '140px', objectFit: 'cover', width: '175px' }
+            }
             src={imgUrl}
             alt="기본스터디이미지"
           />
