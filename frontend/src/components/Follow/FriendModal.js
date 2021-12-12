@@ -149,7 +149,7 @@ const FriendModal = ({ closeModal }) => {
   return (
     <>
       <div className="ModalWrapper" onClick={onCloseModal}>
-        <div className="modalInner">
+        <div className="modalInner" style={{ width: '400px', height: '500px' }}>
           <div className="friendModalWrap">
             <div style={{ top: '5px', right: '10px', position: 'absolute' }}>
               <img
