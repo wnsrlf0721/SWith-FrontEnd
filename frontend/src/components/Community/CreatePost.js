@@ -67,7 +67,7 @@ const CreatePost = () => {
       alert('게시판을 선택해주세요.');
       return;
     }
-    if (title.length > 20) {
+    if (title.length > 40) {
       alert('제목은 40자 이하로 입력해주세요.');
       return;
     }
