@@ -33,7 +33,7 @@ const Post = ({ match }) => {
   const [loginId, setLoginId] = useState('');
   const [editNum, setEditNum] = useState('');
   const [editComment, setEditComment] = useState('');
-  const [pathname, setPathName] = useState('/profile');
+  const [UserimgUrl, setUserimgUrl] = useState(DefaultProfile);
   useEffect(() => {
     if (window.localStorage.userInfo) {
       setLoginId(JSON.parse(window.localStorage.userInfo).userId);
@@ -41,12 +41,21 @@ const Post = ({ match }) => {
     getBoardPostId(boardId, postId)
       .then((response) => {
         const info = response.data.data;
+        console.log(info);
         setPostInfo(info);
+        if (info.user.imageURL) {
+          setUserimgUrl(info.user.imageURL);
+        }
+        console.log(info);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
+  const getOtherimgUrl = (comment) => {
+    if (comment.user.imageURL) return comment.user.imageURL;
+    else return DefaultProfile;
+  };
 
   const onclick = (e) => {
     const isLogined = window.localStorage.userInfo == null ? false : true;
@@ -85,6 +94,10 @@ const Post = ({ match }) => {
             console.log(error);
           });
         window.location.reload();
+      }
+      if (name === 'cancleEditComment') {
+        setEditNum('');
+        setEditComment('');
       }
     }
   };
@@ -139,7 +152,11 @@ const Post = ({ match }) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src={DefaultProfile} alt="기본사용자이미지" width="40" height="40" />
+                <img
+                  src={UserimgUrl}
+                  alt="기본사용자이미지"
+                  style={{ width: '100%', height: '40px', objectFit: 'cover' }}
+                />
               </Link>
             ) : (
               <Link
@@ -149,7 +166,11 @@ const Post = ({ match }) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src={DefaultProfile} alt="기본사용자이미지" width="40" height="40" />
+                <img
+                  src={UserimgUrl}
+                  alt="기본사용자이미지"
+                  style={{ width: '100%', height: '40px', objectFit: 'cover' }}
+                />
               </Link>
             )}
           </Divimg>
@@ -214,38 +235,38 @@ const Post = ({ match }) => {
             return (
               <li>
                 <CommentArea>
-                  {loginId === comment.user.id ? (
-                    <Link
-                      to={{
-                        pathname: '/profile',
-                      }}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img
-                        src={DefaultProfile}
-                        alt="기본사용자이미지"
-                        width="35"
-                        height="35"
-                      />
-                    </Link>
-                  ) : (
-                    <Link
-                      to={{
-                        pathname: `/profile/${comment.user.id}/other`,
-                      }}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img
-                        src={DefaultProfile}
-                        alt="기본사용자이미지"
-                        width="35"
-                        height="35"
-                      />
-                    </Link>
-                  )}
-                  <div style={{ padding: '0 0 0 10px' }}>
+                  <Divimg style={{ width: '35px', height: '35px' }}>
+                    {loginId === comment.user.id ? (
+                      <Link
+                        to={{
+                          pathname: '/profile',
+                        }}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          src={getOtherimgUrl(comment)}
+                          alt="기본사용자이미지"
+                          style={{ width: '100%', height: '35px', objectFit: 'cover' }}
+                        />
+                      </Link>
+                    ) : (
+                      <Link
+                        to={{
+                          pathname: `/profile/${comment.user.id}/other`,
+                        }}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          src={getOtherimgUrl(comment)}
+                          alt="기본사용자이미지"
+                          style={{ width: '100%', height: '35px', objectFit: 'cover' }}
+                        />
+                      </Link>
+                    )}
+                  </Divimg>
+                  <div>
                     <div style={{ fontWeight: 'bold' }}>{comment.user.nickname}</div>
                     <Content>
                       {ReactHtmlParser(comment.comment.replace(/\n/g, '<br/>'))}
@@ -278,7 +299,7 @@ const Post = ({ match }) => {
                 {editNum === comment.id ? (
                   <CommentArea>
                     <Comment>
-                      댓글 수정
+                      {/* 댓글 수정 */}
                       <textarea
                         placeholder="내용을 입력하세요"
                         className="inputarea"
@@ -287,11 +308,33 @@ const Post = ({ match }) => {
                       />
                       <button
                         style={{
+                          backgroundColor: 'white',
+                          color: '#ef8585',
+                          border: 'none',
+                          cursor: 'pointer',
+                          margin: '0 0 0 10px',
+                          height: '25px',
+                          border: '1px solid #ef8585',
+                          borderRadius: '5px',
+                          fontFamily: 'Roboto',
+                          minWidth: 'fit-content',
+                        }}
+                        name="cancleEditComment"
+                        onClick={(e) => onclick(e)}
+                      >
+                        취소
+                      </button>
+                      <button
+                        style={{
                           backgroundColor: '#ef8585',
                           color: 'white',
                           border: 'none',
                           cursor: 'pointer',
                           margin: '0 0 0 10px',
+                          height: '25px',
+                          borderRadius: '5px',
+                          fontFamily: 'Roboto',
+                          minWidth: 'fit-content',
                         }}
                         name="editComment"
                         onClick={(e) => onclick(e)}
@@ -323,6 +366,7 @@ const Post = ({ match }) => {
               margin: '0 0 0 10px',
               height: '25px',
               borderRadius: '5px',
+              fontFamily: 'Roboto',
             }}
             name="newComment"
             onClick={(e) => onclick(e)}
@@ -376,6 +420,8 @@ const Divimg = styled.div`
   margin-right: 10px;
   width: 40px;
   height: 40px;
+  border-radius: 70%;
+  overflow: hidden;
 `;
 
 const Body = styled.div`
@@ -385,6 +431,7 @@ const Body = styled.div`
 `;
 
 const Comment = styled.div`
+  width: 100%;
   margin: 12px 0 29px;
   padding: 16px 10px 10px 18px;
   border: 2px solid #e4e6eb;
@@ -395,6 +442,7 @@ const Comment = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  font-family: Roboto;
   .inputarea {
     overflow: visible;
     overflow-wrap: break-word;
@@ -432,4 +480,8 @@ const ChangeButton = styled.button`
   background: transparent;
   cursor: pointer;
   color: skyblue;
+`;
+const ProfileImg = styled.div`
+  border-radius: 70%;
+  overflow: hidden;
 `;

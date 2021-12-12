@@ -114,6 +114,8 @@ const Edit = () => {
                   patchUserProfileImgURL(local.userId, response.data)
                     .then((response) => {
                       console.log(response);
+                      alert('프로필 정보를 변경하였습니다.');
+                      window.location.reload();
                     })
                     .catch((error) => {
                       console.log(error);
@@ -122,9 +124,10 @@ const Edit = () => {
                 .catch((error) => {
                   console.log(error);
                 });
+            } else {
+              alert('프로필 정보를 변경하였습니다.');
+              window.location.reload();
             }
-            alert('프로필 정보를 변경하였습니다.');
-            window.location.reload();
           })
           .catch((error) => {
             console.log(error.toJSON());

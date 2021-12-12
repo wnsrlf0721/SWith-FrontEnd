@@ -1,6 +1,5 @@
 import './css/styles.css';
 import 'react-datepicker/dist/react-datepicker.css';
-import styled from 'styled-components';
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -29,6 +28,7 @@ const Calendar = ({ userId }) => {
   const [currentEvents, setCurrentEvents] = useState([]);
   const [todo, setTodo] = useState([]);
   const [isUser, setIsUser] = useState(true);
+  const [tfCheck, setTfCheck] = useState(false);
   const [getEvent, setEvent] = useState([
     {
       id: '',
@@ -96,14 +96,10 @@ const Calendar = ({ userId }) => {
       });
   };
 
-  const getTodoCheck = (event) => {
-    let IdNum = event.id;
+  const getTodoCheck = (eventId) => {
+    //let IdNum = event.id;
     let check = false;
-    todo.map((x) => {
-      if (x.id == IdNum) {
-        check = x.check;
-      }
-    });
+    todo.map((x) => (x.id == eventId ? (check = x.check) : check));
     return check;
   };
 
@@ -139,7 +135,7 @@ const Calendar = ({ userId }) => {
       ].join('-') +
       'T' +
       endDate.toTimeString().substring(0, 8);
-    if (!getTodoCheck(event)) {
+    if (!getTodoCheck(event.id)) {
       chch = 1;
     }
     putPlannerTask(userInfo.userId, event.id, event.title, start, end, chch)
@@ -211,10 +207,7 @@ const Calendar = ({ userId }) => {
         .catch((error) => {
           console.log(error.response.data);
         });
-    }
-    if (!title) {
-      return alert('일정 내용을 입력해주세요.');
-    } else if (title.length > 20) {
+    } else if (title && title.length > 20) {
       return alert('일정 내용은 20자 이하로 입력해주세요.');
     }
   };
@@ -253,7 +246,7 @@ const Calendar = ({ userId }) => {
         <li key={event.id}>
           <input
             type="checkbox"
-            checked={getTodoCheck(event)}
+            checked={getTodoCheck(event.id)}
             onChange={() => HandleTodoCheck(event)}
           ></input>
           <b>{event.title}</b>
@@ -352,14 +345,3 @@ function fillZero(str) {
 let today = new Date().toLocaleDateString();
 
 export default React.memo(Calendar);
-
-const DateInput = styled(DatePicker)`
-  width: 100%;
-  padding: 0;
-  margin: 1em 0 0;
-  background-color: transparent;
-  border: none;
-  font-size: 1.17em;
-  font-weight: bold;
-  font-family: Roboto;
-`;
