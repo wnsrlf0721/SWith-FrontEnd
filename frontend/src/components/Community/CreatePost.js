@@ -96,7 +96,7 @@ const CreatePost = () => {
         container: [
           ['bold', 'italic', 'underline', 'strike'],
           [{ color: [] }],
-          [{ list: 'ordered' }, { list: 'bullet' }, { align: [] }],
+          [{ list: 'ordered' }, { list: 'bullet' }],
           [],
         ],
       },
@@ -117,6 +117,7 @@ const CreatePost = () => {
         <Title
           placeholder="제목을 입력해주세요."
           onChange={getTitle}
+          maxLength={40}
           value={title}
         ></Title>
         <ReactQuill

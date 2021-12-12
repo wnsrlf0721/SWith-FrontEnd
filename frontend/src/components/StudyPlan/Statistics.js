@@ -6,6 +6,8 @@ import Chart from 'react-apexcharts';
 import moment from 'moment';
 import Timer from './Timer';
 import Progress from './Progress';
+import StatisticsTutorial from './StatisticsTutorial';
+import infoIcon from '../../images/info_icon.svg';
 
 const Statistics = ({ task, time }) => {
   const Today = moment(moment().format('YYYY-MM-DD'));
@@ -63,6 +65,14 @@ const Statistics = ({ task, time }) => {
 
   const [monthcomp, setMonthcomp] = useState(0);
   const [mcCount, setMcCount] = useState(0);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const openModal = () => {
+    setModalVisible(true);
+  };
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   useEffect(() => {
     time.map((data) => {
@@ -149,7 +159,18 @@ const Statistics = ({ task, time }) => {
     <Container>
       <StatsPage>
         <PartPage>
-          <h1 style={{ display: 'flex' }}>일간</h1>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <h1 style={{ display: 'flex' }}>일간</h1>
+            <img src={infoIcon} onClick={openModal}></img>
+          </div>
+          {modalVisible && (
+            <StatisticsTutorial
+              visible={modalVisible}
+              closable={true}
+              maskClosable={true}
+              onClose={closeModal}
+            ></StatisticsTutorial>
+          )}
           <BoxPage>
             <Box style={{ width: '200px' }}>
               <div>

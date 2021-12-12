@@ -70,7 +70,7 @@ const CreatePost = ({ match }) => {
         container: [
           ['bold', 'italic', 'underline', 'strike'],
           [{ color: [] }],
-          [{ list: 'ordered' }, { list: 'bullet' }, { align: [] }],
+          [{ list: 'ordered' }, { list: 'bullet' }],
           [],
         ],
       },
