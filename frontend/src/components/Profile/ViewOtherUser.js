@@ -7,12 +7,12 @@ import {
   getFollowing,
 } from '../../api/APIs';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import userImage from '../../images/default_profile_Image.png';
 
 const ViewOtherUser = ({ match }) => {
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
+  const [introduce, setIntroduce] = useState('');
   const [followingCount, setFollowingCount] = useState(0);
   const [followerCount, setFollowerCount] = useState(0);
   const [postCount, setPostCount] = useState(0);
@@ -33,9 +33,11 @@ const ViewOtherUser = ({ match }) => {
           let user = {
             email: api_data.email,
             nickname: api_data.nickname,
+            introduce: api_data.introduce,
           };
           setEmail(user.email);
           setNickname(user.nickname);
+          setIntroduce(user.introduce);
         }
       })
       .catch((error) => {
@@ -94,47 +96,59 @@ const ViewOtherUser = ({ match }) => {
   return (
     <Container>
       <Wrap>
-        <PictureWrap>
-          <ProfileImg>
-            <img src={UserimgUrl} alt="기본사용자이미지" />
-          </ProfileImg>
-        </PictureWrap>
+        <ProfileWrap>
+          <PictureWrap>
+            <ProfileImg>
+              <img src={UserimgUrl} alt="기본사용자이미지" />
+            </ProfileImg>
+          </PictureWrap>
 
-        <InfoWrap>
-          <TextB style={{ marginBottom: '15px' }}>
-            <h2>{email}</h2>
-            <h3 style={{ fontSize: '20px' }}>{nickname}</h3>
-          </TextB>
+          <InfoWrap>
+            <TextB style={{ marginBottom: '15px' }}>
+              <h2>{email}</h2>
+              <h3 style={{ fontSize: '20px' }}>{nickname}</h3>
+            </TextB>
 
-          <div>
-            <p>
-              팔로워: {followerCount}
-              <span style={{ marginLeft: '50px' }}>팔로잉: {followingCount}</span>
-            </p>
-            <p style={{ display: 'flex' }}>게시글: {postCount}</p>
-          </div>
-        </InfoWrap>
+            <div>
+              <p>
+                팔로워: {followerCount}
+                <span style={{ marginLeft: '50px' }}>팔로잉: {followingCount}</span>
+              </p>
+              <p style={{ display: 'flex' }}>게시글: {postCount}</p>
+            </div>
+          </InfoWrap>
 
-        <ButtonWrap>
-          <a href={`/plan/${userId}`}>
-            <Button style={{ color: '#595959' }}>학습관리</Button>
-          </a>
-          {isFollowed ? (
-            relation === 1 ? (
-              <Button style={{ backgroundColor: '#ef8585', cursor: 'auto' }} disabled>
-                팔로우 중
-              </Button>
+          <ButtonWrap>
+            <a href={`/plan/${userId}`}>
+              <Button style={{ color: '#595959' }}>학습관리</Button>
+            </a>
+            {isFollowed ? (
+              relation === 1 ? (
+                <Button style={{ backgroundColor: '#ef8585', cursor: 'auto' }} disabled>
+                  팔로우 중
+                </Button>
+              ) : (
+                <Button style={{ backgroundColor: '#ef8585', cursor: 'auto' }} disabled>
+                  요청 보냄
+                </Button>
+              )
             ) : (
-              <Button style={{ backgroundColor: '#ef8585', cursor: 'auto' }} disabled>
-                요청 보냄
+              <Button style={{ backgroundColor: '#ef8585' }} onClick={(e) => onFollow(e)}>
+                팔로우 요청
               </Button>
-            )
+            )}
+          </ButtonWrap>
+        </ProfileWrap>
+        <IntroWrap>
+          <IntroHeader>
+            <p style={{ fontWeight: 'bold' }}>소개 글</p>
+          </IntroHeader>
+          {introduce == '' ? (
+            <IntroContents>아직 소개 글이 없습니다.</IntroContents>
           ) : (
-            <Button style={{ backgroundColor: '#ef8585' }} onClick={(e) => onFollow(e)}>
-              팔로우 요청
-            </Button>
+            <IntroContents>{introduce}</IntroContents>
           )}
-        </ButtonWrap>
+        </IntroWrap>
       </Wrap>
     </Container>
   );
@@ -147,12 +161,17 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   margin-top: 120px;
-  justify-content: space-between;
+  justify-content: flex-start;
 `;
-
-const Wrap = styled.div`
+const Wrap = styled.div``;
+const ProfileWrap = styled.div`
   display: flex;
 `;
+const IntroWrap = styled.div`
+  margin: 0 80px;
+`;
+const IntroHeader = styled.div``;
+const IntroContents = styled.div``;
 
 const PictureWrap = styled.div`
   height: 150px;
