@@ -41,12 +41,10 @@ const Post = ({ match }) => {
     getBoardPostId(boardId, postId)
       .then((response) => {
         const info = response.data.data;
-        console.log(info);
         setPostInfo(info);
         if (info.user.imageURL) {
           setUserimgUrl(info.user.imageURL);
         }
-        console.log(info);
       })
       .catch((error) => {
         console.log(error);
@@ -88,7 +86,6 @@ const Post = ({ match }) => {
         putComment(boardId, postId, editNum, editComment)
           .then((response) => {
             const data = response.data.data;
-            console.log(data);
           })
           .catch((error) => {
             console.log(error);

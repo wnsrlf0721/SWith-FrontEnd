@@ -7,19 +7,18 @@ import {
   getFollowing,
 } from '../../api/APIs';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import userImage from '../../images/default_profile_Image.png';
 
 const ViewOtherUser = ({ match }) => {
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
+  const [introduce, setIntroduce] = useState('');
   const [followingCount, setFollowingCount] = useState(0);
   const [followerCount, setFollowerCount] = useState(0);
   const [postCount, setPostCount] = useState(0);
   const [isFollowed, setIsFollowed] = useState(false);
   const [relation, setRelation] = useState(0);
   const [UserimgUrl, setUserimgUrl] = useState(userImage);
-  const [introduce, setIntroduce] = useState('');
 
   //프로필 UserInfo
   const userId = match.params.userId;
@@ -164,13 +163,13 @@ const Container = styled.div`
   margin-top: 120px;
   justify-content: flex-start;
 `;
-
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;
 `;
 const ProfileWrap = styled.div`
   display: flex;
+  flex-direction: column;
 `;
 const IntroWrap = styled.div`
   margin: 0 80px;
