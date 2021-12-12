@@ -158,7 +158,7 @@ const Container = styled.div`
   align-items: center;
   padding: 0 20px;
   justify-content: space-between;
-  border: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
 `;
 
 const Left = styled.div`
