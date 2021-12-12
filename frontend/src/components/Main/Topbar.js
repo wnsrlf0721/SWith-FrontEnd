@@ -7,12 +7,17 @@ import DM_icon from '../../images/DM_icon.png';
 import search_icon from '../../images/search_gray.png';
 import friend_icon from '../../images/heart_default.png';
 import FriendModal from '../Follow/FriendModal';
+import AdminModal from './AdminModal';
+
 import { useEffect } from 'react';
 
 const Topbar = () => {
   const isLogined = window.localStorage.userInfo == null ? false : true;
+  // const isAdmin = window.localStorage.userInfo.name == 'admin@swith.ml' ? true : false;
+
   const [search, setSearch] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [adminModalVisible, setAdminModalVisible] = useState(false);
   const [userId, setUserId] = useState(0);
   useEffect(() => {
     if (isLogined) {
@@ -20,11 +25,13 @@ const Topbar = () => {
       setUserId(userInfo.userId);
     }
   }, []);
-  const openModal = () => {
-    setModalVisible(true);
-  };
+
   const closeModal = () => {
     setModalVisible(!modalVisible);
+  };
+
+  const closeAdminModal = () => {
+    setAdminModalVisible(!adminModalVisible);
   };
 
   const onsearch = (e) => {
@@ -115,6 +122,24 @@ const Topbar = () => {
                 onClick={closeModal}
               />
               {modalVisible && <FriendModal closeModal={closeModal}></FriendModal>}
+              <button
+                style={
+                  JSON.parse(window.localStorage.userInfo).name === 'admin@swith.ml'
+                    ? {
+                        border: 'none',
+                        backgroundColor: 'white',
+                        cursor: 'pointer',
+                      }
+                    : { display: 'none' }
+                }
+                className="rLink"
+                onClick={closeAdminModal}
+              >
+                관리자
+              </button>
+              {adminModalVisible && (
+                <AdminModal closeModal={closeAdminModal}></AdminModal>
+              )}
               <a href="/profile" className="rLink">
                 프로필
               </a>
