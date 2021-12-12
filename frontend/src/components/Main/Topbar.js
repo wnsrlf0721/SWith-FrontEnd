@@ -1,18 +1,20 @@
 import styled from 'styled-components';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import TutorialModal from './TutorialModal';
+import FriendModal from '../Follow/FriendModal';
 
 import logo from '../../images/SWith_logo2.svg';
 import DM_icon from '../../images/DM_icon.png';
 import search_icon from '../../images/search_gray.png';
 import friend_icon from '../../images/heart_default.png';
-import FriendModal from '../Follow/FriendModal';
-import { useEffect } from 'react';
+import infoIcon from '../../images/info_icon.svg';
 
-const Topbar = () => {
+const Topbar = ({ pageName }) => {
   const isLogined = window.localStorage.userInfo == null ? false : true;
   const [search, setSearch] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [tutoModalVisible, setTutoModalVisible] = useState(false);
   const [userId, setUserId] = useState(0);
   useEffect(() => {
     if (isLogined) {
@@ -20,11 +22,12 @@ const Topbar = () => {
       setUserId(userInfo.userId);
     }
   }, []);
-  const openModal = () => {
-    setModalVisible(true);
-  };
-  const closeModal = () => {
-    setModalVisible(!modalVisible);
+  const closeModal = (type) => {
+    if (type === 'friend') {
+      setModalVisible(!modalVisible);
+    } else if (type === 'tutorial') {
+      setTutoModalVisible(!tutoModalVisible);
+    }
   };
 
   const onsearch = (e) => {
@@ -39,6 +42,27 @@ const Topbar = () => {
     alert('로그아웃 하였습니다.');
     localStorage.removeItem('userInfo');
     return (window.location.href = '/');
+  };
+  const getTutorial = () => {
+    if (pageName === 'Main') {
+      return (
+        <div style={{ width: '23px', height: '23px' }}>
+          <img
+            src={infoIcon}
+            onClick={() => closeModal('tutorial')}
+            style={{ cursor: 'pointer' }}
+          ></img>
+          {tutoModalVisible && (
+            <TutorialModal
+              visible={tutoModalVisible}
+              closable={true}
+              maskClosable={true}
+              onClose={() => closeModal('tutorial')}
+            ></TutorialModal>
+          )}
+        </div>
+      );
+    }
   };
 
   return (
@@ -87,6 +111,7 @@ const Topbar = () => {
           </Search>
         </Left>
         <Right>
+          {getTutorial()}
           <a className="rLink" href="/MakeRoom">
             스터디 만들기
           </a>
@@ -112,9 +137,11 @@ const Topbar = () => {
                 }}
                 src={friend_icon}
                 alt="friend_icon"
-                onClick={closeModal}
+                onClick={() => closeModal('friend')}
               />
-              {modalVisible && <FriendModal closeModal={closeModal}></FriendModal>}
+              {modalVisible && (
+                <FriendModal closeModal={() => closeModal('friend')}></FriendModal>
+              )}
               <a href="/profile" className="rLink">
                 프로필
               </a>
