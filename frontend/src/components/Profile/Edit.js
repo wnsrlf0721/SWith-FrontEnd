@@ -115,7 +115,7 @@ const Edit = () => {
                     .then((response) => {
                       console.log(response);
                       alert('프로필 정보를 변경하였습니다.');
-                      window.location.reload();
+                      window.location.href = '/profile';
                     })
                     .catch((error) => {
                       console.log(error);
@@ -126,7 +126,7 @@ const Edit = () => {
                 });
             } else {
               alert('프로필 정보를 변경하였습니다.');
-              window.location.reload();
+              window.location.href = '/profile';
             }
           })
           .catch((error) => {
@@ -164,7 +164,7 @@ const Edit = () => {
                 });
             }
             alert('프로필 정보를 변경하였습니다.');
-            window.location.reload();
+            window.location.href = '/profile';
           })
           .catch((error) => {
             console.log(error.toJSON());
@@ -227,6 +227,7 @@ const Edit = () => {
             <TextInputBox
               name="introduce"
               value={editInfo.introduce}
+              maxLength={40}
               onChange={(e) => onChangehandler(e)}
               style={{ margin: '5px 0 25px' }}
             />
