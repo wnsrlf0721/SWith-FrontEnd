@@ -3,6 +3,8 @@ import './css/StudyRoom.css';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { studyRoomAtoms } from '../recoils';
+import { useRecoilState } from 'recoil';
+import { getUsers } from '../../api/APIs';
 
 import defaultProfile from '../../images/default_profile_Image.png';
 import camera_true from '../../images/camera_default.png';
@@ -10,7 +12,6 @@ import camera_false from '../../images/camera_false.png';
 import speaker_true from '../../images/speaker_default.png';
 import speaker_false from '../../images/speaker_false.png';
 import kickout_default from '../../images/kickout_default.png';
-import { useRecoilState } from 'recoil';
 
 const UserList = (
   userId,
@@ -36,6 +37,22 @@ const UserList = (
       nickName: userNickName,
     },
   ];
+  const [UserimgUrls, setUserimgUrls] = useState(new Map());
+
+  useEffect(() => {
+    getUsers()
+      .then((response) => {
+        const userImgUrl = new Map();
+        const data = response.data.data;
+        data.map((user) => {
+          userImgUrl[user.id] = user.imageURL;
+        });
+        setUserimgUrls(userImgUrl);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   useEffect(() => {
     setImUser(users.concat(connnectedUsers));
@@ -89,7 +106,11 @@ const UserList = (
                           width: 'auto',
                           objectFit: 'cover',
                         }}
-                        src={defaultProfile}
+                        src={
+                          UserimgUrls[user.userId]
+                            ? UserimgUrls[user.userId]
+                            : defaultProfile
+                        }
                         alt="defaultProfile"
                       />
                     </Link>
@@ -107,7 +128,11 @@ const UserList = (
                           width: 'auto',
                           objectFit: 'cover',
                         }}
-                        src={defaultProfile}
+                        src={
+                          UserimgUrls[user.userId]
+                            ? UserimgUrls[user.userId]
+                            : defaultProfile
+                        }
                         alt="defaultProfile"
                       />
                     </Link>

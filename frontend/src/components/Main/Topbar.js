@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import React, { useState, useEffect } from 'react';
 import TutorialModal from './TutorialModal';
 import FriendModal from '../Follow/FriendModal';
+import AdminModal from './AdminModal';
 
 import logo from '../../images/SWith_logo2.svg';
 import DM_icon from '../../images/DM_icon.png';
@@ -12,9 +13,12 @@ import infoIcon from '../../images/info_icon.svg';
 
 const Topbar = ({ pageName }) => {
   const isLogined = window.localStorage.userInfo == null ? false : true;
+  // const isAdmin = window.localStorage.userInfo.name == 'admin@swith.ml' ? true : false;
+
   const [search, setSearch] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [tutoModalVisible, setTutoModalVisible] = useState(false);
+  const [adminModalVisible, setAdminModalVisible] = useState(false);
   const [userId, setUserId] = useState(0);
   useEffect(() => {
     if (isLogined) {
@@ -28,6 +32,10 @@ const Topbar = ({ pageName }) => {
     } else if (type === 'tutorial') {
       setTutoModalVisible(!tutoModalVisible);
     }
+  };
+
+  const closeAdminModal = () => {
+    setAdminModalVisible(!adminModalVisible);
   };
 
   const onsearch = (e) => {
@@ -141,6 +149,24 @@ const Topbar = ({ pageName }) => {
               />
               {modalVisible && (
                 <FriendModal closeModal={() => closeModal('friend')}></FriendModal>
+              )}
+              <button
+                style={
+                  JSON.parse(window.localStorage.userInfo).name === 'admin@swith.ml'
+                    ? {
+                        border: 'none',
+                        backgroundColor: 'white',
+                        cursor: 'pointer',
+                      }
+                    : { display: 'none' }
+                }
+                className="rLink"
+                onClick={closeAdminModal}
+              >
+                관리자
+              </button>
+              {adminModalVisible && (
+                <AdminModal closeModal={closeAdminModal}></AdminModal>
               )}
               <a href="/profile" className="rLink">
                 프로필

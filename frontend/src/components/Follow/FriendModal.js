@@ -8,6 +8,7 @@ import {
   getFollower,
   postFollowRequest,
   postFollowApprove,
+  getUsers,
 } from '../../api/APIs';
 
 import defaultProfile from '../../images/default_profile_Image.png';
@@ -18,6 +19,7 @@ const FriendModal = ({ closeModal }) => {
   const [swapleft, setSwapleft] = useState(true);
   const [friends, setFriends] = useState([]);
   const [followerLists, setFollowerLists] = useState([]);
+  const [UserimgUrls, setUserimgUrls] = useState(new Map());
 
   const onCloseModal = (e) => {
     if (e.target === e.currentTarget) {
@@ -101,7 +103,18 @@ const FriendModal = ({ closeModal }) => {
       const followers = response.data.data.users;
       setFollowerLists(followers);
     });
-    console.log();
+    getUsers()
+      .then((response) => {
+        const userImgUrl = new Map();
+        const data = response.data.data;
+        data.map((user) => {
+          userImgUrl[user.id] = user.imageURL;
+        });
+        setUserimgUrls(userImgUrl);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   const getUserProfile = (user) => {
@@ -121,7 +134,7 @@ const FriendModal = ({ closeModal }) => {
                 width: 'auto',
                 objectFit: 'cover',
               }}
-              src={defaultProfile}
+              src={UserimgUrls[user.id] ? UserimgUrls[user.id] : defaultProfile}
               alt="defaultProfile"
             />
           </Link>

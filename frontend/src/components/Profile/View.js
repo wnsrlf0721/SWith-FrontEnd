@@ -97,13 +97,13 @@ const View = () => {
           </ButtonWrap>
         </ProfileWrap>
         <IntroWrap>
-          <IntroHeader>
+          <div>
             <p style={{ fontWeight: 'bold' }}>소개 글</p>
-          </IntroHeader>
+          </div>
           {introduce == '' ? (
-            <IntroContents>아직 소개 글이 없습니다.</IntroContents>
+            <div style={{ color: 'gray' }}>아직 소개 글이 없습니다.</div>
           ) : (
-            <IntroContents>{introduce}</IntroContents>
+            <div>{introduce}</div>
           )}
         </IntroWrap>
       </Wrap>
@@ -121,14 +121,14 @@ const Container = styled.div`
   justify-content: flex-start;
 `;
 const Wrap = styled.div``;
+
 const ProfileWrap = styled.div`
   display: flex;
 `;
 const IntroWrap = styled.div`
   margin: 0 80px;
+  max-width: 600px;
 `;
-const IntroHeader = styled.div``;
-const IntroContents = styled.div``;
 
 const PictureWrap = styled.div`
   border-radius: 70%;

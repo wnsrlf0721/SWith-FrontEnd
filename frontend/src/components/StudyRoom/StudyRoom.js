@@ -13,6 +13,7 @@ import { StudyRoomSocket } from '../../socket/studyRoomSocket';
 import UserKickedModal from './UserKickedModal';
 import UserKickOutModal from './UserKickOutModal';
 import StudyRoomReloadModal from './StudyRoomReloadModal';
+import ExitAllUsersModal from './ExitAllUsersModal';
 
 import { getStudyRoomInfo, postUserStudyRoomHistory } from '../../api/APIs';
 import socket from '../../socket/socket';
@@ -68,6 +69,9 @@ const StudyRoom = ({ match }) => {
   );
   const [openReloadModal, setOpenReloadModal] = useRecoilState(
     studyRoomAtoms.openReloadModal,
+  );
+  const [openExitAllUsersModal, setOpenExitAllUsersModal] = useRecoilState(
+    studyRoomAtoms.openExitAllUsersModal,
   );
 
   useBeforeunload(async (event) => {
@@ -291,6 +295,7 @@ const StudyRoom = ({ match }) => {
       {kicked ? <UserKickedModal></UserKickedModal> : <></>}
       {openKickOutModal ? <UserKickOutModal></UserKickOutModal> : <></>}
       {openReloadModal ? <StudyRoomReloadModal></StudyRoomReloadModal> : <></>}
+      {openExitAllUsersModal ? <ExitAllUsersModal></ExitAllUsersModal> : <></>}
       <LeftBar studyRoomId={studyRoomId} masterId={masterId} userId={userId} />
 
       <div className="RightWrap">

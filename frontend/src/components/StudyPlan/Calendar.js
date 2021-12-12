@@ -29,6 +29,7 @@ const Calendar = ({ userId }) => {
   const [todo, setTodo] = useState([]);
   const [isUser, setIsUser] = useState(true);
   const [tfCheck, setTfCheck] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const [getEvent, setEvent] = useState([
     {
       id: '',
@@ -261,7 +262,6 @@ const Calendar = ({ userId }) => {
     </button>
   );
 
-  const [modalVisible, setModalVisible] = useState(false);
   const openModal = () => {
     setModalVisible(true);
   };
@@ -313,7 +313,7 @@ const Calendar = ({ userId }) => {
           initialView="dayGridMonth"
           editable={false}
           selectable={isUser}
-          selectMirror={false}
+          selectMirror={isUser}
           dayMaxEvents={true}
           weekends={true}
           events={getEvent}

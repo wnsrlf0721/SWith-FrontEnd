@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
-const StudyRoomReloadModal = () => {
+const ExitAllUsersModal = () => {
   return (
     <>
       <ModalOverlay />
       <ModalWrapper tabIndex="-1">
         <ModalInner tabIndex="0" className="modal-inner">
-          <p style={{ fontSize: '25px' }}>방 정보가 수정되어 새로고침합니다.</p>
-          <Button onClick={() => window.location.reload()}>새로고침</Button>
+          <p style={{ fontSize: '25px' }}>스터디룸이 삭제되어 퇴실합니다.</p>
+          <Button onClick={() => window.open('', '_self').close()}>나가기</Button>
         </ModalInner>
       </ModalWrapper>
     </>
@@ -68,4 +68,4 @@ const Button = styled.button`
   text-decoration: none;
 `;
 
-export default StudyRoomReloadModal;
+export default ExitAllUsersModal;

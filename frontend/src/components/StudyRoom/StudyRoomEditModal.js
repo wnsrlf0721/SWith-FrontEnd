@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { getStudyRoomInfo, patchStudyRoomInfo } from '../../api/APIs';
+import { getStudyRoomInfo, patchStudyRoomInfo, deleteStudyRoom } from '../../api/APIs';
 import DatePicker from 'react-datepicker';
 import { ko } from 'date-fns/esm/locale';
 import moment from 'moment';
@@ -215,16 +215,17 @@ const StudyRoomEditModal = ({
       } else if (roominfo.title.length > 10) {
         return alert('스터디룸 이름을 10자 이하로 작성해주세요');
       }
+      if (isNaN(Number(roominfo.maxUserCount))) {
+        return alert('최대인원에는 숫자가 들어가야 합니다');
+      }
       if (Number(roominfo.maxUserCount) > 8) {
         return alert('최대인원은 8명 이하로 입력되어야 합니다');
       }
       if (Number(roominfo.maxUserCount) < 1) {
-        alert('최대인원은 1명 이상으로 입력되어야 합니다');
-        return;
+        return alert('최대인원은 1명 이상으로 입력되어야 합니다');
       }
       if (roominfo.notice && roominfo.notice.length > 100) {
-        alert('공지사항은 100자 이하로 입력되어야 합니다.');
-        return;
+        return alert('공지사항은 100자 이하로 입력되어야 합니다.');
       }
       const room = roominfo;
       var moment = require('moment');
@@ -278,6 +279,21 @@ const StudyRoomEditModal = ({
     },
     [roominfo],
   );
+
+  const onClickDeleteStudyRoom = () => {
+    if (window.confirm('스터디룸을 정말 삭제하시겠습니까?')) {
+      deleteStudyRoom(studyRoomId)
+        .then((response) => {
+          socket.emit('delete_studyroom', {
+            room: studyRoomId,
+          });
+          window.open('', '_self').close();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
   return (
     <>
@@ -425,7 +441,12 @@ const StudyRoomEditModal = ({
                   />
                 </Rowarea>
               )}
-
+              <Button
+                style={{ marginTop: '40px', backgroundColor: 'red' }}
+                onClick={onClickDeleteStudyRoom}
+              >
+                스터디룸 삭제
+              </Button>
               <Button style={{ marginTop: '40px' }} onClick={onsubmit}>
                 수정 완료
               </Button>

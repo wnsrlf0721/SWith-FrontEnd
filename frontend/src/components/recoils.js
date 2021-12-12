@@ -75,8 +75,14 @@ const studyRoomAtoms = {
     key: 'openKickOutModal',
     default: false,
   }),
+
   openReloadModal: atom({
     key: 'openReloadModal',
+    default: false,
+  }),
+
+  openExitAllUsersModal: atom({
+    key: 'openExitAllUsersModal',
     default: false,
   }),
 };

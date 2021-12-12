@@ -27,6 +27,9 @@ export const StudyRoomSocket = ({ secTimer, userVideoRef, userInfo, userNickName
   const [openReloadModal, setOpenReloadModal] = useRecoilState(
     studyRoomAtoms.openReloadModal,
   );
+  const [openExitAllUsersModal, setOpenExitAllUsersModal] = useRecoilState(
+    studyRoomAtoms.openExitAllUsersModal,
+  );
   const [exitUserSocketId, setExitUserSocketId] = useState('');
 
   useEffect(() => {
@@ -144,6 +147,10 @@ export const StudyRoomSocket = ({ secTimer, userVideoRef, userInfo, userNickName
 
     socket.on('reload', () => {
       setOpenReloadModal(true);
+    });
+
+    socket.on('all_user_exit', () => {
+      setOpenExitAllUsersModal(true);
     });
   };
 

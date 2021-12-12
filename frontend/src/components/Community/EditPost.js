@@ -41,7 +41,7 @@ const CreatePost = ({ match }) => {
       alert('내용을 입력해주세요.');
       return;
     }
-    if (title.length > 40) {
+    if (title.length > 20) {
       alert('제목은 40자 이하로 입력해주세요.');
       return;
     }
@@ -70,7 +70,7 @@ const CreatePost = ({ match }) => {
         container: [
           ['bold', 'italic', 'underline', 'strike'],
           [{ color: [] }],
-          [{ list: 'ordered' }, { list: 'bullet' }, { align: [] }],
+          [{ list: 'ordered' }, { list: 'bullet' }],
           [],
         ],
       },

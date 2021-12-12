@@ -11,6 +11,7 @@ import EditPost from './EditPost';
 import search_icon from '../../images/search_gray.png';
 import writing_icon from '../../images/writing_icon.png';
 import post_list from '../../images/post_list.png';
+import plus_icon from '../../images/plus_icon.png';
 import { getBoards, postBoard } from '../../api/APIs';
 
 const baseUrl = '/comm/';
@@ -18,8 +19,10 @@ const baseUrl = '/comm/';
 const Index = () => {
   const [boardList, setBoardList] = useState([]);
   const [search, setSearch] = useState('');
+  const [addBoard, setAddBoard] = useState('');
+  const local = JSON.parse(window.localStorage.userInfo);
+
   useEffect(() => {
-    //const local = JSON.parse(window.localStorage.userInfo);
     //postBoard('정보 공유', local.userId);
     getBoards()
       .then((response) => {
@@ -42,6 +45,23 @@ const Index = () => {
       alert(`검색어는 2자 이상 필요합니다.`);
     }
   };
+
+  const AdminAddBoard = () => {
+    if (window.confirm(`게시판 ${addBoard}를 추가하시겠습니까?`)) {
+      if (!addBoard) {
+        alert('게시판 이름이 비어있습니다.');
+        return;
+      }
+      postBoard(addBoard, local.userId)
+        .then((response) => {
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
   return (
     <>
       <Topbar />
@@ -92,6 +112,36 @@ const Index = () => {
                   />
                   게시글 작성하기
                 </Link>
+              </Box>
+              <Box style={'admin@swith.ml' !== local.name ? { display: 'none' } : {}}>
+                <span>
+                  <button
+                    style={{
+                      backgroundColor: 'white',
+                      border: '0px',
+                      padding: '0 6px 0 0 ',
+                      cursor: 'pointer',
+                    }}
+                    onClick={AdminAddBoard}
+                  >
+                    <img
+                      style={{
+                        height: '18px',
+                        width: '18px',
+                        verticalAlign: 'middle',
+                      }}
+                      src={plus_icon}
+                      alt="search_icon"
+                    />
+                  </button>
+                  <input
+                    style={{ border: '0px' }}
+                    type="text"
+                    placeholder="게시판 추가"
+                    value={addBoard}
+                    onChange={(e) => setAddBoard(e.target.value)}
+                  ></input>
+                </span>
               </Box>
               <Box>
                 게시판 목록

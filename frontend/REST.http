@@ -1,0 +1,46 @@
+GET http://118.67.133.19:8080/studyrooms HTTP/1.1
+
+###
+
+GET http://118.67.133.19:8080/boards HTTP/1.1
+
+###
+
+GET http://118.67.133.19:8080/users HTTP/1.1
+
+###
+
+POST http://118.67.133.19:8080/signup HTTP/1.1
+content-type: application/json
+
+{
+    "email": "admin@swith.ml",
+    "password": "1234",
+    "nickname": "admin"
+}
+
+###
+
+POST http://118.67.133.19:8080/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "ehdwns1516@ajou.ac.kr",
+    "password": "1234"
+}
+
+###
+
+DELETE http://118.67.133.19:8080/users/105 HTTP/1.1
+
+###
+
+DELETE http://118.67.133.19:8080/studyrooms/54 HTTP/1.1
+
+###
+DELETE http://118.67.133.19:8080/studyrooms/54 HTTP/1.1
+
+###
+DELETE http://118.67.133.19:8080/boards/197 HTTP/1.1
+
+
