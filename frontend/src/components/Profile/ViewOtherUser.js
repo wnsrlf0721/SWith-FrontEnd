@@ -143,7 +143,7 @@ const ViewOtherUser = ({ match }) => {
           <div>
             <p style={{ fontWeight: 'bold' }}>소개 글</p>
           </div>
-          {introduce == '' ? (
+          {introduce === '' || introduce === null ? (
             <div style={{ color: 'gray' }}>아직 소개 글이 없습니다.</div>
           ) : (
             <div>{introduce}</div>
