@@ -75,13 +75,15 @@ const StudyRoom = ({ match }) => {
   );
 
   useBeforeunload(async (event) => {
-    // event.preventDefault();
     socket.disconnect();
     window.localStorage.setItem('enteredStudyRoom', 'false');
-    // return 'Are you sure to close this tab?';
   });
 
   useEffect(() => {
+    if (!document.referrer) {
+      alert('잘못된 접근입니다.');
+      return (window.location.href = `/`);
+    }
     window.localStorage.setItem('enteredStudyRoom', 'true');
     const userId = JSON.parse(userInfo)['userId'];
     setUserId(userId);
@@ -154,7 +156,9 @@ const StudyRoom = ({ match }) => {
       connectedUserTimer.forEach((value, key) => {
         connectedUserTimer.set(key, value + 1);
       });
-
+      if (!window.localStorage.userInfo) {
+        window.open('', '_self').close();
+      }
       setConnectedUserTimer(connectedUserTimer);
       setStudyTimer(studyTimer);
     }, 1000);

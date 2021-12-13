@@ -23,13 +23,14 @@ import '@fullcalendar/timegrid/main.css';
 
 import infoIcon from '../../images/info_icon.svg';
 
-const Calendar = ({ userId }) => {
+const Calendar = ({ userId, refreshStatistics }) => {
   const [dateStr, setDateStr] = useState(new Date().toDateString());
   const [currentEvents, setCurrentEvents] = useState([]);
   const [todo, setTodo] = useState([]);
   const [isUser, setIsUser] = useState(true);
   const [tfCheck, setTfCheck] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
   const [getEvent, setEvent] = useState([
     {
       id: '',
@@ -39,10 +40,15 @@ const Calendar = ({ userId }) => {
       allDay: '',
     },
   ]);
-  const userInfo = JSON.parse(window.localStorage.userInfo);
 
   const HandleLoad = () => {
     useEffect(() => {
+      const isLogined = window.localStorage.userInfo == null ? false : true;
+      if (!isLogined) {
+        return;
+      }
+      setUserInfo(JSON.parse(window.localStorage.userInfo));
+
       let tempEvents = [];
       let tempTodo = [];
       getUserPlanner(userId)
@@ -155,6 +161,7 @@ const Calendar = ({ userId }) => {
               });
             });
             setTodo(tempTodo);
+            refreshStatistics();
           })
           .catch((error) => {
             console.log(error);

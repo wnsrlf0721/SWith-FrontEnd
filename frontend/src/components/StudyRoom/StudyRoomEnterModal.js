@@ -106,6 +106,7 @@ const StudyRoomEnterModal = ({ setInitSetting, videoRef, notice }) => {
               입장하기
             </Button>
           </span>
+          <p>🎙다른 사용자들을 위해 입장시 마이크는 음소거 상태입니다.🎙</p>
         </ModalInner>
       </ModalWrapper>
     </>

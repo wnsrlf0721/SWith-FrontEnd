@@ -103,6 +103,12 @@ export const postImgUpload = async (img) => {
   return await axios.post(`/images`, form);
 };
 
+export const postFindPassword = async (email) => {
+  return await axios.post(`/password-find`, {
+    email: email,
+  });
+};
+
 export const patchUserProfileImgURL = async (userId, imgURL) => {
   return await axios.patch(`/users/${userId}/images`, {
     imageURL: imgURL,

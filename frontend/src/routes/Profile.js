@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import View from '../components/Profile/View';
 import ViewOtherUser from '../components/Profile/ViewOtherUser';
+import OtherProfileBeforePage from '../components/Profile/OtherProfileBeforePage';
 import Edit from '../components/Profile/Edit';
 import Plan from '../components/StudyPlan/index';
 
@@ -24,7 +25,8 @@ const Profile = () => {
         <BrowserRouter>
           <Switch>
             <Route exact path={baseUrl} component={View} />
-            <Route path="/profile/:userId/other" component={ViewOtherUser} />
+            <Route path="/profile/:userId/other" component={OtherProfileBeforePage} />
+            <Route path="/profile/:userId/otheruser" component={ViewOtherUser} />
             <Route path={baseUrl + 'edit'} component={Edit} />
             <Route path="/plan" component={Plan} />
           </Switch>

@@ -14,10 +14,16 @@ const View = () => {
   const [followerCount, setFollowerCount] = useState(0);
   const [postCount, setPostCount] = useState(0);
   const [UserimgUrl, setUserimgUrl] = useState(userImage);
-  const local = JSON.parse(window.localStorage.userInfo);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    getUserInfo(local.userId)
+    const isLogined = window.localStorage.userInfo == null ? false : true;
+    if (!isLogined) {
+      return;
+    }
+    setUserId(JSON.parse(window.localStorage.userInfo).userId);
+
+    getUserInfo(userId)
       .then((response) => {
         const data = response.data;
         if (data.status === '200' && data.message === 'OK') {
@@ -36,7 +42,7 @@ const View = () => {
       .catch((error) => {
         console.log(error);
       });
-    getUserCount(local.userId)
+    getUserCount(userId)
       .then((response) => {
         const data = response.data;
         console.log(data);
@@ -91,7 +97,7 @@ const View = () => {
             <Link to="/profile/edit">
               <Button style={{ backgroundColor: '#f8ad1d' }}>프로필 편집</Button>
             </Link>
-            <a href={`/plan/${local.userId}`}>
+            <a href={`/plan/${userId}`}>
               <Button style={{ color: '#595959' }}>학습관리</Button>
             </a>
           </ButtonWrap>
