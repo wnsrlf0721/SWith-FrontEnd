@@ -24,7 +24,8 @@ const Wrap = styled.div`
   margin-top: 64px;
   padding-bottom: 120px;
   background-color: #fff;
-  position: relative;
+  width: 100%;
+  height: 100%;
 `;
 
 export default Main;

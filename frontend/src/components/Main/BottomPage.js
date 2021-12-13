@@ -258,10 +258,11 @@ const BottomPage = ({ search }) => {
 export default BottomPage;
 
 const Bottompage = styled.div`
-  padding: 70px 20px 0;
-  width: 1200px;
+  width: 100%;
   height: 700px;
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
 `;
 
 const LinkContainer = styled.div`

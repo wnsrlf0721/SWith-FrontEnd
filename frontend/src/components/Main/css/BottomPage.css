@@ -1,7 +1,9 @@
 .StudiesContainer {
   padding: 70px 20px 0;
-  width: 100%;
   margin: 0 auto;
+  width: 1200px;
+  display: flex;
+  flex-direction: column;
 }
 .StudiesHeader {
   position: relative;
