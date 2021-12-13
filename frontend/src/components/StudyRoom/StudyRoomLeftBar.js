@@ -3,7 +3,7 @@ import './css/StudyRoom.css';
 import StudyRoomEditModal from './StudyRoomEditModal';
 import { useState } from 'react';
 
-import logo from '../../images/logoBack.png';
+import logo from '../../images/SWith_logo2.svg';
 import menu from '../../images/setting_icon.svg';
 import back from '../../images/back.png';
 
@@ -26,7 +26,7 @@ const StudyRoomLeftBar = ({ studyRoomId, masterId, userId }) => {
       <div className="LeftTopIconWrap">
         <div className="LogoIcon">
           <img
-            style={{ width: '60px', backgroundColor: '', cursor: 'default' }}
+            style={{ width: '50px', backgroundColor: '', cursor: 'default' }}
             src={logo}
             alt="logo"
           />
