@@ -22,8 +22,7 @@ const View = () => {
       return;
     }
     setUserId(JSON.parse(window.localStorage.userInfo).userId);
-
-    getUserInfo(userId)
+    getUserInfo(JSON.parse(window.localStorage.userInfo).userId)
       .then((response) => {
         const data = response.data;
         if (data.status === '200' && data.message === 'OK') {
@@ -42,7 +41,7 @@ const View = () => {
       .catch((error) => {
         console.log(error);
       });
-    getUserCount(userId)
+    getUserCount(JSON.parse(window.localStorage.userInfo).userId)
       .then((response) => {
         const data = response.data;
         console.log(data);
