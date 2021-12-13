@@ -101,7 +101,7 @@ const StudyRoom = ({ match }) => {
     getStudyRoomInfo(studyRoomId)
       .then((response) => {
         const data = response.data;
-        console.log(data);
+        // console.log(data);
         setStudyRoomInfo({
           id: data.data.id,
           title: data.data.title,
