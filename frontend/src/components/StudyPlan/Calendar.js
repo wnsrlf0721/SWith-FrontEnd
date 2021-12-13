@@ -144,7 +144,21 @@ const Calendar = ({ userId }) => {
         const data = response.data;
         if (data.status === '200' && data.message === 'OK') {
         }
-        window.location.reload();
+        let tempTodo = [];
+        getUserPlanner(userId)
+          .then((events) => {
+            const tasks = events.data.data.studyplanner_Tasks;
+            tasks.map((task) => {
+              tempTodo = tempTodo.concat({
+                id: task.id,
+                check: Boolean(task.complete),
+              });
+            });
+            setTodo(tempTodo);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       })
       .catch((error) => {
         console.log(error.toJSON());

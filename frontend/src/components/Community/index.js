@@ -20,10 +20,19 @@ const Index = () => {
   const [boardList, setBoardList] = useState([]);
   const [search, setSearch] = useState('');
   const [addBoard, setAddBoard] = useState('');
-  const local = JSON.parse(window.localStorage.userInfo);
+  const [userId, setUserId] = useState(null);
+  const [userEmail, setUserEmail] = useState(null);
+  const isLogined = window.localStorage.userInfo == null ? false : true;
 
   useEffect(() => {
-    //postBoard('정보 공유', local.userId);
+    if (!isLogined) {
+      alert('로그인이 필요합니다.');
+      return (window.location.href = '/login');
+    }
+    const local = JSON.parse(window.localStorage.userInfo);
+    setUserId(local.userId);
+    setUserEmail(local.name);
+
     getBoards()
       .then((response) => {
         let array = [];
@@ -52,7 +61,7 @@ const Index = () => {
         alert('게시판 이름이 비어있습니다.');
         return;
       }
-      postBoard(addBoard, local.userId)
+      postBoard(addBoard, userId)
         .then((response) => {
           window.location.reload();
         })
@@ -113,7 +122,7 @@ const Index = () => {
                   게시글 작성하기
                 </Link>
               </Box>
-              <Box style={'admin@swith.ml' !== local.name ? { display: 'none' } : {}}>
+              <Box style={userEmail !== 'admin@swith.ml' ? { display: 'none' } : {}}>
                 <span>
                   <button
                     style={{
