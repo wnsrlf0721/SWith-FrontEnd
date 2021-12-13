@@ -56,6 +56,26 @@ const Edit = () => {
     introduce: '',
   });
   const [pwConfirm, setPwConfirm] = useState('');
+  const [pwvalid, setPwvalid] = useState(true);
+  const CheckPWvalid = (value) => {
+    if (value.length > 0) {
+      if (!/^[a-zA-Z0-9]{8,20}$/.test(value)) {
+        setPwvalid(false);
+        console.log('비밀번호는 숫자와 영문자 조합으로 8~20자리를 사용해야 합니다.');
+      } else {
+        var chk_num = value.search(/[0-9]/g);
+        var chk_eng = value.search(/[a-z]/gi);
+        if (chk_num < 0 || chk_eng < 0) {
+          setPwvalid(false);
+          console.log('비밀번호는 숫자와 영문자 조합으로 8~20자리를 사용해야 합니다.');
+        } else {
+          setPwvalid(true);
+        }
+      }
+    } else {
+      setPwvalid(true);
+    }
+  };
 
   const onChangehandler = (e) => {
     const { name, value } = e.target;
@@ -67,6 +87,9 @@ const Edit = () => {
         [name]: value,
       }));
     } else {
+      if (name === 'password') {
+        CheckPWvalid(value);
+      }
       setEditInfo((prevInfo) => ({
         ...prevInfo,
         [name]: value.trim(),
@@ -89,8 +112,12 @@ const Edit = () => {
         alert('비밀번호를 입력해야합니다');
         return;
       }
+      if (!pwvalid) {
+        alert('새 비밀번호를 8~20자의 영어 대소문자, 숫자의 조합으로 입력해주세요');
+        return;
+      }
       if (editInfo.password !== pwConfirm) {
-        alert('비밀번호 일치하는지 확인해주세요');
+        alert('변경할 비밀번호가 일치하는지 확인해주세요');
         return;
       }
       if (!editInfo.password) {
@@ -248,6 +275,13 @@ const Edit = () => {
               onChange={(e) => onChangehandler(e)}
               placeholder="새로운 비밀번호를 입력하세요."
             />
+            {!pwvalid ? (
+              <div style={{ textAlign: 'right', color: 'red' }}>
+                비밀번호 규칙을 확인해주세요
+              </div>
+            ) : (
+              <></>
+            )}
             <TextG>비밀번호 확인</TextG>
             <TextInputBox
               name="PWconfirm"
@@ -269,6 +303,10 @@ const Edit = () => {
             ) : (
               <div> </div>
             )}
+            <TextG style={{ color: 'red', fontSize: '15px' }}>
+              ※ 새 비밀번호 설정 시 주의사항
+            </TextG>
+            <TextG>8~20자 이내의 영문 대소문자, 숫자의 조합 사용</TextG>
             <Button>프로필 설정 완료</Button>
           </form>
         </EditBoxWrap>

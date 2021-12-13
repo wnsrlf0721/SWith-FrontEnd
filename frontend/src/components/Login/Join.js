@@ -19,9 +19,25 @@ const Join = () => {
   var reg_email = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
   const [checkemail, setCheckEmail] = useState(false);
   const [checkcode, setCheckcode] = useState(false);
+  const [pwvalid, setPwvalid] = useState(false);
   const [checkpw, setCheckpw] = useState(false);
   const [repeatpw, setRepeatpw] = useState('');
 
+  const CheckPWvalid = (value) => {
+    if (!/^[a-zA-Z0-9]{8,20}$/.test(value)) {
+      setPwvalid(false);
+      console.log('비밀번호는 숫자와 영문자 조합으로 8~20자리를 사용해야 합니다.');
+    } else {
+      var chk_num = value.search(/[0-9]/g);
+      var chk_eng = value.search(/[a-z]/gi);
+      if (chk_num < 0 || chk_eng < 0) {
+        setPwvalid(false);
+        console.log('비밀번호는 숫자와 영문자 조합으로 8~20자리를 사용해야 합니다.');
+      } else {
+        setPwvalid(true);
+      }
+    }
+  };
   const onChangehandler = (e) => {
     const { name, value } = e.target;
     if (name === 'repeatpw') {
@@ -44,6 +60,7 @@ const Join = () => {
         }
       }
       if (name === 'password') {
+        CheckPWvalid(value);
         if (!value) {
           //return alert('비밀번호를 입력해야합니다');
           setCheckpw(false);
@@ -111,6 +128,8 @@ const Join = () => {
       return alert('빈칸을 다시 한번 확인해주세요.');
     } else if (joinInfo.nickname.length > 9) {
       return alert('닉네임을 9자 이하로 작성해주세요');
+    } else if (!pwvalid) {
+      return alert('새 비밀번호를 8~20자의 영어 대소문자, 숫자의 조합으로 입력해주세요');
     }
     postSignUp(joinInfo.email, joinInfo.password, joinInfo.nickname)
       .then((response) => {
@@ -188,6 +207,13 @@ const Join = () => {
               value={joinInfo.password}
               onChange={(e) => onChangehandler(e)}
             />
+            {!pwvalid ? (
+              <div style={{ color: 'red', fontSize: '12px' }}>
+                비밀번호 규칙을 확인해주세요
+              </div>
+            ) : (
+              <></>
+            )}
           </Text>
           <Text>
             <Label>비밀번호 확인</Label>
@@ -207,6 +233,12 @@ const Join = () => {
                 비밀번호가 일치합니다
               </div>
             )}
+          </Text>
+          <Text style={{ marginTop: '20px' }}>
+            <Label style={{ color: 'red', fontSize: '15px' }}>
+              ※ 비밀번호 설정 시 주의사항
+            </Label>
+            <Label>8~20자 이내의 영문 대소문자, 숫자의 조합 사용</Label>
           </Text>
           <Text>
             <Label>닉네임</Label>
