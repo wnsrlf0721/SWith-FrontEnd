@@ -34,6 +34,8 @@ const Post = ({ match }) => {
   const [editNum, setEditNum] = useState('');
   const [editComment, setEditComment] = useState('');
   const [UserimgUrl, setUserimgUrl] = useState(DefaultProfile);
+  const local = JSON.parse(window.localStorage.userInfo);
+
   useEffect(() => {
     if (window.localStorage.userInfo) {
       setLoginId(JSON.parse(window.localStorage.userInfo).userId);
@@ -41,10 +43,12 @@ const Post = ({ match }) => {
     getBoardPostId(boardId, postId)
       .then((response) => {
         const info = response.data.data;
+        console.log(info);
         setPostInfo(info);
         if (info.user.imageURL) {
           setUserimgUrl(info.user.imageURL);
         }
+        console.log(info);
       })
       .catch((error) => {
         console.log(error);
@@ -86,6 +90,7 @@ const Post = ({ match }) => {
         putComment(boardId, postId, editNum, editComment)
           .then((response) => {
             const data = response.data.data;
+            console.log(data);
           })
           .catch((error) => {
             console.log(error);
@@ -198,7 +203,7 @@ const Post = ({ match }) => {
                 />
                 {postInfo.viewCount}
               </span>
-              {loginId === postInfo.user.id ? (
+              {loginId === postInfo.user.id || 'admin@swith.ml' === local.name ? (
                 <span style={{ marginLeft: '10px' }}>
                   <span style={{ marginLeft: '5px' }}>
                     <ChangeButton
@@ -272,7 +277,7 @@ const Post = ({ match }) => {
                       <span>
                         {moment(comment.createdDate).format('YYYY.MM.DD. HH:mm')}
                       </span>
-                      {loginId === comment.user.id ? (
+                      {loginId === comment.user.id || 'admin@swith.ml' === local.name ? (
                         <span style={{ marginLeft: '10px' }}>
                           <span style={{ marginLeft: '5px' }}>
                             <ChangeButton

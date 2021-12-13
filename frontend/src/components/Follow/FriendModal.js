@@ -8,15 +8,18 @@ import {
   getFollower,
   postFollowRequest,
   postFollowApprove,
+  getUsers,
 } from '../../api/APIs';
 
 import defaultProfile from '../../images/default_profile_Image.png';
+import closeImg from '../../images/close.png';
 
 const FriendModal = ({ closeModal }) => {
   const userInfo = JSON.parse(window.localStorage.userInfo);
   const [swapleft, setSwapleft] = useState(true);
   const [friends, setFriends] = useState([]);
   const [followerLists, setFollowerLists] = useState([]);
+  const [UserimgUrls, setUserimgUrls] = useState(new Map());
 
   const onCloseModal = (e) => {
     if (e.target === e.currentTarget) {
@@ -100,7 +103,18 @@ const FriendModal = ({ closeModal }) => {
       const followers = response.data.data.users;
       setFollowerLists(followers);
     });
-    console.log();
+    getUsers()
+      .then((response) => {
+        const userImgUrl = new Map();
+        const data = response.data.data;
+        data.map((user) => {
+          userImgUrl[user.id] = user.imageURL;
+        });
+        setUserimgUrls(userImgUrl);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   const getUserProfile = (user) => {
@@ -120,7 +134,7 @@ const FriendModal = ({ closeModal }) => {
                 width: 'auto',
                 objectFit: 'cover',
               }}
-              src={defaultProfile}
+              src={UserimgUrls[user.id] ? UserimgUrls[user.id] : defaultProfile}
               alt="defaultProfile"
             />
           </Link>
@@ -135,8 +149,15 @@ const FriendModal = ({ closeModal }) => {
   return (
     <>
       <div className="ModalWrapper" onClick={onCloseModal}>
-        <div className="modalInner">
+        <div className="modalInner" style={{ width: '400px', height: '500px' }}>
           <div className="friendModalWrap">
+            <div style={{ top: '5px', right: '10px', position: 'absolute' }}>
+              <img
+                src={closeImg}
+                onClick={() => closeModal()}
+                style={{ height: '12px', width: '12px', cursor: 'pointer' }}
+              ></img>
+            </div>
             <div className="friendHeader">
               <button
                 className={swapleft === true ? 'friendTapActive' : 'friendTap'}
