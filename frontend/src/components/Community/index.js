@@ -24,6 +24,10 @@ const Index = () => {
   const [userEmail, setUserEmail] = useState(null);
 
   useEffect(() => {
+    if (!document.referrer) {
+      alert('잘못된 접근입니다.');
+      return (window.location.href = `/`);
+    }
     const isLogined = window.localStorage.userInfo == null ? false : true;
     if (!isLogined) {
       alert('로그인이 필요합니다.');

@@ -90,7 +90,11 @@ const Login = () => {
             <Button>로그인</Button>
           </form>
         </LoginWrapper>
-        <Join>
+        <Join style={{ marginTop: '15px' }}>
+          <p>비밀번호를 잊으셨나요?</p>
+          <a href="/login/password">비밀번호 찾기</a>
+        </Join>
+        <Join style={{ marginTop: '0px' }}>
           <p>아직 회원이 아니신가요?</p>
           <a href="/login/join">회원가입</a>
         </Join>

@@ -12,13 +12,12 @@ import friend_icon from '../../images/heart_default.png';
 import infoIcon from '../../images/info_icon.svg';
 
 const Topbar = ({ pageName }) => {
-  const isLogined = window.localStorage.userInfo == null ? false : true;
-
   const [search, setSearch] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [tutoModalVisible, setTutoModalVisible] = useState(false);
   const [adminModalVisible, setAdminModalVisible] = useState(false);
   const [userId, setUserId] = useState(0);
+  const isLogined = window.localStorage.userInfo == null ? false : true;
   useEffect(() => {
     if (isLogined) {
       const userInfo = JSON.parse(window.localStorage.userInfo);
@@ -48,6 +47,7 @@ const Topbar = ({ pageName }) => {
   const onLogout = (e) => {
     alert('로그아웃 하였습니다.');
     localStorage.removeItem('userInfo');
+    localStorage.removeItem('enteredStudyRoom');
     return (window.location.href = '/');
   };
   const getTutorial = () => {

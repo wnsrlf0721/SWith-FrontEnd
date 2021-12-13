@@ -11,6 +11,10 @@ const Index = ({ match }) => {
   const [task, setTask] = useState([]);
   const [time, setTime] = useState([]);
   useEffect(() => {
+    if (!document.referrer) {
+      alert('잘못된 접근입니다.');
+      return (window.location.href = `/`);
+    }
     const isLogined = window.localStorage.userInfo == null ? false : true;
     if (!isLogined) {
       alert('로그인이 필요합니다.');
@@ -52,6 +56,43 @@ const Index = ({ match }) => {
       });
   }, []);
 
+  const refreshStatistics = () => {
+    getUserStatistics(match.params.userId)
+      .then((response) => {
+        const data = response.data.data;
+        let tempTimes = [];
+        data.map((time) => {
+          tempTimes = tempTimes.concat({
+            id: time.id,
+            studyTime: time.studyTime,
+            date: time.date,
+          });
+        });
+        setTime(tempTimes);
+      })
+      .catch((error) => {
+        console.log(error.toJSON());
+      });
+    getUserPlanner(match.params.userId)
+      .then((response) => {
+        const data = response.data.data;
+        let tempEvents = [];
+        data.studyplanner_Tasks.map((task) => {
+          tempEvents = tempEvents.concat({
+            id: task.id,
+            title: task.taskDescription,
+            start: task.startDate,
+            end: task.endDate,
+            complete: task.complete,
+          });
+        });
+        setTask(tempEvents);
+      })
+      .catch((error) => {
+        console.log(error.toJSON());
+      });
+  };
+
   const [swapleft, setSwapleft] = useState(true);
   return (
     <>
@@ -71,7 +112,7 @@ const Index = ({ match }) => {
       </TabWrapContainer>
 
       {swapleft ? (
-        <Calendar userId={match.params.userId} />
+        <Calendar userId={match.params.userId} refreshStatistics={refreshStatistics} />
       ) : (
         <Statistics task={task} time={time} />
       )}

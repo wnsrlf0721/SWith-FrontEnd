@@ -24,6 +24,10 @@ const ViewOtherUser = ({ match }) => {
   const userId = match.params.userId;
 
   useEffect(() => {
+    if (!document.referrer) {
+      alert('잘못된 접근입니다.');
+      return (window.location.href = `/`);
+    }
     getUserInfo(userId)
       .then((response) => {
         const data = response.data;

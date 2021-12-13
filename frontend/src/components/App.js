@@ -8,6 +8,7 @@ import Community from './Community/index';
 import Profile from '../routes/Profile';
 import MakeStudyRoom from './StudyRoom/MakeStudyRoom';
 import StudyRoom from './StudyRoom/StudyRoom';
+import StudyRoomBeforePage from './StudyRoom/StudyRoomBeforePage';
 
 function App() {
   return (
@@ -23,6 +24,10 @@ function App() {
             <Route path="/MakeRoom" component={MakeStudyRoom} />
             <Route
               path="/StudyRoom/:studyRoomId/:nickName/:userInfo"
+              component={StudyRoomBeforePage}
+            />
+            <Route
+              path="/StudyRoomJoin/:studyRoomId/:nickName/:userInfo"
               component={StudyRoom}
             />
           </Switch>
