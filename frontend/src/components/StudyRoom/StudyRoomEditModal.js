@@ -85,7 +85,6 @@ const StudyRoomEditModal = ({
       .then((response) => {
         const data = response.data;
         const roomData = data.data;
-        console.log(roomData);
         let temphash = [];
         roomData.hashtags.map((x) => {
           temphash = temphash.concat(x.hashtag);
@@ -226,6 +225,9 @@ const StudyRoomEditModal = ({
       }
       if (roominfo.notice && roominfo.notice.length > 100) {
         return alert('공지사항은 100자 이하로 입력되어야 합니다.');
+      }
+      if (!roominfo.password && !swapleft) {
+        alert('비밀번호를 입력하지 않아 공개방이 생성됩니다.');
       }
       const room = roominfo;
       var moment = require('moment');

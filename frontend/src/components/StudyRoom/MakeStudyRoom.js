@@ -185,9 +185,12 @@ const MakeStudyRoom = () => {
       if (Number(room.maxUserCount) < 1) {
         return alert('최대인원은 1명 이상으로 입력되어야 합니다');
       }
-      if(room.notice&&room.notice.length>100){
+      if (room.notice && room.notice.length > 100) {
         alert('공지사항은 100자 이하로 입력되어야 합니다.');
         return;
+      }
+      if (!room.password && !swapleft) {
+        alert('비밀번호를 입력하지 않아 공개방이 생성됩니다.');
       }
       room.endDate = moment(room.endDate).tz('Asia/Seoul').format('YYYY-MM-DD 23:59:59');
       if (room.password) {
