@@ -128,6 +128,8 @@ const Join = () => {
       return alert('빈칸을 다시 한번 확인해주세요.');
     } else if (joinInfo.nickname.length > 9) {
       return alert('닉네임을 9자 이하로 작성해주세요');
+    } else if (!pwvalid) {
+      return alert('새 비밀번호를 8~20자의 영어 대소문자, 숫자의 조합으로 입력해주세요');
     }
     postSignUp(joinInfo.email, joinInfo.password, joinInfo.nickname)
       .then((response) => {
@@ -236,7 +238,7 @@ const Join = () => {
             <Label style={{ color: 'red', fontSize: '15px' }}>
               ※ 비밀번호 설정 시 주의사항
             </Label>
-            <Label>8~20자 이내로 영문 대소문자, 숫자를 사용</Label>
+            <Label>8~20자 이내의 영문 대소문자, 숫자의 조합 사용</Label>
           </Text>
           <Text>
             <Label>닉네임</Label>
