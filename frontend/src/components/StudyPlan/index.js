@@ -107,10 +107,10 @@ const Index = ({ match }) => {
     <>
       <Topbar />
       <TabWrapContainer>
+        <Header>
+          <span style={{ color: '#ef8585' }}>{nickName}</span>님의 학습관리
+        </Header>
         <TabWrap>
-          <p style={{ fontSize: '20px' }}>
-            <span style={{ color: '#ef8585' }}>{nickName}</span>님의 학습관리
-          </p>
           <Button className={swapleft ? 'active' : ''} onClick={() => setSwapleft(true)}>
             캘린더
           </Button>
@@ -171,4 +171,12 @@ const TabWrapContainer = styled.div`
   margin-top: 80px;
   margin-left: auto;
   margin-right: auto;
+`;
+
+const Header = styled.div`
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 22px;
+  margin: 20px;
 `;
