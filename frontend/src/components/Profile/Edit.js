@@ -56,6 +56,22 @@ const Edit = () => {
     introduce: '',
   });
   const [pwConfirm, setPwConfirm] = useState('');
+  const [pwvalid, setPwvalid] = useState(false);
+  const CheckPWvalid = (value) => {
+    if (!/^[a-zA-Z0-9]{8,20}$/.test(value)) {
+      setPwvalid(false);
+      console.log('비밀번호는 숫자와 영문자 조합으로 8~20자리를 사용해야 합니다.');
+    } else {
+      var chk_num = value.search(/[0-9]/g);
+      var chk_eng = value.search(/[a-z]/gi);
+      if (chk_num < 0 || chk_eng < 0) {
+        setPwvalid(false);
+        console.log('비밀번호는 숫자와 영문자 조합으로 8~20자리를 사용해야 합니다.');
+      } else {
+        setPwvalid(true);
+      }
+    }
+  };
 
   const onChangehandler = (e) => {
     const { name, value } = e.target;
@@ -67,6 +83,9 @@ const Edit = () => {
         [name]: value,
       }));
     } else {
+      if (name === 'beforePassword') {
+        CheckPWvalid(value);
+      }
       setEditInfo((prevInfo) => ({
         ...prevInfo,
         [name]: value.trim(),
@@ -240,6 +259,13 @@ const Edit = () => {
               placeholder="기존 비밀번호를 입력하세요."
               onChange={(e) => onChangehandler(e)}
             />
+            {!pwvalid ? (
+              <div style={{ color: 'red', fontSize: '12px' }}>
+                비밀번호 규칙을 확인해주세요
+              </div>
+            ) : (
+              <></>
+            )}
             <TextG>새 비밀번호</TextG>
             <TextInputBox
               name="password"
