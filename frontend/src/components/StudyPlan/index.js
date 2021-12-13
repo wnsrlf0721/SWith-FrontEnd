@@ -2,7 +2,7 @@ import './css/styles.css';
 import styled from 'styled-components';
 
 import React, { useState, useEffect } from 'react';
-import { getUserPlanner, getUserStatistics } from '../../api/APIs';
+import { getUserPlanner, getUserStatistics, getUserInfo } from '../../api/APIs';
 import Calendar from './Calendar';
 import Statistics from './Statistics';
 import Topbar from '../Main/Topbar';
@@ -10,6 +10,8 @@ import Topbar from '../Main/Topbar';
 const Index = ({ match }) => {
   const [task, setTask] = useState([]);
   const [time, setTime] = useState([]);
+  const [nickName, setNickName] = useState('');
+
   useEffect(() => {
     if (!document.referrer) {
       alert('잘못된 접근입니다.');
@@ -53,6 +55,13 @@ const Index = ({ match }) => {
       })
       .catch((error) => {
         console.log(error.toJSON());
+      });
+    getUserInfo(match.params.userId)
+      .then((response) => {
+        setNickName(response.data.data.nickname);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }, []);
 
@@ -99,6 +108,9 @@ const Index = ({ match }) => {
       <Topbar />
       <TabWrapContainer>
         <TabWrap>
+          <p style={{ fontSize: '20px' }}>
+            <span style={{ color: '#ef8585' }}>{nickName}</span>님의 학습관리
+          </p>
           <Button className={swapleft ? 'active' : ''} onClick={() => setSwapleft(true)}>
             캘린더
           </Button>
