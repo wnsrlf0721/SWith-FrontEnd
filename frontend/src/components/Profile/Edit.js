@@ -100,20 +100,18 @@ const Edit = () => {
   const onsubmit = useCallback(
     (e) => {
       e.preventDefault();
-      if (!editInfo.nickname) {
-        alert('닉네임을 한 글자 이상 입력해야합니다');
-        return;
-      }
-      if (editInfo.nickname.length > 9) {
-        alert('닉네임을 9자 이하로 작성해주세요');
+      if (editInfo.nickname.length > 9 || !editInfo.nickname) {
+        alert('닉네임은 1~9자 이내로 작성해야합니다');
         return;
       }
       if (!editInfo.beforePassword) {
-        alert('비밀번호를 입력해야합니다');
+        alert('현재 비밀번호를 입력해야합니다');
         return;
       }
       if (!pwvalid) {
-        alert('새 비밀번호를 8~20자의 영어 대소문자, 숫자의 조합으로 입력해주세요');
+        alert(
+          '새 비밀번호 변경을 원하시면 8~20자의 영어 대소문자, 숫자의 조합으로 입력해주세요',
+        );
         return;
       }
       if (editInfo.password !== pwConfirm) {
@@ -254,6 +252,7 @@ const Edit = () => {
             <TextInputBox
               name="introduce"
               value={editInfo.introduce}
+              placeholder="아직 소개 글이 없습니다."
               maxLength={40}
               onChange={(e) => onChangehandler(e)}
               style={{ margin: '5px 0 25px' }}

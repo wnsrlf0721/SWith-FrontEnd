@@ -123,13 +123,23 @@ const Join = () => {
   };
 
   const onSignup = (e) => {
-    //console.log(joinInfo);
-    if (!emailtype || !checkemail || !checkcode || !checkpw || !joinInfo.nickname) {
-      return alert('빈칸을 다시 한번 확인해주세요.');
-    } else if (joinInfo.nickname.length > 9) {
-      return alert('닉네임을 9자 이하로 작성해주세요');
-    } else if (!pwvalid) {
-      return alert('새 비밀번호를 8~20자의 영어 대소문자, 숫자의 조합으로 입력해주세요');
+    if (!emailtype) {
+      return alert('이메일 형식을 맞춰주세요');
+    }
+    if (!checkemail) {
+      return alert('이미 가입되어 있는 이메일인지 확인해주세요');
+    }
+    if (!checkcode) {
+      return alert('이메일 인증번호가 일치하는지 확인해주세요');
+    }
+    if (!pwvalid) {
+      return alert('비밀번호를 8~20자의 영어 대소문자, 숫자의 조합으로 입력해주세요');
+    }
+    if (!checkpw) {
+      return alert('비밀번호가 일치하지 않습니다');
+    }
+    if (joinInfo.nickname.length > 9 || !joinInfo.nickname) {
+      return alert('닉네임은 1~9자 이내로 작성해야합니다');
     }
     postSignUp(joinInfo.email, joinInfo.password, joinInfo.nickname)
       .then((response) => {
