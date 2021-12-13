@@ -169,7 +169,6 @@ const Wrap = styled.div`
 `;
 const ProfileWrap = styled.div`
   display: flex;
-  flex-direction: column;
 `;
 const IntroWrap = styled.div`
   margin: 0 80px;
