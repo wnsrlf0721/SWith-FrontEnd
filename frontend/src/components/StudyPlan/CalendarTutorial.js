@@ -7,6 +7,7 @@ import select from '../../images/addtodo.png';
 import deleteBlock from '../../images/deleteblock.png';
 import rightButton from '../../images/month.png';
 import leftButton from '../../images/today.png';
+import closeImg from '../../images/close.png';
 
 const CalendarTutorial = ({ onClose, maskClosable, visible }) => {
   const onMaskClick = (e) => {
@@ -24,32 +25,27 @@ const CalendarTutorial = ({ onClose, maskClosable, visible }) => {
       >
         <ModalInner tabIndex="0" className="modal-inner">
           <Container>
+            <div style={{ top: '10px', right: '10px', position: 'absolute' }}>
+              <img
+                src={closeImg}
+                onClick={() => onClose()}
+                style={{ height: '15px', width: '15px', cursor: 'pointer' }}
+              ></img>
+            </div>
             <div className="page">
               <h3 style={{ fontWeight: 'bold' }}>스윗한 SWith 가이드 - 캘린더</h3>
               <ContentsWrap>
-                <img
-                  src={rightButton}
-                  alt="1번사진"
-                  style={{ width: '120px', height: '30px' }}
-                ></img>
+                <img src={rightButton} alt="1번사진" style={{ width: '120px' }}></img>
                 <Text>
                   1. 학습관리의 "캘린더"는 "month", "week", "day" 버튼을 통해 각각 월, 주,
                   일별로 일정을 확인할 수 있습니다.
                 </Text>
-                <img
-                  src={leftButton}
-                  alt="2번사진"
-                  style={{ width: '110px', height: '32px' }}
-                ></img>
+                <img src={leftButton} alt="2번사진" style={{ width: '110px' }}></img>
                 <Text>
                   2. 왼쪽, 오른쪽 각 화살표를 눌러 이전 달, 다음 달을 넘나들 수 있으며
                   "today" 를 누르면 현재 달로 돌아갑니다.
                 </Text>
-                <img
-                  src={deleteBlock}
-                  alt="3번사진"
-                  style={{ width: '95px', height: '90px' }}
-                ></img>
+                <img src={deleteBlock} alt="3번사진" style={{ width: '95px' }}></img>
                 <Text>3. 캘린더의 날짜 칸을 클릭하면 일정을 추가할 수 있습니다.</Text>
                 <Text>
                   4. "week"와 "day"에서는 클릭 혹은 드래그로 일정을 추가할 수 있습니다.
@@ -57,11 +53,7 @@ const CalendarTutorial = ({ onClose, maskClosable, visible }) => {
 
                 <Text>5. 생성된 일정 블록을 클릭하면 일정을 삭제할 수 있습니다.</Text>
 
-                <img
-                  src={sidebar}
-                  alt="6번사진"
-                  style={{ width: '130px', height: '110px' }}
-                ></img>
+                <img src={sidebar} alt="6번사진" style={{ width: '150px' }}></img>
                 <Text>
                   6. 일정은 오른쪽 사이드 바의 "To-do List"에서 날짜별로 확인할 수
                   있습니다.

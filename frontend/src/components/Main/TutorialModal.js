@@ -25,7 +25,9 @@ const TutorialModal = ({ onClose, maskClosable, visible }) => {
           ></img>
         </div>
         <div className="page">
-          <Header>{'<' + '홈화면 사용법' + '>'} </Header>
+          <Header>
+            <h3>스윗한 SWith 가이드 - 홈</h3>{' '}
+          </Header>
           <img
             src={historyCapture}
             style={{ marginTop: '30px', height: '150px', width: 'fit-content' }}
@@ -119,7 +121,7 @@ const ModalInner = styled.div`
   background-color: #fff;
   border-radius: 10px;
   width: 600px;
-  height: 700px;
+  height: 750px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

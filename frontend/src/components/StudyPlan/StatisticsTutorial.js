@@ -4,6 +4,7 @@ import React from 'react';
 
 import chartsImage1 from '../../images/stats_charts_1.png';
 import chartsImage2 from '../../images/stats_charts_2.png';
+import closeImg from '../../images/close.png';
 
 const StatisticsTutorial = ({ onClose, maskClosable, visible }) => {
   const onMaskClick = (e) => {
@@ -21,6 +22,13 @@ const StatisticsTutorial = ({ onClose, maskClosable, visible }) => {
       >
         <ModalInner tabIndex="0" className="modal-inner">
           <Container>
+            <div style={{ top: '10px', right: '10px', position: 'absolute' }}>
+              <img
+                src={closeImg}
+                onClick={() => onClose()}
+                style={{ height: '15px', width: '15px', cursor: 'pointer' }}
+              ></img>
+            </div>
             <div className="page">
               <h3 style={{ fontWeight: 'bold' }}>스윗한 SWith 가이드 - 통계</h3>
               <ContentsWrap>
@@ -36,12 +44,12 @@ const StatisticsTutorial = ({ onClose, maskClosable, visible }) => {
                   <img
                     src={chartsImage1}
                     alt="chartsImage1"
-                    style={{ width: '200px', height: '130px', marginLeft: '30px' }}
+                    style={{ width: '200px', marginLeft: '30px' }}
                   ></img>
                   <img
                     src={chartsImage2}
                     alt="chartsImage2"
-                    style={{ width: '150px', height: '130px', marginLeft: '30px' }}
+                    style={{ width: '150px', marginLeft: '30px' }}
                   ></img>
                 </div>
                 <Text>
