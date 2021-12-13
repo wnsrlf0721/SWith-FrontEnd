@@ -195,7 +195,7 @@ const Bar = styled.div`
   width: 100%;
   background: #ffffff;
   display: flex;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   z-index: 5;
@@ -208,7 +208,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0 20px;
   justify-content: space-between;
   border-bottom: 1px solid #cccccc;
 `;
@@ -218,6 +217,7 @@ const Left = styled.div`
   flex-direction: row;
   justify-content: space-between;
   width: 60%;
+  margin-left: 20px;
 `;
 
 const Link = styled.ul`
@@ -264,6 +264,7 @@ const Right = styled.div`
   // justify-content: space-between;
   align-items: center;
   gap: 15px;
+  margin-right: 20px;
 
   /* Inside Auto Layout */
   flex: none;
