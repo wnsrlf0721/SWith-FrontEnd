@@ -21,6 +21,8 @@ const Chat = ({ userNickName }) => {
   const sendMessage = useCallback(
     (e) => {
       e.preventDefault();
+      if (!content) return;
+
       setMessages((old) => [
         ...old,
         {

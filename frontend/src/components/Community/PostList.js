@@ -1,8 +1,9 @@
 import './css/PostList.css';
+import styled from 'styled-components';
 
 import React, { useState, useEffect } from 'react';
 import queryString from 'query-string';
-import { getBoards, getBoardPost } from '../../api/APIs';
+import { getBoards, getBoardPost, deleteBoard } from '../../api/APIs';
 
 import writeIMG from '../../images/write.png';
 
@@ -11,6 +12,7 @@ const PostList = ({ location, match }) => {
   const query = queryString.parse(location.search);
   const boardId = match.params.boardId;
   const boardTitle = match.params.boardTitle;
+  const local = JSON.parse(window.localStorage.userInfo);
 
   useEffect(() => {
     if (boardId == undefined) {
@@ -144,6 +146,18 @@ const PostList = ({ location, match }) => {
     }
   };
 
+  const AdminDeleteBoard = () => {
+    if (window.confirm(`${boardTitle}을 정말 삭제하시겠습니까?`)) {
+      deleteBoard(boardId)
+        .then((response) => {
+          window.location.href = '/comm';
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
   return (
     <>
       <div className="PostListWrap">
@@ -151,7 +165,19 @@ const PostList = ({ location, match }) => {
           {query.search ? (
             <div className="PostListTitle">{`'${query.search}'의 검색결과`}</div>
           ) : boardTitle ? (
-            <div className="PostListTitle">{boardTitle}</div>
+            <div className="PostListTitle">
+              {boardTitle}
+              <ChangeButton
+                style={
+                  local.name === 'admin@swith.ml'
+                    ? { marginLegt: '5px' }
+                    : { display: 'none' }
+                }
+                onClick={AdminDeleteBoard}
+              >
+                삭제
+              </ChangeButton>
+            </div>
           ) : (
             <div className="PostListTitle">전체글 보기</div>
           )}
@@ -207,4 +233,12 @@ const PostList = ({ location, match }) => {
     </>
   );
 };
+
+const ChangeButton = styled.button`
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: skyblue;
+`;
+
 export default PostList;

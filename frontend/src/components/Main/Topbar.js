@@ -13,7 +13,6 @@ import infoIcon from '../../images/info_icon.svg';
 
 const Topbar = ({ pageName }) => {
   const isLogined = window.localStorage.userInfo == null ? false : true;
-  // const isAdmin = window.localStorage.userInfo.name == 'admin@swith.ml' ? true : false;
 
   const [search, setSearch] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
