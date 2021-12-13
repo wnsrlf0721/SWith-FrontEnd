@@ -12,9 +12,15 @@ const PostList = ({ location, match }) => {
   const query = queryString.parse(location.search);
   const boardId = match.params.boardId;
   const boardTitle = match.params.boardTitle;
-  const local = JSON.parse(window.localStorage.userInfo);
+  const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
+    const isLogined = window.localStorage.userInfo == null ? false : true;
+    if (isLogined) {
+      const local = JSON.parse(window.localStorage.userInfo);
+      setUserEmail(local.name);
+    }
+
     if (boardId == undefined) {
       getBoards()
         .then((response) => {
@@ -169,7 +175,7 @@ const PostList = ({ location, match }) => {
               {boardTitle}
               <ChangeButton
                 style={
-                  local.name === 'admin@swith.ml'
+                  userEmail === 'admin@swith.ml'
                     ? { marginLegt: '5px' }
                     : { display: 'none' }
                 }

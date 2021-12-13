@@ -22,9 +22,9 @@ const Index = () => {
   const [addBoard, setAddBoard] = useState('');
   const [userId, setUserId] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
-  const isLogined = window.localStorage.userInfo == null ? false : true;
 
   useEffect(() => {
+    const isLogined = window.localStorage.userInfo == null ? false : true;
     if (!isLogined) {
       alert('로그인이 필요합니다.');
       return (window.location.href = '/login');
