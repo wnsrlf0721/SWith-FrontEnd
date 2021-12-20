@@ -220,7 +220,6 @@ const BottomPage = ({ search }) => {
 
         <div className="StudyCardWrap">
           {currentPosts.map((data) => {
-            console.log(data);
             return (
               <LinkContainer>
                 <StudyCard
@@ -238,7 +237,7 @@ const BottomPage = ({ search }) => {
             );
           })}
         </div>
-        <nav style={{ marginLeft: '20px' }}>
+        <nav style={{ margin: '20px' }}>
           {pageNumbers.map((number) => {
             return (
               <button
@@ -258,10 +257,10 @@ const BottomPage = ({ search }) => {
 export default BottomPage;
 
 const Bottompage = styled.div`
-  padding: 70px 20px 0;
-  width: 1200px;
-  height: 700px;
+  width: 100%;
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
 `;
 
 const LinkContainer = styled.div`
